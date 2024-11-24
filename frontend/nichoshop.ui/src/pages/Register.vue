@@ -94,7 +94,7 @@ const resolver = ref(
 );
 const onFormSubmit = ({ valid }) => {
   if (valid) {
-    router.push("/home");
+    router.push("/");
   }
 };
 const onClickGoToLoginPage = () => {
