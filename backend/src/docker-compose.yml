@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  # nichoshop.application:
+  #   image: ${DOCKER_REGISTRY-}nichoshopapplication
+  #   build:
+  #     context: .
+  #     dockerfile: NichoShop.Application/Dockerfile
+  
+  database:
+    image: mcr.microsoft.com/mssql/server
