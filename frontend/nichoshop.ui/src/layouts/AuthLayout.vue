@@ -18,6 +18,6 @@ export default {};
 .logo {
   height: 40px;
   width: 213px;
-  background-image: url("@/assets/images/NS Logo.svg");
+  background-image: url("@/assets/svg/nichoshop_logo.svg");
 }
 </style>
