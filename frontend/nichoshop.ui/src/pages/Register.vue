@@ -3,7 +3,6 @@
     <Form
       v-slot="$form"
       :resolver="resolver"
-      :initialValues="initialValues"
       @submit="onFormSubmit"
       class="flex flex-col gap-4"
     >
@@ -69,17 +68,17 @@ import AuthLayout from "@/layouts/AuthLayout.vue";
 import { z } from "zod";
 import { useRouter } from "vue-router";
 // const toast = useToast();
-const initialValues = ref({
-  password: "",
-});
+
 const router = useRouter();
 const resolver = ref(
   zodResolver(
     z.object({
+      email: z
+        .string({ required_error: "Không được để trống" })
+        .email("Email không đúng định dạng"),
       password: z
         .string()
         .min(3, { message: "Minimum 3 characters." })
-        .max(8, { message: "Maximum 8 characters." })
         .refine((value) => /[a-z]/.test(value), {
           message: "Must have a lowercase letter.",
         })
@@ -90,6 +89,10 @@ const resolver = ref(
       //   message: "Must have a number.",
       // }),
     })
+    // .refine((data) => data.password.includes("nptinh"), {
+    //   message: "Passwords does not include nptinh",
+    //   path: ["password"], // path of error
+    // })
   )
 );
 const onFormSubmit = ({ valid }) => {
