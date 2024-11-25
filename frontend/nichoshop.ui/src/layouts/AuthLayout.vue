@@ -14,6 +14,7 @@ export default {};
 <style>
 .content {
   width: 500px;
+  /* test */
 }
 .logo {
   height: 40px;
