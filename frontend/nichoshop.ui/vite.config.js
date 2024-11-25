@@ -1,7 +1,23 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vite";
+import path from "path";
+import vue from "@vitejs/plugin-vue";
+import Components from "unplugin-vue-components/vite";
+import { PrimeVueResolver } from "@primevue/auto-import-resolver";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-})
+  plugins: [
+    vue(),
+    Components({
+      // Tự động import các component từ thư mục components/
+      dirs: ['src/components'],
+      extensions: ['vue'],
+      dts: true, // Tạo file types tự động nếu bạn dùng TypeScript
+      resolvers: [PrimeVueResolver()],
+    }),
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
