@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Checkbox: typeof import('primevue/checkbox')['default']
     Form: typeof import('@primevue/forms/form')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     Index: typeof import('./src/components/home/Index.vue')['default']

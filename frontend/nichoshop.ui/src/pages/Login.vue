@@ -1,6 +1,6 @@
 <template>
   <auth-layout>
-    <p class="text-2xl text-center py-6">Sign in</p>
+    <p class="text-2xl text-center py-6">Đăng nhập</p>
 
     <Form
       v-slot="$form"
@@ -21,6 +21,20 @@
           fluid
           toggleMask
         />
+
+        <div class="flex justify-between">
+          <div class="flex items-center gap-2">
+            <Checkbox
+              v-model="staySignedIn"
+              inputId="staySignedIn"
+              name="staySignedIn"
+              binary
+            />
+            <label for="staySignedIn"> Stay signed in </label>
+          </div>
+
+          <p class="text-[#0B80CC] ml-[4px] cursor-pointer">Quên mật khẩu?</p>
+        </div>
       </div>
       <Button type="submit" label="Đăng nhập" />
       <div class="flex items-center justify-center">
@@ -48,7 +62,7 @@ const initialValues = ref({
   password: "",
 });
 const router = useRouter();
-
+const staySignedIn = ref(false);
 const onFormSubmit = ({ valid }) => {
   if (valid) {
     router.push("/home");

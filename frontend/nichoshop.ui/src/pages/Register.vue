@@ -1,30 +1,30 @@
 <template>
   <auth-layout>
-    <p class="text-2xl text-center py-6">It's fast and free to get started</p>
+    <p class="text-2xl text-center py-6">Nhanh chóng và miễn phí để bắt đầu</p>
     <div
-      class="tabs bg-gray-100 flex w-[350px] justify-between p-[6px] mb-[32px] rounded"
+      class="tabs bg-gray-100 flex justify-between p-[6px] mb-[32px] rounded gap-2"
     >
       <div
         @click="onSwitchTab(tabs.personal)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[52px]"
+        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
         :class="[
           currentTab === tabs.personal
             ? 'bg-white text-[#0B80CC] shadow-md'
             : 'text-[#B2B2C2]',
         ]"
       >
-        Personal
+        Cá nhân
       </div>
       <div
         @click="onSwitchTab(tabs.business)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[52px]"
+        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
         :class="[
           currentTab === tabs.business
             ? 'bg-white text-[#0B80CC] shadow-md'
             : 'text-[#B2B2C2]',
         ]"
       >
-        Business
+        Doanh nghiệp
       </div>
     </div>
     <Form
