@@ -1,5 +1,7 @@
 <template>
   <auth-layout>
+    <p class="text-2xl text-center py-6">Sign in</p>
+
     <Form
       v-slot="$form"
       :resolver="resolver"
@@ -20,15 +22,15 @@
           toggleMask
         />
       </div>
-      <Button type="submit" severity="secondary" label="Đăng nhập" />
+      <Button type="submit" label="Đăng nhập" />
       <div class="flex items-center justify-center">
         <p class="text-[#81818F]">Chưa có tài khoản?</p>
-        <Button
-          class="font-bold"
-          label="Đăng ký"
+        <p
+          class="text-[#0B80CC] ml-[4px] cursor-pointer"
           @click="onClickGoToRegisterPage"
-          variant="link"
-        />
+        >
+          Đăng ký
+        </p>
       </div>
     </Form>
   </auth-layout>
