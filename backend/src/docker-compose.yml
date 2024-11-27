@@ -8,4 +8,7 @@ services:
   #     dockerfile: NichoShop.Application/Dockerfile
   
   database:
-    image: mcr.microsoft.com/mssql/server
+    image: postgres
+
+volumes:
+  postgres_db:

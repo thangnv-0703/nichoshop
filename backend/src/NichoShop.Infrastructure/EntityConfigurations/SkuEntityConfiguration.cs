@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NichoShop.Domain.AggergateModels;
-using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Enums;
 using NichoShop.Domain.Shared;
 
@@ -11,6 +10,9 @@ public class SkuEntityConfiguration : IEntityTypeConfiguration<Sku>
     public void Configure(EntityTypeBuilder<Sku> builder)
     {
         builder.ToTable("skus");
+
+        builder.Property(o => o.Id)
+            .UseHiLo("SkuSeq");
 
         builder.Ignore(o => o.DomainEvents);
 

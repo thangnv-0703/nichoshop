@@ -1,4 +1,8 @@
-﻿namespace NichoShop.Application.Extensions;
+﻿using FluentValidation;
+using NichoShop.Application.Models.Dtos.Request.User;
+using NichoShop.Application.Validators.User;
+
+namespace NichoShop.Application.Extensions;
 
 public static class ApplicationDI
 {
@@ -14,6 +18,11 @@ public static class ApplicationDI
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        return services;
+    }
+
+    private static IServiceCollection ConfigureValidator(this IServiceCollection services) {
+        services.AddScoped<IValidator<CreateUserRequestDto>, CreateUserValidator>();
         return services;
     }
 }

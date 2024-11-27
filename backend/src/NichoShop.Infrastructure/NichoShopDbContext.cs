@@ -28,17 +28,20 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
     public DbSet<OrderItem> OrderItem { get; set; }
     public DbSet<Sku> Sku { get; set; }
 
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(_configuration["ConnectionString"]);
-        }
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasSequence<int>("ProductSeq")
+            .StartsAt(10_000_000)
+            .IncrementsBy(10);
+
+        modelBuilder.HasSequence<int>("ProductAttributeValueSeq")
+            .StartsAt(100_000)
+            .IncrementsBy(100);
+
+        modelBuilder.HasSequence<int>("SkuSeq")
+            .StartsAt(100_000)
+            .IncrementsBy(10);
+
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         modelBuilder.ApplyConfiguration(new UserAddressEntityConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
