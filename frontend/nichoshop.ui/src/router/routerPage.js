@@ -15,11 +15,7 @@ export default [
   //       anonymous: true,
   //     },
   //   },
-  {
-    path: "/", // Đường dẫn cho trang chủ
-    name: "", // Tên của route
-    component: () => import("@/pages/Home.vue"),
-  },
+
   {
     path: "/login",
     name: "Login",
