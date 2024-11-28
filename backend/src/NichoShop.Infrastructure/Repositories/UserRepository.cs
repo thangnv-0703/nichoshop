@@ -1,18 +1,12 @@
-﻿using NichoShop.Domain.AggergateModels.UserAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Infrastructure.Repositories;
-public class UserRepository : IUserRepository 
+public class UserRepository(NichoShopDbContext context) : BaseRepository<User, Guid>(context), IUserRepository 
 {
-    protected readonly NichoShopDbContext _context;
-
-    public UserRepository(NichoShopDbContext context)
+    public async Task<User?> FindUserByPhoneNumberOrEmail(string phoneNumber, string email)
     {
-        _context = context;
-    }
-
-    public async Task<User> FindUserByPhoneNumberOrEmail(string phoneNumber, string email)
-    {
-        return await _context.User.Where(x => x.PhoneNumber == phoneNumber || x.Email == email);
+        return await _context.User.Where(x => x.PhoneNumber.Value == phoneNumber || x.Email == email).FirstOrDefaultAsync();
     }
 }

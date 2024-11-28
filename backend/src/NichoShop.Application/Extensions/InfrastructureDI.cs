@@ -1,22 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Domain.Repositories;
 using NichoShop.Infrastructure;
+using NichoShop.Infrastructure.Repositories;
 
 namespace NichoShop.Application.Extensions;
 
-public static class InrastructureDI
+public static class InfrastructureDI
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddCustomDbContext(configuration);
+        services.ConfigreDbContext(configuration);
+        services.ConfigureRepositories();
         return services;
     }
 
-    public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigreDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<NichoShopDbContext>(options =>
-            //options.UseNpgsql(configuration["ConnectionStrings"], b => b.MigrationsAssembly("NichoShop.Application")));
             options.UseNpgsql(configuration.GetConnectionString("NichoShopDB"), b => b.MigrationsAssembly("NichoShop.Application")));
+        return services;
+    }
 
+    public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }
 }

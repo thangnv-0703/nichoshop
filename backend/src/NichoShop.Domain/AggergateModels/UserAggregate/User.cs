@@ -22,14 +22,14 @@ public class User : AggregateRoot<Guid>
 
     private User() { }
 
-    public User(string fullName, string email, string phoneNumber, string password, Gender? gender, string userName)
+    public User(string fullName, string email, string phoneNumber, string password, string userName, Gender? gender = null)
     {
         FullName = fullName;
         Email = email;
         PhoneNumber = new PhoneNumber(phoneNumber);
         Password = password;
-        Gender = gender;
         UserName = userName;
+        Gender = gender;
     }
 
     public void AddAddress(UserAddressProps props)
