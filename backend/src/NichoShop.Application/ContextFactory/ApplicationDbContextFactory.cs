@@ -10,7 +10,7 @@ public class NichoShopDbContextFactory : IDesignTimeDbContextFactory<NichoShopDb
     {
         
         // Build configuration
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())

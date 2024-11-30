@@ -3,6 +3,8 @@ using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
+using NichoShop.Infrastructure.Authentication;
+using NichoShop.Infrastructure.CommonService;
 
 namespace NichoShop.Application.Extensions;
 
@@ -15,6 +17,7 @@ public static class ApplicationDI
         services.ConfigureSwagger();
         services.ConfigureApplicationService();
         services.ConfigureFluentValidation();
+        services.ConfigureCustomService();
         return services;
     }
 
@@ -27,11 +30,17 @@ public static class ApplicationDI
 
     private static IServiceCollection ConfigureFluentValidation(this IServiceCollection services) {
         services.AddScoped<IValidator<CreateUserRequestDto>, CreateUserValidator>();
+        services.AddScoped<IValidator<LoginRequestDto>, LoginValidator>();
         return services;
     }
 
     private static IServiceCollection ConfigureApplicationService(this IServiceCollection services) {
         services.AddScoped<IUserService, UserService>();
+        return services;
+    }
+
+    private static IServiceCollection ConfigureCustomService(this IServiceCollection services) {
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 }
