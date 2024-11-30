@@ -1,0 +1,6 @@
+﻿namespace NichoShop.Application.Models.Dtos.Response.User;
+
+public class LoginResponseDto
+{
+    public string Token { get; set; } = string.Empty;
+}

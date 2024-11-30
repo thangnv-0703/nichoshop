@@ -9,6 +9,9 @@ public class ProductAttributeValueEntityConfiguration : IEntityTypeConfiguration
     {
         builder.ToTable("product_attribute_values");
 
+        builder.Property<int>("Id")
+            .UseHiLo("ProductAttributeValueSeq");
+
         builder.Property<int>("ProductId")
             .IsRequired();
 

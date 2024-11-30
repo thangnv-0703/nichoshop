@@ -11,6 +11,9 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("products");  
 
+        builder.Property(o => o.Id)
+            .UseHiLo("ProductSeq");
+
         builder.Ignore(o => o.DomainEvents);
 
         builder.Property(o => o.Name)
