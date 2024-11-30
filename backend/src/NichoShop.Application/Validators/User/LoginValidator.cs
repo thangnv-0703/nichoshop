@@ -3,9 +3,9 @@ using NichoShop.Application.Models.Dtos.Request.User;
 
 namespace NichoShop.Application.Validators.User;
 
-public class CreateUserValidator : AbstractValidator<CreateUserRequestDto>
+public class LoginValidator : AbstractValidator<LoginRequestDto>
 {
-    public CreateUserValidator()
+    public LoginValidator()
     {
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required")
@@ -15,8 +15,5 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequestDto>
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number is required")
             .Matches(@"^84(?:3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$").WithMessage("Phone number is not in correct format");
-
-        RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("User name is required");
     }
 }
