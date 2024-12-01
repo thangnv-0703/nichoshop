@@ -25,6 +25,6 @@ public partial class PhoneNumber : ValueObject
         if (!regex.IsMatch(Value)) throw new Exception("Invalid phone number");
     }
 
-    [GeneratedRegex(@"[\d]")]
+    [GeneratedRegex(@"^84(?:3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$")]
     private static partial Regex PhoneNumberRegex();
 }

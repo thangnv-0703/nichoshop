@@ -1,41 +1,54 @@
-﻿using FluentValidation;
+﻿using NichoShop.Application.Helpers;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Response.User;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
+using NichoShop.Infrastructure.CommonService;
 
 namespace NichoShop.Application.Services;
 
-public class UserService : IUserService
+public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider) : IUserService
 {
-    private readonly IValidator<CreateUserRequestDto> _createUserValidator;
-    private readonly IUserRepository _userRepository;
 
-    public UserService(IValidator<CreateUserRequestDto> createUserValidator, IUserRepository userRepository)
-    {
-        _createUserValidator = createUserValidator;
-        _userRepository = userRepository;
-    }
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IJwtProvider _jwtProvider = jwtProvider;
 
     public async Task<Guid> CreateUserAsync(CreateUserRequestDto requestDto)
     {
-        _createUserValidator.ValidateAndThrow(requestDto);
+        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber);
 
-        var userWithPhoneAndEmail = await _userRepository.FindUserByPhoneNumberOrEmail(requestDto.PhoneNumber, requestDto.Email);
-
-        if (userWithPhoneAndEmail is not null)
+        if (user is not null)
         {
-            throw new Exception("User with this phone number or email already exists");
+            throw new Exception("Pphone number already exists");
         }
-        var user = new User(requestDto.FullName, requestDto.Email, requestDto.PhoneNumber, requestDto.Password, requestDto.UserName);
-        _userRepository.Add(user);
+
+        var passwordHashed = PasswordHelper.Hash(requestDto.Password);
+        var newUser = new User(
+            requestDto.PhoneNumber, 
+            passwordHashed, 
+            requestDto.UserName, 
+            null, 
+            null, 
+            null);
+
+        _userRepository.Add(newUser);
         await _userRepository.SaveChangesAsync();
-        return user.Id;
+
+        return newUser.Id;
     }
 
-    public Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
+    public async Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new Exception("Pphone number already exists");
+
+        var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
+
+        if (!isVerified)
+        {
+            throw new Exception("Password is incorrect");
+        }
+
+        return new LoginResponseDto { Token = _jwtProvider.GenerateToken(user) };
     }
 }

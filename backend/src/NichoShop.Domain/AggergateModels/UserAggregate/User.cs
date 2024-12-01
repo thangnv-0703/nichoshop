@@ -5,15 +5,15 @@ using NichoShop.Domain.Shared;
 namespace NichoShop.Domain.AggergateModels.UserAggregate;
 public class User : AggregateRoot<Guid>
 {
-    public string FullName { get; private set; }
+    public string? FullName { get; private set; }
 
     public string UserName { get; private set; }
 
-    public string Email { get; private set; }
+    public string? Email { get; private set; }
 
     public PhoneNumber PhoneNumber { get; private set; }
 
-    public string Password { get; private set; }
+    public string PasswordHashed { get; private set; }
 
     public Gender? Gender { get; private set; }
 
@@ -22,13 +22,19 @@ public class User : AggregateRoot<Guid>
 
     private User() { }
 
-    public User(string fullName, string email, string phoneNumber, string password, string userName, Gender? gender = null)
+    public User( 
+        string phoneNumber, 
+        string password, 
+        string userName, 
+        string? fullName, 
+        string? email, 
+        Gender? gender = null)
     {
+        PhoneNumber = new PhoneNumber(phoneNumber);
+        PasswordHashed = password;
+        UserName = userName;
         FullName = fullName;
         Email = email;
-        PhoneNumber = new PhoneNumber(phoneNumber);
-        Password = password;
-        UserName = userName;
         Gender = gender;
     }
 

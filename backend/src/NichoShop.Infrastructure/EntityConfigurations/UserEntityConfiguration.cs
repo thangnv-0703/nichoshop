@@ -21,17 +21,18 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(o => o.Email)
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(o => o.FullName)
             .HasMaxLength(50)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(o => o.UserName)
             .HasMaxLength(50)
-            .IsRequired();
+            .IsRequired(false);
 
-        builder.Property(o => o.Password)
+        builder.Property(o => o.PasswordHashed)
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(o => o.Gender)
