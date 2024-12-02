@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NichoShop.Domain.Repositories;
 using NichoShop.Infrastructure;
 using NichoShop.Infrastructure.Authentication;
-using NichoShop.Infrastructure.CommonService;
 using NichoShop.Infrastructure.Repositories;
 using System.Text;
 
@@ -34,6 +32,7 @@ public static class InfrastructureDI
     public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         return services;
     }
 
