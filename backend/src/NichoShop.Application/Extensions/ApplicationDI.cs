@@ -27,7 +27,7 @@ public static class ApplicationDI
         services.AddSwaggerGen();
         return services;
     }
-
+    
     private static IServiceCollection ConfigureFluentValidation(this IServiceCollection services) {
         services.AddScoped<IValidator<CreateUserRequestDto>, CreateUserValidator>();
         services.AddScoped<IValidator<LoginRequestDto>, LoginValidator>();
@@ -36,6 +36,7 @@ public static class ApplicationDI
 
     private static IServiceCollection ConfigureApplicationService(this IServiceCollection services) {
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         return services;
     }
 
