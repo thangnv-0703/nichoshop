@@ -8,7 +8,7 @@ using System.Net;
 
 namespace NichoShop.Application.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v1/users")]
 [ApiController]
 public class UserController : Controller
 {
@@ -23,7 +23,7 @@ public class UserController : Controller
         _loginValidator = loginValidator;
     }
 
-    [HttpPost("Signup")]
+    [HttpPost("signup")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Signup([FromBody] CreateUserRequestDto requestDto)
@@ -33,7 +33,7 @@ public class UserController : Controller
         return Ok(true);
     }
 
-    [HttpPost("Login")]
+    [HttpPost("login")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto requestDto)
