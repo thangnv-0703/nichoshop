@@ -1,29 +1,30 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NichoShop.Infrastructure.CommonService;
-using NichoShop.Infrastructure.Context;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
-public sealed class UserContext(IHttpContextAccessor httpContextAccessor)
+namespace NichoShop.Infrastructure.Context;
+
+public sealed class UserContext
     : IUserContext
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public UserContext(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+    }
+
+    private ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User
+        ?? throw new UnauthorizedAccessException("HttpContext is unavailable.");
+
     public Guid UserId =>
-        httpContextAccessor
-            .HttpContext?
-            .User
-            .GetUserId() ??
+        Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId)
+        ? userId
+        : throw new UnauthorizedAccessException("User ID is missing or invalid.");
+
+    public string PhoneNumber => User.FindFirstValue(JwtRegisteredClaimNames.PhoneNumber) ??
         throw new UnauthorizedAccessException();
 
-    public string PhoneNumber =>
-        httpContextAccessor
-            .HttpContext?
-            .User
-            .GetPhoneNumber() ??
-        throw new UnauthorizedAccessException();
-
-    public bool IsAuthenticated =>
-        httpContextAccessor
-            .HttpContext?
-            .User
-            .Identity?
-            .IsAuthenticated ??
+    public bool IsAuthenticated => User.Identity?.IsAuthenticated ??
         throw new ApplicationException("User context is unavailable");
 }

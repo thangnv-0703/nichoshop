@@ -5,6 +5,7 @@ using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
 using NichoShop.Infrastructure.Authentication;
 using NichoShop.Infrastructure.CommonService;
+using NichoShop.Infrastructure.Context;
 
 namespace NichoShop.Application.Extensions;
 
