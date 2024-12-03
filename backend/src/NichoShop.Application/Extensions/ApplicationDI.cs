@@ -5,6 +5,7 @@ using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
 using NichoShop.Infrastructure.Authentication;
 using NichoShop.Infrastructure.CommonService;
+using NichoShop.Infrastructure.Context;
 
 namespace NichoShop.Application.Extensions;
 
@@ -42,6 +43,8 @@ public static class ApplicationDI
 
     private static IServiceCollection ConfigureCustomService(this IServiceCollection services) {
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUserContext, UserContext>();
         return services;
     }
 }

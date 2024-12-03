@@ -8,12 +8,12 @@ using NichoShop.Infrastructure.CommonService;
 
 namespace NichoShop.Application.Services;
 
-public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider) : IUserService
+public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider, IUserContext userContext) : IUserService
 {
 
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
-
+    private readonly IUserContext _userContext = userContext;
     public async Task<Guid> CreateUserAsync(CreateUserRequestDto requestDto)
     {
         var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber);
@@ -25,11 +25,11 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
 
         var passwordHashed = PasswordHelper.Hash(requestDto.Password);
         var newUser = new User(
-            requestDto.PhoneNumber, 
-            passwordHashed, 
-            requestDto.UserName, 
-            null, 
-            null, 
+            requestDto.PhoneNumber,
+            passwordHashed,
+            requestDto.UserName,
+            null,
+            null,
             null);
 
         _userRepository.Add(newUser);

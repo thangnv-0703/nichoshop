@@ -16,7 +16,7 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
 
     public async Task<List<TEntity>> GetAll()
     {
-        return await _context.Set<TEntity>().ToListAsync();
+        return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
     }
 
     public async Task<TEntity?> GetById(object id)
