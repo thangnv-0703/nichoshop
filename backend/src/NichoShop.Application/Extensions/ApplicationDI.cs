@@ -42,6 +42,8 @@ public static class ApplicationDI
 
     private static IServiceCollection ConfigureCustomService(this IServiceCollection services) {
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUserContext, UserContext>();
         return services;
     }
 }

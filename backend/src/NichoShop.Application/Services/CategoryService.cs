@@ -1,6 +1,6 @@
 ﻿using NichoShop.Application.Interfaces;
-using NichoShop.Domain.DTO;
 using NichoShop.Domain.Repositories;
+using NichoShop.Infrastructure.CommonService;
 
 namespace NichoShop.Application.Services;
 
@@ -8,8 +8,8 @@ public class CategoryService(ICategoryRepository categoriesRepository) : ICatego
 {
     private readonly ICategoryRepository _categoriesRepository = categoriesRepository;
 
-    public async Task<List<CategoryHome>> GetCategoryAsync()
+    public async Task<List<Category>> GetCategoryAsync()
     {
-        return await _categoriesRepository.GetCategoryAsync();
+        return await _categoriesRepository.GetAll();
     }
 }
