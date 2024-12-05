@@ -5,11 +5,12 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services
+    .AddSetupOption(configuration)
     .AddApplicationServices(configuration)
     .AddInfrastructureServices(configuration); 
 
-
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

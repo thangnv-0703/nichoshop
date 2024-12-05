@@ -1,17 +1,18 @@
 ﻿using NichoShop.Application.Interfaces;
-using NichoShop.Domain.Repositories;
-using NichoShop.Infrastructure.CommonService;
+using NichoShop.Application.CommonService.Interface;
+using NichoShop.Application.Queries;
+using NichoShop.Application.Models.ViewModels;
 
 namespace NichoShop.Application.Services;
 
-public class CategoryService(ICategoryRepository categoriesRepository, IUserContext userContext) : ICategoryService
+public class CategoryService(IUserContext userContext, IQueryService queryService) : ICategoryService
 {
-    private readonly ICategoryRepository _categoriesRepository = categoriesRepository;
+    private readonly IQueryService _queryService = queryService;
     private readonly IUserContext _userContext = userContext;
 
-    public async Task<List<Category>> GetCategoryAsync()
+    public async Task<List<CategoryViewModel>> GetCategoryAsync()
     {
         var user = _userContext.UserId;
-        return await _categoriesRepository.GetAll();
+        return await queryService.GetCategoryViewModelsAsync();
     }
 }

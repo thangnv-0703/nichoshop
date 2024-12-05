@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NichoShop.Domain.AggergateModels.UserAggregate;
-using NichoShop.Infrastructure.CommonService;
+using NichoShop.Application.CommonService.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using NichoShop.Application.Models.AppSettings;
 
-namespace NichoShop.Infrastructure.Authentication;
+namespace NichoShop.Application.CommonService.Implementation;
 public sealed class JwtProvider : IJwtProvider
 {
     private readonly JwtOptions _jwtOptions;

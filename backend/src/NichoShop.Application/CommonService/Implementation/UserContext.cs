@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using NichoShop.Infrastructure.CommonService;
+﻿using NichoShop.Application.CommonService.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace NichoShop.Infrastructure.Context;
+namespace NichoShop.Application.CommonService.Implementation;
 
 public sealed class UserContext
     : IUserContext
