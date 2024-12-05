@@ -8,14 +8,9 @@ using System.Text;
 using NichoShop.Application.Models.AppSettings;
 
 namespace NichoShop.Application.CommonService.Implementation;
-public sealed class JwtProvider : IJwtProvider
+public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions;
-
-    public JwtProvider(IOptions<JwtOptions> jwtOptions)
-    {
-        _jwtOptions = jwtOptions.Value;
-    }
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public string GenerateToken(User user)
     {
