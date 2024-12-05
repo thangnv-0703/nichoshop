@@ -4,7 +4,7 @@ using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Response.User;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
-using NichoShop.Infrastructure.CommonService;
+using NichoShop.Application.CommonService.Interface;
 
 namespace NichoShop.Application.Services;
 

@@ -1,6 +1,6 @@
 ﻿using NichoShop.Domain.AggergateModels.UserAggregate;
 
-namespace NichoShop.Infrastructure.CommonService;
+namespace NichoShop.Application.CommonService.Interface;
 
 public interface IJwtProvider
 {

@@ -1,4 +1,4 @@
-﻿namespace NichoShop.Infrastructure.CommonService;
+﻿namespace NichoShop.Application.CommonService.Interface;
 public interface IUserContext
 {
     bool IsAuthenticated { get; }

@@ -1,6 +1,8 @@
-﻿namespace NichoShop.Application.Interfaces;
+﻿using NichoShop.Application.Models.ViewModels;
+
+namespace NichoShop.Application.Interfaces;
 
 public interface ICategoryService
 {
-    Task<List<Category>> GetCategoryAsync();
+    Task<List<CategoryViewModel>> GetCategoryAsync();
 }

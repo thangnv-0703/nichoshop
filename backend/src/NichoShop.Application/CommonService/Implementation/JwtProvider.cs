@@ -1,20 +1,16 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NichoShop.Domain.AggergateModels.UserAggregate;
-using NichoShop.Infrastructure.CommonService;
+using NichoShop.Application.CommonService.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using NichoShop.Application.Models.AppSettings;
 
-namespace NichoShop.Infrastructure.Authentication;
-public sealed class JwtProvider : IJwtProvider
+namespace NichoShop.Application.CommonService.Implementation;
+public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions;
-
-    public JwtProvider(IOptions<JwtOptions> jwtOptions)
-    {
-        _jwtOptions = jwtOptions.Value;
-    }
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public string GenerateToken(User user)
     {
