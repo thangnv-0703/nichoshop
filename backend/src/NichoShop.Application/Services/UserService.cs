@@ -1,10 +1,10 @@
-﻿using NichoShop.Application.Helpers;
+﻿using NichoShop.Application.CommonService.Interface;
+using NichoShop.Application.Helpers;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Response.User;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
-using NichoShop.Application.CommonService.Interface;
 
 namespace NichoShop.Application.Services;
 
@@ -38,6 +38,7 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
         return newUser.Id;
     }
 
+
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
     {
         var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new Exception("Pphone number already exists");
@@ -50,5 +51,20 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
         }
 
         return new LoginResponseDto { Token = _jwtProvider.GenerateToken(user) };
+    }
+
+    public async Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param)
+    {
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+
+        user.UpdateUserInfo(param.FullName, param.Email, param.PhoneNumber, param.Gender);
+        await _userRepository.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<User> GetUserInfoAsync()
+    {
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        return user;
     }
 }

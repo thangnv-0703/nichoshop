@@ -15,5 +15,13 @@ class UserApi extends BaseApi {
     const apiURL = this.getApiURL("signup");
     return httpClient.post(apiURL, payload);
   }
+  getItem() {
+    const apiURL = this.getApiURL();
+    return httpClient.get(apiURL);
+  }
+  update(id, payload) {
+    const apiURL = this.getApiURL();
+    return httpClient.put(apiURL, payload);
+  }
 }
 export default new UserApi();

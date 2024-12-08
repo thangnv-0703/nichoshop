@@ -153,6 +153,15 @@ export default {
           >
             <Marker :options="{ position: center }" />
           </GoogleMap>
+          <div class="flex items-center gap-2">
+            <Checkbox
+              v-model="model.isDefault"
+              inputId="staySignedIn"
+              name="staySignedIn"
+              binary
+            />
+            <label for="staySignedIn">Đặt làm địa chỉ mặc định</label>
+          </div>
         </div>
         <div class="flex justify-end gap-2">
           <Button

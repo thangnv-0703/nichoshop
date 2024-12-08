@@ -40,10 +40,10 @@ export default class Crud {
           commit("setLoading", false);
         }
       },
-      async fetchItem({ commit }, id) {
+      async getItem({ commit }, id) {
         commit("setLoading", true);
         try {
-          const response = await me.api.getById(id);
+          const response = await me.api.getItem(id);
           commit("setItem", response.data);
         } catch (error) {
           commit("setError", error);

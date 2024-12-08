@@ -4,7 +4,9 @@ import { createVfm } from "vue-final-modal";
 import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
 import { definePreset } from "@primevue/themes";
-
+import ConfirmationService from 'primevue/confirmationservice';
+import DialogService from 'primevue/dialogservice'
+import ToastService from 'primevue/toastservice';
 import store from "./stores/store";
 import App from "./App.vue";
 import router from "./router";
@@ -45,6 +47,9 @@ app.use(PrimeVue, {
     preset: MyPreset,
   },
 });
+app.use(ConfirmationService);
+app.use(ToastService);
+app.use(DialogService);
 app.use(vfm);
 app.use(store);
 app.use(router);
