@@ -45,6 +45,7 @@ public static class ApplicationDI
     private static IServiceCollection ConfigureApplicationService(this IServiceCollection services) {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IUserAddressService, UserAddressService>();
         return services;
     }
 

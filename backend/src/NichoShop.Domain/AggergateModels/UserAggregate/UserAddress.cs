@@ -27,7 +27,7 @@ public class UserAddress : Entity<Guid>
     public UserAddress(UserAddressProps props)
     {
         FullName = props.FullName;
-        Street = props.Addess;
+        Street = props.Street;
         Ward = props.Ward;
         District = props.District;
         Province = props.Province;
@@ -44,7 +44,7 @@ public class UserAddress : Entity<Guid>
     public void UpdateAddress(UserAddressProps props)
     {
         FullName = props.FullName;
-        Street = props.Addess;
+        Street = props.Street;
         Ward = props.Ward;
         District = props.District;
         Province = props.Province;
@@ -56,7 +56,7 @@ public class UserAddress : Entity<Guid>
 
 public class UserAddressProps {
     public string FullName { get; set; } = default!;
-    public string Addess { get; set; } = default!;
+    public string Street { get; set; } = default!;
     public string Ward { get; set; } = default!;
     public string District { get; set; } = default!;
     public string Province { get; set; } = default!;
