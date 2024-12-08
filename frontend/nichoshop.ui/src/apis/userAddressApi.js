@@ -5,7 +5,7 @@ class UserApi extends BaseCrudApi {
     super();
     let me = this;
     me.apiVersion = "v1";
-    me.controller = "user/address";
+    me.controller = "users/address";
   }
 }
 export default new UserApi();

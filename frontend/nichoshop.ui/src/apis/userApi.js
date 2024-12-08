@@ -1,4 +1,4 @@
-import axios from "axios";
+import httpClient from "./base/httpClient";
 import BaseApi from "./base/baseApi";
 class UserApi extends BaseApi {
   constructor() {
@@ -9,11 +9,11 @@ class UserApi extends BaseApi {
   }
   login(payload) {
     const apiURL = this.getApiURL("login");
-    return axios.post(apiURL, payload);
+    return httpClient.post(apiURL, payload);
   }
   signup(payload) {
     const apiURL = this.getApiURL("signup");
-    return axios.post(apiURL, payload);
+    return httpClient.post(apiURL, payload);
   }
 }
 export default new UserApi();

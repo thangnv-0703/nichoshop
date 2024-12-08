@@ -6,8 +6,15 @@ export default defineComponent({
   data() {
     return { model: null };
   },
-  mounted() { },
+  created() {
+    if (this.$attrs.editMode === this.$nicho.enumeration.editMode.Edit) {
+      this.model = this.$attrs.record;
+    }
+  },
+  mounted() {
+  },
   methods: {
+
     onSubmit({ valid }) {
       if (!valid) {
         return;
@@ -15,8 +22,14 @@ export default defineComponent({
       this.save();
     },
     save() {
-      this.$store.dispatch(`${this.module}/createItem`, this.model);
-      debugger;
+      switch (this.$attrs.editMode) {
+        case this.$nicho.enumeration.editMode.Add:
+          this.$store.dispatch(`${this.module}/createItem`, this.model);
+          break;
+        case this.$nicho.enumeration.editMode.Edit:
+          this.$store.dispatch(`${this.module}/update`, this.model);
+          break;
+      }
     },
     getEditData() { },
   },

@@ -1,4 +1,4 @@
-import api from "@/apis/userApi";
+import api from "@/apis/userAddressApi";
 import Crud from "@/stores/crudBase";
 var crud = new Crud(api);
 const state = {

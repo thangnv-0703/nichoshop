@@ -3,22 +3,32 @@ import { defineComponent, getCurrentInstance } from "vue";
 
 export default defineComponent({
   name: "Baselist",
+  computed: {
+    items() {
+      return this.$store.state[this.module].items;
+    }
+  },
   data() {
-    return { detailModal: null, gridBase: null, module: null };
+    return {
+      detailModal: null,
+      gridBase: null,
+      module: null,
+    };
   },
   mounted() {
     this.autoLoadGrid && this.loadDataGrid();
   },
   methods: {
     loadDataGrid() {
-      this.$store.dispatch(`${module}/getpaging`);
+      this.$store.dispatch(`${this.module}/getAll`); //để tạm get all
     },
-    edit() {
+    edit(record) {
       const { open, close } = useModal({
         component: this.detailModal,
         attrs: {
           popupTitle: `Sửa ${this.$store.state[this.module].config?.name}`,
           editMode: this.$nicho.enumeration.editMode.Edit,
+          record
         },
       });
       open();
@@ -34,7 +44,7 @@ export default defineComponent({
       open();
     },
     save(editMode) { },
-    delete() { },
+    deleteOne() { },
     getEditData() { },
   },
 });

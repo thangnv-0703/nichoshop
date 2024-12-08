@@ -9,12 +9,15 @@ export default {
   extends: baseDetail,
   components: { VueFinalModal, GoogleMap, Marker },
   setup() {
+    const model = ref({
+      fullName: null,
+      phoneNumber: null,
+      street: null,
+    });
     const { proxy } = getCurrentInstance();
     onMounted(() => {
       console.log(proxy);
-      debugger;
     });
-    const model = ref({});
     const module = "moduleUserAddress";
     const selectedCountry = ref();
     const countries = ref([
@@ -70,7 +73,7 @@ export default {
           <div class="grid grid-cols-2 gap-1">
             <div class="flex flex-col gap-1">
               <FloatLabel variant="on">
-                <InputText id="fullName" />
+                <InputText v-model="model.fullName" id="fullName" />
                 <label for="fullName">Họ và tên</label>
               </FloatLabel>
               <template v-if="$form.fullName?.invalid">
@@ -87,7 +90,13 @@ export default {
             <div class="flex flex-col gap-1">
               <div class="flex flex-col gap-1">
                 <FloatLabel variant="on">
-                  <InputMask id="phonenumber" mask="(999) 999-9999" fluid />
+                  <InputText v-model="model.phoneNumber" id="phoneNumber" />
+                  <!-- <InputMask
+                    v-model="model.PhoneNumber"
+                    id="phonenumber"
+                    mask="(99)999 999 999"
+                    fluid
+                  /> -->
                   <label for="phonenumber">Số điện thoại</label>
                 </FloatLabel>
               </div>
@@ -120,6 +129,7 @@ export default {
 
           <div class="flex flex-col gap-1">
             <InputText
+              v-model="model.street"
               name="specificAdress"
               type="text"
               placeholder="Địa chỉ cụ thể"

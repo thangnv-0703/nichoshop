@@ -13,7 +13,7 @@
       <DataTable
         :ref="baseGrid"
         v-model:selection="selectedProducts"
-        :value="products"
+        :value="items"
         dataKey="id"
         :paginator="true"
         :rows="10"
@@ -24,49 +24,47 @@
       >
         <Column field="price" header="Địa chỉ" style="min-width: 8rem">
           <template #body="slotProps">
-            <div>
+            <div class="flex">
               <div>
-                <div>
-                  <span><div>Nguyễn Phúc Tĩnh</div></span>
-                  <div>(+84) 948 314 827</div>
-                </div>
+                <b>{{ slotProps.data["fullName"] }}</b>
               </div>
+              <Divider layout="vertical" />
               <div>
-                <div>
-                  <div>
-                    <div>Toà Nhà N03-T1, khu Ngoại Giao Đoàn</div>
-                    <div>Phường Xuân Tảo, Quận Bắc Từ Liêm, Hà Nội</div>
-                  </div>
-                </div>
-                <div>
-                  <button class="FIxzOe H6ESfz U4E1nT" disabled="">
-                    Thiết lập mặc định
-                  </button>
-                </div>
-              </div>
-              <div>
-                <Tag severity="warn" value="Mặc định"></Tag>
-                <Tag severity="secondary" value="Địa chỉ lấy hàng"></Tag>
+                {{ slotProps.data["phoneNumber"]["value"] }}
               </div>
             </div>
+            <div>
+              {{ slotProps.data["street"] }}
+            </div>
+            <div>
+              {{
+                `${slotProps.data["ward"]}, ${slotProps.data["district"]}, ${slotProps.data["province"]}`
+              }}
+            </div>
+            <Tag severity="warn" value="Mặc định"></Tag>
           </template>
         </Column>
 
         <Column :exportable="false" style="width: 140px">
           <template #body="slotProps">
+            <div class="flex justify-end">
+              <span
+                @click="edit(slotProps.data)"
+                class="text-[#0B80CC] cursor-pointer"
+                >Cập nhật</span
+              >
+              <span
+                @click="deleteOne(slotProps.data)"
+                class="text-[#0B80CC] cursor-pointer ml-3"
+                >Xóa</span
+              >
+            </div>
             <Button
-              icon="pi pi-pencil"
-              outlined
-              rounded
-              class="mr-2"
-              @click="edit(slotProps.data)"
-            />
-            <Button
-              icon="pi pi-trash"
-              outlined
-              rounded
-              severity="danger"
-              @click="confirmDeleteProduct(slotProps.data)"
+              :disabled="slotProps.data['isDefault']"
+              class="w-[160px] set-default-btn"
+              label="Thiết lập mặc định"
+              severity="secondary"
+              variant="outlined"
             />
           </template>
         </Column>
@@ -84,7 +82,7 @@ export default {
   extends: baseList,
   setup() {
     const detailModal = DetailModal;
-    const autoLoad = true;
+    const autoLoadGrid = true;
     const { proxy } = getCurrentInstance();
     const module = "moduleUserAddress";
     onMounted(() => {
@@ -100,7 +98,13 @@ export default {
       products,
       detailModal,
       module,
+      autoLoadGrid,
     };
   },
 };
 </script>
+<style scoped>
+.set-default-btn {
+  line-height: 13px;
+}
+</style>
