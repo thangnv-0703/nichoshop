@@ -34,9 +34,9 @@ const routes = [
           },
           {
             path: "account/address",
-            name: "accountAddress",
+            name: "userAddress",
             component: () =>
-              import("@/views/user/account/address/AccountAddress.vue"),
+              import("@/views/user/account/address/UserAddress.vue"),
           },
         ],
       },

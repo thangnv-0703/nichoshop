@@ -24,50 +24,27 @@
       >
         <Column field="price" header="Địa chỉ" style="min-width: 8rem">
           <template #body="slotProps">
-            <div class="Ln8BPM">
-              <div role="heading" class="ZP_sH4 EhiHrl">
-                <div
-                  id="address-card_56bc40f8-6982-4d02-9d97-ba28faa66de9_header"
-                  class="PvQ82w Bo_fXH"
-                >
-                  <span class="WZoJQT sHEV0u"
-                    ><div class="xwB4_Q">Nguyễn Phúc Tĩnh</div></span
-                  >
-                  <div class="qhS2mB"></div>
-                  <div role="row" class="urSLUA SDYBn1 PoI6l8">
-                    (+84) 948 314 827
-                  </div>
-                </div>
-                <div class="oQEeks">
-                  <button class="JHMWU8">Cập nhật</button>
+            <div>
+              <div>
+                <div>
+                  <span><div>Nguyễn Phúc Tĩnh</div></span>
+                  <div>(+84) 948 314 827</div>
                 </div>
               </div>
-              <div
-                id="address-card_56bc40f8-6982-4d02-9d97-ba28faa66de9_content"
-                role="heading"
-                class="ZP_sH4 EhiHrl"
-              >
-                <div class="PvQ82w Bo_fXH">
-                  <div class="W_MyuV">
-                    <div role="row" class="PoI6l8">
-                      Toà Nhà N03-T1, khu Ngoại Giao Đoàn
-                    </div>
-                    <div role="row" class="PoI6l8">
-                      Phường Xuân Tảo, Quận Bắc Từ Liêm, Hà Nội
-                    </div>
+              <div>
+                <div>
+                  <div>
+                    <div>Toà Nhà N03-T1, khu Ngoại Giao Đoàn</div>
+                    <div>Phường Xuân Tảo, Quận Bắc Từ Liêm, Hà Nội</div>
                   </div>
                 </div>
-                <div class="JwDIHs oQEeks">
+                <div>
                   <button class="FIxzOe H6ESfz U4E1nT" disabled="">
                     Thiết lập mặc định
                   </button>
                 </div>
               </div>
-              <div
-                id="address-card_56bc40f8-6982-4d02-9d97-ba28faa66de9_badge"
-                role="row"
-                class="Xx6fjH PoI6l8"
-              >
+              <div>
                 <Tag severity="warn" value="Mặc định"></Tag>
                 <Tag severity="secondary" value="Địa chỉ lấy hàng"></Tag>
               </div>
@@ -102,19 +79,17 @@
 import { ref, onMounted, getCurrentInstance } from "vue";
 import { FilterMatchMode } from "@primevue/core/api";
 import baseList from "@/views/base/baseList.js";
-// import { useToast } from "primevue/usetoast";
-// import { ProductService } from "@/service/ProductService";
-import DetailModal from "@/views/user/account/address/AccountAddressPopup.vue";
+import DetailModal from "@/views/user/account/address/UserAddressPopup.vue";
 export default {
   extends: baseList,
   setup() {
     const detailModal = DetailModal;
+    const autoLoad = true;
     const { proxy } = getCurrentInstance();
+    const module = "moduleUserAddress";
     onMounted(() => {
       //   ProductService.getProducts().then((data) => (products.value = data));
     });
-
-    // const toast = useToast();
     const dt = ref();
     const products = ref([{}, {}]);
     const selectedProducts = ref();
@@ -124,6 +99,7 @@ export default {
     return {
       products,
       detailModal,
+      module,
     };
   },
 };

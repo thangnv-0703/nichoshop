@@ -1,37 +1,45 @@
-<script setup lang="ts">
-import { ref } from "vue";
+<script>
+import { ref, onMounted, getCurrentInstance } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { GoogleMap, Marker } from "vue3-google-map";
-
+import baseDetail from "@/views/base/baseDetail.js";
 import { z } from "zod";
-const selectedCountry = ref();
-const countries = ref([
-  { name: "Australia", code: "AU" },
-  { name: "Brazil", code: "BR" },
-  { name: "China", code: "CN" },
-  { name: "Egypt", code: "EG" },
-  { name: "France", code: "FR" },
-  { name: "Germany", code: "DE" },
-  { name: "India", code: "IN" },
-  { name: "Japan", code: "JP" },
-  { name: "Spain", code: "ES" },
-  { name: "United States", code: "US" },
-]);
+export default {
+  extends: baseDetail,
+  components: { VueFinalModal, GoogleMap, Marker },
+  setup() {
+    const { proxy } = getCurrentInstance();
+    onMounted(() => {
+      console.log(proxy);
+      debugger;
+    });
+    const selectedCountry = ref();
+    const countries = ref([
+      { name: "Australia", code: "AU" },
+      { name: "Brazil", code: "BR" },
+      { name: "China", code: "CN" },
+      { name: "Egypt", code: "EG" },
+      { name: "France", code: "FR" },
+      { name: "Germany", code: "DE" },
+      { name: "India", code: "IN" },
+      { name: "Japan", code: "JP" },
+      { name: "Spain", code: "ES" },
+      { name: "United States", code: "US" },
+    ]);
 
-const center = { lat: 21.028511, lng: 105.804817 };
-// const toast = useToast();
-const initialValues = ref({
-  password: "",
-});
+    const center = { lat: 21.028511, lng: 105.804817 };
 
-const resolver = ref(
-  zodResolver(
-    z.object({
-      fullName: z.string({ required_error: "Không được để trống" }),
-    })
-  )
-);
+    const resolver = ref(
+      zodResolver(
+        z.object({
+          fullName: z.string({ required_error: "Không được để trống" }),
+        })
+      )
+    );
+    return { resolver, center, countries };
+  },
+};
 </script>
 
 <template>
@@ -49,12 +57,11 @@ const resolver = ref(
     content-class="w-[500px] mx-4 p-5 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg space-y-2"
   >
     <template #default="{ close }">
-      <span class="text-xl">Cập nhật địa chỉ</span>
+      <span class="text-xl">{{ $attrs.popupTitle }}</span>
       <Form
         v-slot="$form"
         :resolver="resolver"
-        :initialValues="initialValues"
-        @submit="onFormSubmit"
+        @submit="onSubmit"
         class="flex flex-col gap-4 w-full"
       >
         <div class="flex flex-col gap-4">

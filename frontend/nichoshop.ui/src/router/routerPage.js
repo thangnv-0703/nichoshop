@@ -25,9 +25,9 @@ export default [
     },
   },
   {
-    path: "/register",
-    name: "register",
-    component: () => import("@/pages/Register.vue"),
+    path: "/signup",
+    name: "signup",
+    component: () => import("@/pages/Signup.vue"),
     meta: {
       anonymous: true,
     },

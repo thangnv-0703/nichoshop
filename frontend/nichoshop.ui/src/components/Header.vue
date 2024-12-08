@@ -95,7 +95,6 @@ export default defineComponent({
 });
 </script>
 
-
 <style scoped lang="scss">
 /* Đặt biến màu sắc */
 $navbar-color: #f53d2d;

@@ -11,7 +11,12 @@
     >
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
-          <InputText name="email" type="text" placeholder="Tài khoản" />
+          <InputText
+            name="email"
+            type="text"
+            placeholder="Tài khoản"
+            v-model="model.PhoneNumber"
+          />
         </div>
 
         <Password
@@ -20,6 +25,7 @@
           :feedback="false"
           fluid
           toggleMask
+          v-model="model.Password"
         />
 
         <div class="flex justify-between">
@@ -41,7 +47,7 @@
         <p class="text-[#81818F]">Chưa có tài khoản?</p>
         <p
           class="text-[#0B80CC] ml-[4px] cursor-pointer"
-          @click="onClickGoToRegisterPage"
+          @click="onClickGoToSignupPage"
         >
           Đăng ký
         </p>
@@ -50,26 +56,37 @@
   </auth-layout>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import { VueFinalModal } from "vue-final-modal";
-import { zodResolver } from "@primevue/forms/resolvers/zod";
-// import { useToast } from "primevue/usetoast";
+import { ref, getCurrentInstance, onMounted } from "vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
-import { z } from "zod";
 import { useRouter } from "vue-router";
-// const toast = useToast();
-const initialValues = ref({
-  password: "",
+
+const { proxy } = getCurrentInstance();
+const model = ref({
+  PhoneNumber: null,
+  Password: null,
 });
 const router = useRouter();
 const staySignedIn = ref(false);
+onMounted(() => {
+  proxy.$store.dispatch("moduleUser/logout");
+});
 const onFormSubmit = ({ valid }) => {
-  if (valid) {
-    router.push("/home");
-  }
+  proxy.$store
+    .dispatch("moduleUser/login", {
+      PhoneNumber: model.value.PhoneNumber,
+      Password: model.value.Password,
+    })
+    .then((res) => {
+      if (res?.data?.token) {
+        router.push("/");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
-const onClickGoToRegisterPage = () => {
-  router.push("/register");
+const onClickGoToSignupPage = () => {
+  router.push("/signup");
 };
 </script>
 

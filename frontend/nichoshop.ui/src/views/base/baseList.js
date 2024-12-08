@@ -1,32 +1,24 @@
 import { ModalsContainer, useModal } from "vue-final-modal";
-import { defineComponent } from "vue";
+import { defineComponent, getCurrentInstance } from "vue";
 
 export default defineComponent({
   name: "Baselist",
   data() {
-    return { detailModal: null, baseGrid: null };
+    return { detailModal: null, gridBase: null, module: null };
   },
   mounted() {
-    // this.autoLoadGrid && this.loadDataGrid(1);
+    this.autoLoadGrid && this.loadDataGrid();
   },
   methods: {
-    // loadDataGrid() {
-    //   module.d;
-    // },
+    loadDataGrid() {
+      this.$store.dispatch(`${module}/getpaging`);
+    },
     edit() {
       const { open, close } = useModal({
         component: this.detailModal,
         attrs: {
-          // async onBeforeOpen() {
-          //   //todo: mask
-          //   await getEditData();
-          // },
-          onSubmit(formData) {
-            alert(JSON.stringify(formData, null, 2));
-
-            save();
-            close();
-          },
+          popupTitle: `Sửa ${this.$store.state[this.module].config?.name}`,
+          editMode: this.$nicho.enumeration.editMode.Edit,
         },
       });
       open();
@@ -35,17 +27,14 @@ export default defineComponent({
       const { open, close } = useModal({
         component: this.detailModal,
         attrs: {
-          onSubmit(formData) {
-            alert(JSON.stringify(formData, null, 2));
-            save();
-            close();
-          },
+          popupTitle: `Thêm ${this.$store.state[this.module].config?.name}`,
+          editMode: this.$nicho.enumeration.editMode.Add,
         },
       });
       open();
     },
-    save(editMode) {},
-    delete() {},
-    getEditData() {},
+    save(editMode) { },
+    delete() { },
+    getEditData() { },
   },
 });

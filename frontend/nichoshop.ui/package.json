@@ -12,6 +12,7 @@
     "@primevue/forms": "^4.2.2",
     "@primevue/themes": "^4.2.2",
     "@vorms/core": "^1.1.0",
+    "axios": "^1.7.9",
     "nichoshop.ui": "file:",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.2",

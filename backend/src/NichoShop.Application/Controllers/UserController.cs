@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
-using NichoShop.Application.Validators.User;
 using System.Net;
 
 namespace NichoShop.Application.Controllers;
