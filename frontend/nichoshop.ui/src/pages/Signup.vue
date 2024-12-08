@@ -35,7 +35,12 @@
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
-          <InputText name="fullname" type="text" placeholder="Họ và tên" />
+          <InputText
+            name="fullname"
+            type="text"
+            v-model="model.FullName"
+            placeholder="Họ và tên"
+          />
           <Message
             v-if="$form.fullname?.invalid"
             severity="error"
@@ -45,19 +50,25 @@
           >
         </div>
         <div class="flex flex-col gap-1">
-          <InputText name="email" type="text" placeholder="Email" />
+          <InputText
+            name="phoneNumber"
+            v-model="model.PhoneNumber"
+            type="text"
+            placeholder="Số điện thoại"
+          />
           <Message
-            v-if="$form.email?.invalid"
+            v-if="$form.phoneNumber?.invalid"
             severity="error"
             size="small"
             variant="simple"
-            >{{ $form.email.error?.message }}</Message
+            >{{ $form.phoneNumber.error?.message }}</Message
           >
         </div>
 
         <div class="flex flex-col gap-1">
           <Password
             name="password"
+            v-model="model.Password"
             placeholder="Nhập mật khẩu"
             :feedback="false"
             fluid
@@ -89,27 +100,32 @@
   </auth-layout>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import { VueFinalModal } from "vue-final-modal";
+import { ref, getCurrentInstance } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-// import { useToast } from "primevue/usetoast";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import { z } from "zod";
 import { useRouter } from "vue-router";
-// const toast = useToast();
+const { proxy } = getCurrentInstance();
+const router = useRouter();
 const tabs = ref({
   personal: 0,
   bussiness: 1,
 });
 const currentTab = ref(tabs.value.personal);
-const router = useRouter();
+const model = ref({
+  FullName: null,
+  PhoneNumber: null,
+  Password: null,
+});
 const resolver = ref(
   zodResolver(
     z.object({
       fullname: z.string({ required_error: "Không được để trống" }),
-      email: z
+      phoneNumber: z
         .string({ required_error: "Không được để trống" })
-        .email("Email không đúng định dạng"),
+        .regex(/^84(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/, {
+          message: "Số điện thoại không đúng dịnh dạng",
+        }),
       password: z
         .string({ required_error: "Không được để trống" })
         .min(3, { message: "Ít nhất chứa 3 ký tự." })
@@ -123,21 +139,28 @@ const resolver = ref(
   )
 );
 const onFormSubmit = ({ valid }) => {
-  if (valid) {
-    router.push("/");
+  if (!valid) {
+    return;
   }
+  proxy.$store
+    .dispatch("moduleUser/signup", {
+      FullName: model.value.FullName,
+      PhoneNumber: model.value.PhoneNumber,
+      Password: model.value.Password,
+    })
+    .then((res) => {
+      router.push("/login");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 const onClickGoToLoginPage = () => {
   router.push("/login");
 };
 const onSwitchTab = (newValue) => {
-  debugger;
   currentTab.value = newValue;
 };
 </script>
 
-<style scoped lang="scss">
-.tabs {
-}
-/* Thêm CSS tùy chỉnh nếu cần */
-</style>
+<style scoped lang="scss"></style>

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
-using NichoShop.Application.Validators.User;
 using System.Net;
 
 namespace NichoShop.Application.Controllers;
@@ -40,6 +39,24 @@ public class UserController : Controller
     {
         _loginValidator.Validate(requestDto);
         var result = await _userService.LoginAsync(requestDto);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequestDto param)
+    {
+        var result = await _userService.UpdateUserInfoAsync(param);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var result = await _userService.GetUserInfoAsync();
         return Ok(result);
     }
 }

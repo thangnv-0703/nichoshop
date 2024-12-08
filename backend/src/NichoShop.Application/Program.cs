@@ -7,7 +7,7 @@ var configuration = builder.Configuration;
 builder.Services
     .AddSetupOption(configuration)
     .AddApplicationServices(configuration)
-    .AddInfrastructureServices(configuration); 
+    .AddInfrastructureServices(configuration);
 
 var app = builder.Build();
 
@@ -24,7 +24,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+app.UseCors("_myAllowSpecificOrigins");
 app.MapControllers();
 
 app.Run();

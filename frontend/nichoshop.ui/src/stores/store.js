@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
-import ModuleUser from "./modules/ModuleUser";
+import moduleUser from "./modules/ModuleUser";
+import moduleUserAddress from "./modules/moduleUserAddress";
 const store = createStore({
-  modules: { ModuleUser },
+  modules: { moduleUser, moduleUserAddress },
 });
 export default store;

@@ -3,7 +3,7 @@ using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Infrastructure.Repositories;
-public class UserRepository(NichoShopDbContext context) : BaseRepository<User, Guid>(context), IUserRepository 
+public class UserRepository(NichoShopDbContext context) : BaseRepository<User, Guid>(context), IUserRepository
 {
     public async Task<User?> FindUserByPhoneNumber(string phoneNumber)
     {

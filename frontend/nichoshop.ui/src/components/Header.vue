@@ -21,7 +21,7 @@
           <div class="line"></div>
           <span>Đăng ký</span>
           <div class="line"></div>
-          <span>Đăng nhập</span>
+          <RouterLink to="/login">Đăng nhập</RouterLink>
         </div>
       </div>
       <div class="header-bottom">
@@ -68,7 +68,7 @@
 
 <script>
 import { defineComponent } from "vue";
-
+import { RouterLink } from "vue-router";
 export default defineComponent({
   name: "Header",
   data() {
@@ -94,7 +94,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <style scoped lang="scss">
 /* Đặt biến màu sắc */
