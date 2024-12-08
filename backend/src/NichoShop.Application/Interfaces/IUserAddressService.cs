@@ -6,7 +6,7 @@ namespace NichoShop.Application.Interfaces
 {
     public interface IUserAddressService
     {
-        Task<List<UserAddress>> GetUserAddressAsync();
+        Task<IReadOnlyCollection<UserAddress>> GetUserAddressAsync();
         Task<Guid> CreateUserAddressAsync(CreateUserAddressRequestDto param);
         Task<bool> UpdateUserAddressAsync(UpdateUserAddressResquestDto param, Guid userAddressId);
         Task<bool> SetDefaultUserAddressAsync(Guid userAddressId);
