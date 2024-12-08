@@ -9,9 +9,6 @@
 /backend/src/NichoShop.Infrastructure/bin/Debug/net8.0
 /backend/src/NichoShop.Infrastructure/obj
 /backend/src/obj
-/backend/NichoShop.DataLoader/bin/Debug/net8.0
-/backend/NichoShop.DataLoader/obj
-/backend/src/NichoShop.Common/NichoShop.Common/obj
-/backend/src/NichoShop.DataLoader/obj
-/backend/src/NichoShop.DataLoader/bin/Debug/net8.0
-/backend/src/NichoShop.DataLoader/NichoShop.TestDataLoader/obj
+
+/backend/src/NichoShop.TestDataLoader/bin/Debug/net8.0
+/backend/src/NichoShop.TestDataLoader/obj

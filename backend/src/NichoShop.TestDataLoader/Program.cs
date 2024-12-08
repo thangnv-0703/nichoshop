@@ -84,7 +84,7 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectionString = "Host=localhost;Database=NichoShopDB;Username=postgres;Password=postgres";
+        string connectionString = "Host=localhost;Database=NichoShopDB;Username=postgres";
         optionsBuilder.UseNpgsql(connectionString);
     }
 
