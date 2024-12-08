@@ -2,7 +2,7 @@
 using NichoShop.Domain.SeedWork;
 
 namespace NichoShop.Domain.AggergateModels.ProductAggregate;
-public class Product : AggregateRoot<int>
+public class Product : AggregateRoot<int>, IAuditable
 {
     public string Name { get; private set; } = default!;
 
@@ -10,13 +10,10 @@ public class Product : AggregateRoot<int>
 
     public ProductStatus Status { get; private set; } = default!;
 
-    public DateTimeOffset Created { get; private set; }
-
-    public DateTimeOffset? Updated { get; private set; }
-
+    public DateTimeOffset CreatedAt { get; private set; } = default!;
+    public DateTimeOffset? UpdatedAt { get; private set; }
     public string CreatedBy { get; private set; }
-
-    public string UpdatedBy { get; private set; }
+    public string? UpdatedBy { get; private set; }
 
 
     private readonly List<ProductCategory> _categories = [];
@@ -32,15 +29,11 @@ public class Product : AggregateRoot<int>
     {
     }
 
-    public Product(string name, string description, ProductStatus status, DateTimeOffset created, DateTimeOffset? updated, string createdBy, string updatedBy, List<ProductCategory> categories, List<ProductAttributeValue> attributeValues, List<ProductVariant> productVariants)
+    public Product(string name, string description, ProductStatus status, List<ProductCategory> categories, List<ProductAttributeValue> attributeValues, List<ProductVariant> productVariants)
     {
         Name = name;
         Description = description;
         Status = status;
-        Created = created;
-        Updated = updated;
-        CreatedBy = createdBy;
-        UpdatedBy = updatedBy;
         _categories = categories;
         _attributeValues = attributeValues;
         _variants = productVariants;

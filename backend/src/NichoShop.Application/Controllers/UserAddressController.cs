@@ -6,7 +6,7 @@ using System.Net;
 
 namespace NichoShop.Application.Controllers;
 
-[Route("api/v1/user/address")]
+[Route("api/v1/users/address")]
 [ApiController]
 [Authorize]
 public class UserAddressController : Controller
@@ -34,11 +34,11 @@ public class UserAddressController : Controller
         return Ok(result);
     }
 
-    [HttpPut]
+    [HttpPut("{userAddressId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> UpdateUserAddress(UpdateUserAddressResquestDto param)
+    public async Task<IActionResult> UpdateUserAddress(Guid userAddressId, [FromBody] UpdateUserAddressResquestDto param)
     {
-        var result = await _userAddressService.UpdateUserAddressAsync(param);
+        var result = await _userAddressService.UpdateUserAddressAsync(param, userAddressId);
         return Ok(result);
     }
 
