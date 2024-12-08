@@ -6,7 +6,7 @@ using System.Net;
 
 namespace NichoShop.Application.Controllers;
 
-[Route("api/v1/user/address")]
+[Route("api/v1/users/address")]
 [ApiController]
 [Authorize]
 public class UserAddressController : Controller
@@ -20,7 +20,7 @@ public class UserAddressController : Controller
 
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> CreateUserAddress()
+    public async Task<IActionResult> GetUserAddress()
     {
         var result = await _userAddressService.GetUserAddressAsync();
         return Ok(result);
@@ -34,11 +34,11 @@ public class UserAddressController : Controller
         return Ok(result);
     }
 
-    [HttpPut]
+    [HttpPut("{userAddressId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> UpdateUserAddress(UpdateUserAddressResquestDto param)
+    public async Task<IActionResult> UpdateUserAddress(Guid userAddressId, [FromBody] UpdateUserAddressResquestDto param)
     {
-        var result = await _userAddressService.UpdateUserAddressAsync(param);
+        var result = await _userAddressService.UpdateUserAddressAsync(param, userAddressId);
         return Ok(result);
     }
 
@@ -50,7 +50,7 @@ public class UserAddressController : Controller
         return Ok(result);
     }
 
-    [HttpDelete("userAddressId")]
+    [HttpDelete("{userAddressId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> DeleteUserAddress(Guid userAddressId)
     {

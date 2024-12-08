@@ -1,7 +1,6 @@
 ﻿using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
-using NichoShop.Application.Queries;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
 
@@ -14,25 +13,13 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
 
     public async Task<List<UserAddress>> GetUserAddressAsync()
     {
-        var user = await _userRepository.GetById(userContext.UserId);
-
-        if (user is null)
-        {
-            throw new Exception("User is undefined");
-        }
-
-        return user.GetUserAddresses();
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined"); ;
+        return user.Addresses.ToList();
     }
 
-    public async Task<bool> CreateUserAddressAsync(CreateUserAddressRequestDto param)
+    public async Task<Guid> CreateUserAddressAsync(CreateUserAddressRequestDto param)
     {
-        var user = await _userRepository.GetById(userContext.UserId);
-
-        if (user is null)
-        {
-            throw new Exception("User is undefined");
-        }
-
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
         var userAddressProp = new UserAddressProps()
         {
             FullName = param.FullName,
@@ -44,23 +31,17 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
             ZipCode = param.ZipCode,
             PhoneNumber = param.PhoneNumber,
         };
-        user.AddAddress(userAddressProp);
+        var address = user.AddAddress(userAddressProp);
         await _userRepository.SaveChangesAsync();
-        return true;
+        return address.Id;
     }
 
-    public async Task<bool> UpdateUserAddressAsync(UpdateUserAddressResquestDto param)
+    public async Task<bool> UpdateUserAddressAsync(UpdateUserAddressResquestDto param, Guid userAddressId)
     {
-        var user = await _userRepository.GetById(userContext.UserId);
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        var userAddresses = user.Addresses.ToList();
 
-        if (user is null)
-        {
-            throw new Exception("User is undefined");
-        }
-
-        var userAddress = user.GetUserAddressById(param.Id);
-
-        if (userAddress is not null && IsValidUser(userAddress.Id))
+        if (userAddresses.Any() && userAddresses.Find(x => x.Id == userAddressId) is not null)
         {
             var userAddressProp = new UserAddressProps()
             {
@@ -73,7 +54,7 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
                 ZipCode = param.ZipCode,
                 PhoneNumber = param.PhoneNumber,
             };
-            user.UpdateAddress(param.Id, userAddressProp);
+            user.UpdateAddress(userAddressId, userAddressProp);
             await _userRepository.SaveChangesAsync();
             return true;
         }
@@ -82,18 +63,13 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
 
     public async Task<bool> SetDefaultUserAddressAsync(Guid userAddressId)
     {
-        var user = await _userRepository.GetById(userContext.UserId);
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        var userAddresses = user.Addresses.ToList();
 
-        if (user is null)
-        {
-            throw new Exception("User is undefined");
-        }
-
-        var userAddress = user.GetUserAddressById(userAddressId);
-
-        if (userAddress is not null && IsValidUser(userAddress.Id))
+        if (userAddresses.Any() && userAddresses.Find(x => x.Id == userAddressId) is not null)
         {
             user.SetDefaultAddress(userAddressId);
+            await _userRepository.SaveChangesAsync();
             return true;
         }
         return false;
@@ -101,32 +77,15 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
 
     public async Task<bool> DeleteUserAddressAsync(Guid userAddressId)
     {
-        var user = await _userRepository.GetById(userContext.UserId);
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        var userAddresses = user.Addresses.ToList();
 
-        if (user is null)
-        {
-            throw new Exception("User is undefined");
-        }
-
-        var userAddress = user.GetUserAddressById(userAddressId);
-
-        if (userAddress is not null && IsValidUser(userAddress.Id))
+        if (userAddresses.Any() && userAddresses.Find(x => x.Id == userAddressId) is not null)
         {
             user.RemoveAddress(userAddressId);
+            await _userRepository.SaveChangesAsync();
             return true;
         }
-        return false;
-    }
-
-    /// <summary>
-    /// Hàm kiểm tra xem userId có khớp với userId của userAddress có khớp không?
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns></returns>
-    private bool IsValidUser(Guid userID_userAddress)
-    {
-        if (_userContext.UserId == userID_userAddress)
-            return true;
         return false;
     }
 }

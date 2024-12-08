@@ -38,15 +38,11 @@ public class User : AggregateRoot<Guid>
         Gender = gender;
     }
 
-    public List<UserAddress> GetUserAddresses()
-    {
-        return _addresses;
-    }
-
-    public void AddAddress(UserAddressProps props)
+    public UserAddress AddAddress(UserAddressProps props)
     {
         var address = new UserAddress(props);
         _addresses.Add(address);
+        return address;
     }
 
     public void RemoveAddress(Guid userAddressId)
@@ -75,11 +71,5 @@ public class User : AggregateRoot<Guid>
         var address = _addresses.Find(x => x.Id == userAddressId) ?? throw new Exception("Address not found");
         _addresses.ForEach(x => x.SetDefault(false));
         address.SetDefault(true);
-    }
-
-    public UserAddress? GetUserAddressById(Guid userAddressId)
-    {
-        var userAddress = _addresses.Find(x => x.Id == userAddressId);
-        return userAddress;
     }
 }
