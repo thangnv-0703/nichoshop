@@ -11,10 +11,10 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
     private readonly IUserContext _userContext = userContext;
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<IReadOnlyCollection<UserAddress>> GetUserAddressAsync()
+    public async Task<List<UserAddress>> GetUserAddressAsync()
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined"); ;
-        return user.Addresses;
+        return user.Addresses.ToList();
     }
 
     public async Task<Guid> CreateUserAddressAsync(CreateUserAddressRequestDto param)
