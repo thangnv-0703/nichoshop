@@ -43,10 +43,11 @@ public class User : AggregateRoot<Guid>
         return _addresses;
     }
 
-    public void AddAddress(UserAddressProps props)
+    public UserAddress AddAddress(UserAddressProps props)
     {
         var address = new UserAddress(props);
         _addresses.Add(address);
+        return address;
     }
 
     public void RemoveAddress(Guid userAddressId)

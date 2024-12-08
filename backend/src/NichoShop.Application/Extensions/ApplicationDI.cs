@@ -45,12 +45,13 @@ public static class ApplicationDI
     private static IServiceCollection ConfigureApplicationService(this IServiceCollection services) {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IUserAddressService, UserAddressService>();
         return services;
     }
 
     private static IServiceCollection ConfigureCustomService(this IServiceCollection services) {
-        services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IUserContext, UserContext>();
         return services;
     }
