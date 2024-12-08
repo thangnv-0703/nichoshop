@@ -29,7 +29,14 @@ const routes = [
           {
             path: "account/profile",
             name: "accountProfile",
-            component: () => import("@/views/user/account/profile.vue"),
+            component: () =>
+              import("@/views/user/account/profile/AccountProfile.vue"),
+          },
+          {
+            path: "account/address",
+            name: "accountAddress",
+            component: () =>
+              import("@/views/user/account/address/AccountAddress.vue"),
           },
         ],
       },
