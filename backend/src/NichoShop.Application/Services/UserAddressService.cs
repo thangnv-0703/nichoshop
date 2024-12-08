@@ -1,4 +1,5 @@
-﻿using NichoShop.Application.CommonService.Interface;
+﻿using Mapster;
+using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
 using NichoShop.Domain.AggergateModels.UserAggregate;
@@ -11,10 +12,12 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
     private readonly IUserContext _userContext = userContext;
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<List<UserAddress>> GetUserAddressAsync()
+    public async Task<List<UserAddressDto>> GetUserAddressAsync()
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined"); ;
-        return user.Addresses.ToList();
+        var userAddresses = user.Addresses.ToList();
+        var response = userAddresses.Adapt<List<UserAddressDto>>();
+        return response;
     }
 
     public async Task<Guid> CreateUserAddressAsync(CreateUserAddressRequestDto param)
