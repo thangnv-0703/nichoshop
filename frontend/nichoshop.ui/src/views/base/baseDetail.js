@@ -15,7 +15,7 @@ export default defineComponent({
       this.save();
     },
     save() {
-      this.$store.dispatch(`${module}/createItem`, model);
+      this.$store.dispatch(`${this.module}/createItem`, this.model);
       debugger;
     },
     getEditData() { },

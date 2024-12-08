@@ -14,6 +14,8 @@ export default {
       console.log(proxy);
       debugger;
     });
+    const model = ref({});
+    const module = "moduleUserAddress";
     const selectedCountry = ref();
     const countries = ref([
       { name: "Australia", code: "AU" },
@@ -37,7 +39,7 @@ export default {
         })
       )
     );
-    return { resolver, center, countries };
+    return { model, module, resolver, center, countries };
   },
 };
 </script>

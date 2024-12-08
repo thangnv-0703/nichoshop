@@ -52,6 +52,7 @@ export default class Crud {
         }
       },
       async createItem({ commit, dispatch }, payload) {
+        debugger
         commit("setLoading", true);
         try {
           await me.api.create(payload);
