@@ -1,4 +1,5 @@
 using NichoShop.Application.Extensions;
+using NichoShop.Application.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -8,6 +9,12 @@ builder.Services
     .AddSetupOption(configuration)
     .AddApplicationServices(configuration)
     .AddInfrastructureServices(configuration);
+
+// Thêm filter vào MVC
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiResponseFilter>();
+});
 
 var app = builder.Build();
 
