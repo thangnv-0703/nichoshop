@@ -9,7 +9,6 @@
 <script>
 import { ModalsContainer } from "vue-final-modal";
 import ConfirmDialog from "primevue/confirmdialog";
-
 export default {
   name: "App",
   components: { ModalsContainer, ConfirmDialog },

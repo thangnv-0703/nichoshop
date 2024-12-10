@@ -4,13 +4,9 @@ import { defineComponent, getCurrentInstance } from "vue";
 export default defineComponent({
   name: "BaseDetail",
   data() {
-    return { model: null, loadEditData: null, editMode: null };
+    return { model: null, loadEditData: null, editMode: this.$attrs.editMode };
   },
   async created() {
-    debugger
-    if (this.$attrs.editMode) {
-      this.editMode = this.$attrs.editMode;
-    }
     if (this.editMode === this.$nicho.enumeration.editMode.Edit && this.$attrs.record) {
       this.model = this.$attrs.record;
     }
@@ -33,7 +29,7 @@ export default defineComponent({
     save() {
       let param = this.model;
       debugger
-      param = this.customParam();
+      param = this.customParam(param);
       switch (this.editMode) {
         case this.$nicho.enumeration.editMode.Add:
           this.$store.dispatch(`${this.module}/createItem`, param);
@@ -43,7 +39,7 @@ export default defineComponent({
           break;
       }
     },
-    customParam() { },
+    customParam(param) { return param },
     getEditData() { },
   },
 });

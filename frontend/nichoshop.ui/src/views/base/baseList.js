@@ -1,7 +1,6 @@
 import { ModalsContainer, useModal } from "vue-final-modal";
 import { defineComponent, getCurrentInstance } from "vue";
 import _ from 'lodash'
-import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 export default defineComponent({
   name: "Baselist",
@@ -15,6 +14,7 @@ export default defineComponent({
       detailModal: null,
       gridBase: null,
       module: null,
+      confirm: useConfirm(),
     };
   },
   mounted() {
@@ -46,30 +46,33 @@ export default defineComponent({
       open();
     },
     save(editMode) { },
-    deleteOne() {
-      const confirm = useConfirm();
-      const toast = useToast();
-      confirm.require({
+    deleteOne(record) {
+      this.confirm.require({
         message: `Bạn có chắc chắn muốn xóa ${this.$store.state[this.module].config?.name} này?`,
-        header: 'Danger Zone',
+        header: 'Cảnh báo',
         icon: 'pi pi-info-circle',
-        rejectLabel: 'Cancel',
+        rejectLabel: 'Hủy',
         rejectProps: {
-          label: 'Cancel',
+          label: 'Hủy',
           severity: 'secondary',
           outlined: true
         },
         acceptProps: {
-          label: 'Delete',
+          label: 'Đồng ý',
           severity: 'danger'
         },
         accept: () => {
-          toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+          debugger
+          const fieldId = this.$store.state[this.module].config?.fieldId;
+          this.handleDelete(record[fieldId])
         },
         reject: () => {
-          toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+          close()
         }
       });
+    },
+    handleDelete(id) {
+      this.$store.dispatch(`${this.module}/deleteItem`, id); //để tạm get all
     },
     getEditData() { },
   },

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Application.CommonService.Interface;
+using NichoShop.Application.Models.AppSettings;
+using NichoShop.Domain.AggergateModels.UserAggregate;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using NichoShop.Application.Models.AppSettings;
 
 namespace NichoShop.Application.CommonService.Implementation;
 public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
@@ -31,7 +31,7 @@ public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
             _jwtOptions.Audience,
             claims,
             null,
-            DateTime.Now.AddMinutes(30),
+            DateTime.Now.AddHours(4),
             signingCredentials);
 
         string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
