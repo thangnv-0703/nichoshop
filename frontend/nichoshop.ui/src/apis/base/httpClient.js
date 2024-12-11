@@ -8,7 +8,8 @@ export default {
     get: (apiURL) => {
         const token = localStorage.getItem('token')
         const headers = { 'Authorization': `Bearer ${token}` };
-        return axios.get(apiURL, { headers });
+        const res = axios.get(apiURL, { headers });
+        return res;
     },
     put: (apiURL, payload) => {
         const token = localStorage.getItem('token')

@@ -10,11 +10,7 @@ using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Queries;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
-using NichoShop.Application.CommonService.Implementation;
 using System.Text;
-using NichoShop.Application.Models.AppSettings;
-using NichoShop.Application.Queries;
-using NichoShop.Application.CommonService.Interface;
 
 namespace NichoShop.Application.Extensions;
 
@@ -56,7 +52,8 @@ public static class ApplicationDI
         return services;
     }
 
-    private static IServiceCollection ConfigureCustomService(this IServiceCollection services) {
+    private static IServiceCollection ConfigureCustomService(this IServiceCollection services)
+    {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IUserContext, UserContext>();
@@ -90,20 +87,20 @@ public static class ApplicationDI
         var serviceProvider = services.BuildServiceProvider();
         var appConfig = serviceProvider.GetRequiredService<IOptions<AppConfig>>().Value;
 
-        //if (appConfig.Cors != null)
-        //{
-        services.AddCors(
+        if (appConfig.Cors != null)
+        {
+            services.AddCors(
             options =>
             {
                 options.AddPolicy(
                     name: "_myAllowSpecificOrigins",
-                    builder => builder.WithOrigins(["http://localhost:5173"])
+                    builder => builder.WithOrigins(appConfig.Cors)
                                       .AllowAnyHeader()
                                       .AllowAnyMethod()
                                       .AllowCredentials()
                 );
             });
-        //}
+        }
         return services;
     }
 
