@@ -15,33 +15,33 @@
         v-model:selection="selectedProducts"
         :value="items"
         dataKey="id"
-        :paginator="true"
         :rows="10"
         :filters="filters"
-        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        :rowsPerPageOptions="[5, 10, 25]"
-        currentPageReportTemplate=""
       >
         <Column field="price" header="Địa chỉ" style="min-width: 8rem">
           <template #body="slotProps">
             <div class="flex">
               <div>
-                <b>{{ slotProps.data["fullName"] }}</b>
+                <b>{{ slotProps.data.fullName }}</b>
               </div>
               <Divider layout="vertical" />
               <div>
-                {{ slotProps.data["phoneNumber"]["value"] }}
+                {{ slotProps.data.phoneNumber }}
               </div>
             </div>
             <div>
-              {{ slotProps.data["street"] }}
+              {{ slotProps.data.street }}
             </div>
             <div>
               {{
-                `${slotProps.data["ward"]}, ${slotProps.data["district"]}, ${slotProps.data["province"]}`
+                `${slotProps.data.ward}, ${slotProps.data.district}, ${slotProps.data.province}`
               }}
             </div>
-            <Tag severity="warn" value="Mặc định"></Tag>
+            <Tag
+              severity="warn"
+              v-if="slotProps.data.isDefault"
+              value="Mặc định"
+            ></Tag>
           </template>
         </Column>
 

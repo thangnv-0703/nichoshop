@@ -3,6 +3,7 @@
     <router-view />
     <ModalsContainer />
     <ConfirmDialog></ConfirmDialog>
+    <Toast position="top-center" group="tc" />
   </div>
 </template>
 

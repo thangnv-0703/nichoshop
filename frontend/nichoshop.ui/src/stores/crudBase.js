@@ -32,6 +32,7 @@ export default class Crud {
       async getAll({ commit }) {
         commit("setLoading", true);
         try {
+
           const response = await me.api.getAll();
           commit("setItems", response.data);
         } catch (error) {
@@ -51,31 +52,52 @@ export default class Crud {
           commit("setLoading", false);
         }
       },
-      async createItem({ commit, dispatch }, payload) {
-        debugger
+      async createItem({ commit, state }, payload) {
         commit("setLoading", true);
         try {
-          await me.api.create(payload);
+          const res = await me.api.create(payload);
+          if (res?.data) {
+            commit("setItems", [...state.items, {
+              ...payload,
+              [state.config.fieldId]: res.data
+            }]);
+          }
+          return res;
         } catch (error) {
           commit("setError", error);
         } finally {
           commit("setLoading", false);
         }
       },
-      async updateItem({ commit, dispatch }, payload) {
+      async updateItem({ commit, state }, payload) {
         commit("setLoading", true);
         try {
-          await me.api.update(payload.id, payload);
+          const res = await me.api.update(payload.id, payload);
+          if (res?.data) {
+            commit("setItems", state.items.map(item => {
+              if (item[state.config.fieldId] == payload.id) {
+                return payload
+              }
+              return item;
+            }
+            ));
+          }
+          return res;
         } catch (error) {
           commit("setError", error);
         } finally {
           commit("setLoading", false);
         }
       },
-      async deleteItem({ commit, dispatch }, id) {
+      async deleteItem({ commit, state }, id) {
         commit("setLoading", true);
         try {
-          await me.api.delete(id);
+          const res = await me.api.delete(id);
+          debugger
+          if (res) {
+            commit("setItems", state.items.filter(item => item[state.config.fieldId] !== id));
+          }
+          return res;
         } catch (error) {
           commit("setError", error);
         } finally {
