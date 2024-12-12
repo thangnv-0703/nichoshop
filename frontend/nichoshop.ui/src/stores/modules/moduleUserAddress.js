@@ -5,6 +5,7 @@ const state = {
   ...crud.state,
   config: {
     name: "địa chỉ",
+    fieldId: 'id'
   },
 };
 const getters = {

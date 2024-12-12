@@ -18,7 +18,6 @@ declare module 'vue' {
     Form: typeof import('@primevue/forms/form')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     Index: typeof import('./src/components/home/Index.vue')['default']
-    InputMask: typeof import('primevue/inputmask')['default']
     InputText: typeof import('primevue/inputtext')['default']
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
@@ -32,6 +31,7 @@ declare module 'vue' {
     Select: typeof import('primevue/select')['default']
     SvgIcon: typeof import('./src/components/common/SvgIcon.vue')['default']
     Tag: typeof import('primevue/tag')['default']
+    Toast: typeof import('primevue/toast')['default']
   }
   export interface ComponentCustomProperties {
     Ripple: typeof import('primevue/ripple')['default']
