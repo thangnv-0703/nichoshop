@@ -1,15 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using NichoShop.TestDataLoader.Features;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
-using NichoShop.Application.Extensions;
 using Microsoft.Extensions.Configuration;
-using System;
 using Microsoft.Extensions.Hosting;
 using NichoShop.Infrastructure;
 
