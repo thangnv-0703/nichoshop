@@ -8,7 +8,6 @@ public class NichoShopDbContextFactory : IDesignTimeDbContextFactory<NichoShopDb
 {
     public NichoShopDbContext CreateDbContext(string[] args)
     {
-        
         // Build configuration
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
@@ -24,4 +23,9 @@ public class NichoShopDbContextFactory : IDesignTimeDbContextFactory<NichoShopDb
 
         return new NichoShopDbContext(optionsBuilder.Options, configuration);
     }
+
+    //public static NichoShopDbContext CreateDbContext()
+    //{
+        
+    //}
 }

@@ -36,7 +36,7 @@ public class UserAddress : Entity<Guid>
         PhoneNumber = new PhoneNumber(props.PhoneNumber);
     }
 
-    public void SetDefault(bool isDefault)
+    internal void SetDefault(bool isDefault)
     {
         IsDefault = isDefault;
     }
