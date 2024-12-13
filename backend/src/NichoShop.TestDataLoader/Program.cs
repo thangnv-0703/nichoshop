@@ -1,100 +1,95 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using NichoShop.TestDataLoader.Features;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json;
+using System.Reflection;
+using NichoShop.Application.Extensions;
+using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.Extensions.Hosting;
+using NichoShop.Infrastructure;
+
+namespace NichoShop.TestDataLoader;
 
 internal class Program
 {
     private static async Task Main(string[] args)
     {
-        try
-        {
-            Console.Write("Do you want to update categories? (yes/no): ");
-            string userInput = Console.ReadLine()?.Trim().ToLower();
-
-            if (userInput == "yes")
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
             {
-                await UpdateCategoryData();
-            }
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+                config.SetBasePath(Directory.GetCurrentDirectory())
+                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                      .AddJsonFile($"appsettings.{environment}.json", optional: true);
+            })
+            .ConfigureServices((context, services) =>
+            {
+                var configuration = context.Configuration;
+                services.AddDbContext<NichoShopDbContext>(options =>
+                    options.UseNpgsql(configuration.GetConnectionString("NichoShopDB")));
+                services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            })
+            .Build();
 
-        }
-        catch (Exception ex)
+        var mediator = host.Services.GetRequiredService<IMediator>();
+
+        while (true)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            DisplayMenu();
+
+            int choice = GetMenuChoice();
+
+            if (choice == 0)
+            {
+                Console.WriteLine("Exiting the application. Goodbye!");
+                break;
+            }
+            else
+            {
+                var selectedOption = MenuOption.GetAll<MenuOption>().FirstOrDefault(option => option.Id == choice);
+
+                if (selectedOption == null)
+                {
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    continue;
+                }
+                Console.WriteLine($"Executing: {selectedOption.Name}");
+                try
+                {
+                    await mediator.Send(selectedOption.Command);
+                    Console.WriteLine("Action completed.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                }
+            }
         }
+
+        
     }
 
-    private static async Task UpdateCategoryData()
+    private static void DisplayMenu()
     {
-        string jsonFilePath = "categories.json"; // Path to your JSON file
-                                                 // Read JSON file
-        string jsonContent = File.ReadAllText(jsonFilePath);
-        var categories = JsonConvert.DeserializeObject<List<Category>>(jsonContent);
-
-        using var context = new AppDbContext();
-        if (categories != null)
+        Console.WriteLine("Menu Options:");
+        Console.WriteLine("0. Exit");
+        foreach (var option in MenuOption.GetAll<MenuOption>())
         {
-            context.Categories.RemoveRange(context.Categories);  
-            await context.SaveChangesAsync();
-
-            // Prepare batch insert
-            var newCategories = new List<Category>();
-
-            foreach (var category in categories)
-            {
-                InsertCategory(category);
-            }
+            Console.WriteLine($"{option.Id}. {option.Name}");
         }
-        else
-        {
-            Console.WriteLine("No categories to insert.");
-        }
-
-        void InsertCategory(Category category)
-        {
-            context.Add(category);
-            foreach (var childCategory in category.Children)
-            {
-                InsertCategory(childCategory);
-            }
-        }
-
-        await context.SaveChangesAsync();
+        Console.Write("Your choice: ");
     }
 
-}
-
-[Table("categories")]
-public class Category
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    [JsonProperty("display_name")]
-    public string DisplayName { get; set; } = string.Empty;
-    public int? ParentId { get; set; }  // Nullable to allow root categories
-    [NotMapped]
-    public Category? Parent { get; set; }
-    [NotMapped]
-    public ICollection<Category> Children { get; set; } = [];
-}
-
-public class AppDbContext : DbContext
-{
-    public DbSet<Category> Categories { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    static int GetMenuChoice()
     {
-        string connectionString = "Host=localhost;Database=NichoShopDB;Username=postgres";
-        optionsBuilder.UseNpgsql(connectionString);
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Category>()
-            .HasOne(c => c.Parent)
-            .WithMany(c => c.Children)
-            .HasForeignKey(c => c.ParentId)
-            .OnDelete(DeleteBehavior.Cascade);
+        int choice;
+        while (!int.TryParse(Console.ReadLine(), out choice)) { }
+        return choice;
     }
 }
 

@@ -10,7 +10,11 @@ using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Queries;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
+using NichoShop.Application.CommonService.Implementation;
 using System.Text;
+using NichoShop.Application.Models.AppSettings;
+using NichoShop.Application.Queries;
+using NichoShop.Application.CommonService.Interface;
 
 namespace NichoShop.Application.Extensions;
 
