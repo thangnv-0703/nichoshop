@@ -5,8 +5,9 @@ using NichoShop.Domain.AggergateModels.OrderAggregate;
 using NichoShop.Domain.AggergateModels.ProductAggregate;
 using NichoShop.Domain.AggergateModels.ShoppingCartAggregate;
 using NichoShop.Domain.AggergateModels.UserAggregate;
+using NichoShop.Domain.Location;
 using NichoShop.Infrastructure.EntityConfigurations;
-using System.Reflection.Emit;
+using NichoShop.Infrastructure.EntityConfigurations.Location;
 
 namespace NichoShop.Infrastructure;
 public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IConfiguration configuration) : DbContext(options)
@@ -27,6 +28,14 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
     public DbSet<Order> Order { get; set; }
     public DbSet<OrderItem> OrderItem { get; set; }
     public DbSet<Sku> Sku { get; set; }
+
+    #region location
+    public DbSet<Province> Province { get; set; }
+    public DbSet<District> District { get; set; }
+    public DbSet<Ward> Ward { get; set; }
+    public DbSet<AdministrativeUnit> AdministrativeUnit { get; set; }
+    public DbSet<AdministrativeRegion> AdministrativeRegions { get; set; }
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,5 +64,13 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
         modelBuilder.ApplyConfiguration(new OrderEntityConfiguration());
         modelBuilder.ApplyConfiguration(new OrderItemEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SkuEntityConfiguration());
+
+        #region location
+        modelBuilder.ApplyConfiguration(new ProvinceEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new DistrictEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new WardEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AdministrativeUnitEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AdministrativeRegionEntityConfiguration());
+        #endregion
     }
 }
