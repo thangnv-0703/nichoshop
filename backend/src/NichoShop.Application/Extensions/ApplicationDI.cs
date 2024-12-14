@@ -7,14 +7,12 @@ using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.AppSettings;
 using NichoShop.Application.Models.Dtos.Request.User;
+using NichoShop.Application.Models.Dtos.Request.UserAddress;
 using NichoShop.Application.Queries;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
-using NichoShop.Application.CommonService.Implementation;
+using NichoShop.Application.Validators.UserAddress;
 using System.Text;
-using NichoShop.Application.Models.AppSettings;
-using NichoShop.Application.Queries;
-using NichoShop.Application.CommonService.Interface;
 
 namespace NichoShop.Application.Extensions;
 
@@ -45,6 +43,7 @@ public static class ApplicationDI
     {
         services.AddScoped<IValidator<CreateUserRequestDto>, CreateUserValidator>();
         services.AddScoped<IValidator<LoginRequestDto>, LoginValidator>();
+        services.AddScoped<IValidator<UserAddressRequestDto>, UserAddressValidator>();
         return services;
     }
 

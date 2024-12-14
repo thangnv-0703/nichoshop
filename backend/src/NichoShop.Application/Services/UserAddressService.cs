@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using AutoMapper;
 using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
@@ -7,20 +7,21 @@ using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class UserAddressService(IUserRepository userRepository, IUserContext userContext) : IUserAddressService
+public class UserAddressService(IUserRepository userRepository, IUserContext userContext, IMapper mapper) : IUserAddressService
 {
     private readonly IUserContext _userContext = userContext;
     private readonly IUserRepository _userRepository = userRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<UserAddressDto>> GetUserAddressAsync()
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined"); ;
         var userAddresses = user.Addresses.ToList();
-        var response = userAddresses.Adapt<List<UserAddressDto>>();
-        return response;
+        var res = _mapper.Map<List<UserAddressDto>>(userAddresses);
+        return res;
     }
 
-    public async Task<Guid> CreateUserAddressAsync(CreateUserAddressRequestDto param)
+    public async Task<Guid> CreateUserAddressAsync(UserAddressRequestDto param)
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
         var userAddressProp = new UserAddressProps()
@@ -39,7 +40,7 @@ public class UserAddressService(IUserRepository userRepository, IUserContext use
         return address.Id;
     }
 
-    public async Task<bool> UpdateUserAddressAsync(UpdateUserAddressResquestDto param, Guid userAddressId)
+    public async Task<bool> UpdateUserAddressAsync(UserAddressRequestDto param, Guid userAddressId)
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
         var userAddresses = user.Addresses.ToList();
