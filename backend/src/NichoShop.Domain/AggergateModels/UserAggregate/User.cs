@@ -22,12 +22,12 @@ public class User : AggregateRoot<Guid>
 
     private User() { }
 
-    public User( 
-        string phoneNumber, 
-        string password, 
-        string userName, 
-        string? fullName, 
-        string? email, 
+    public User(
+        string phoneNumber,
+        string password,
+        string userName,
+        string? fullName,
+        string? email,
         Gender? gender = null)
     {
         PhoneNumber = new PhoneNumber(phoneNumber);
@@ -58,12 +58,13 @@ public class User : AggregateRoot<Guid>
         address.UpdateAddress(props);
     }
 
-    public void UpdateUserInfo(string? fullName, string? email, string? phoneNumber, Gender? gender)
+    public void UpdateUserInfo(string userName, string? fullName, string? email, string? phoneNumber, Gender? gender)
     {
-        if(!string.IsNullOrWhiteSpace(fullName)) FullName = fullName;
-        if(!string.IsNullOrWhiteSpace(email)) Email = email;
-        if(!string.IsNullOrWhiteSpace(phoneNumber) && PhoneNumber.Value != phoneNumber) PhoneNumber = new PhoneNumber(phoneNumber);
-        if(gender is not null) Gender = (Gender)gender;
+        if (!string.IsNullOrWhiteSpace(userName)) UserName = userName;
+        if (!string.IsNullOrWhiteSpace(fullName)) FullName = fullName;
+        if (!string.IsNullOrWhiteSpace(email)) Email = email;
+        if (!string.IsNullOrWhiteSpace(phoneNumber) && PhoneNumber.Value != phoneNumber) PhoneNumber = new PhoneNumber(phoneNumber);
+        if (gender is not null) Gender = (Gender)gender;
     }
 
     public void SetDefaultAddress(Guid userAddressId)

@@ -1,4 +1,5 @@
-﻿using NichoShop.Application.CommonService.Interface;
+﻿using AutoMapper;
+using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Helpers;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
@@ -8,9 +9,9 @@ using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider, IUserContext userContext) : IUserService
+public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider, IUserContext userContext, IMapper mapper) : IUserService
 {
-
+    private readonly IMapper _mapper = mapper;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly IUserContext _userContext = userContext;
@@ -57,14 +58,15 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
 
-        user.UpdateUserInfo(param.FullName, param.Email, param.PhoneNumber, param.Gender);
+        user.UpdateUserInfo(param.UserName, param.FullName, param.Email, param.PhoneNumber, param.Gender);
         await _userRepository.SaveChangesAsync();
         return true;
     }
 
-    public async Task<User> GetUserInfoAsync()
+    public async Task<UserInfoDto> GetUserInfoAsync()
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
-        return user;
+        var res = _mapper.Map<UserInfoDto>(user);
+        return res;
     }
 }
