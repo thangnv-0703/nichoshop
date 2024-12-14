@@ -32,12 +32,12 @@ export default [
       anonymous: true,
     },
   },
-  //   {
-  //     path: "/logout",
-  //     name: "Logout",
-  //     component: () => import("@/pages/Logout.vue"),
-  //     meta: {
-  //       anonymous: true,
-  //     },
-  //   },
+  {
+    path: "/logout",
+    name: "Logout",
+    component: () => import("@/pages/Logout.vue"),
+    meta: {
+      anonymous: true,
+    },
+  },
 ];

@@ -33,7 +33,7 @@ export default defineComponent({
     async save() {
       let param = this.model;
       param = this.customParam(param);
-      let res
+      let res = null;
       switch (this.editMode) {
         case this.$nicho.enumeration.editMode.Add:
           res = await this.$store.dispatch(`${this.module}/createItem`, param);
@@ -42,7 +42,7 @@ export default defineComponent({
           res = await this.$store.dispatch(`${this.module}/updateItem`, param);
           break;
       }
-      if (res.data) {
+      if (res?.data) {
         close();
         this.toast.add({ severity: 'success', summary: 'Thành công', detail: 'Lưu thành công!', group: 'tc', life: 3000 });
       }

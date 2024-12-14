@@ -24,14 +24,24 @@
           <RouterLink v-if="!authHelper.isAuthenticated()" to="/login"
             >Đăng nhập</RouterLink
           >
-          <div v-if="authHelper.isAuthenticated()" @click="toggle">
+          <div
+            class="cursor-pointer"
+            v-if="authHelper.isAuthenticated()"
+            @click="toggle"
+          >
             thothoikhon
           </div>
           <Popover ref="op">
             <div class="flex flex-col gap-4">
               <div>
-                <span class="font-medium block mb-2">Tài khoản của tôi</span>
-                <span class="font-medium block mb-2">Đăng xuất</span>
+                <RouterLink
+                  to="/user/account/profile"
+                  class="font-medium block mb-2"
+                  >Tài khoản của tôi</RouterLink
+                >
+                <RouterLink class="font-medium block" to="/logout"
+                  >Đăng xuất</RouterLink
+                >
               </div>
             </div>
           </Popover>

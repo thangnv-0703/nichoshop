@@ -19,8 +19,8 @@ const actions = {
   },
   async login(store, payload) {
     const res = await api.login(payload);
-    if (res?.data?.data?.token) {
-      store.commit("setToken", res?.data?.data?.token)
+    if (res?.data?.token) {
+      store.commit("setToken", res?.data?.token)
     }
     return res;
   },
