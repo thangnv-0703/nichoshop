@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
@@ -12,10 +13,12 @@ namespace NichoShop.Application.Controllers;
 public class UserAddressController : Controller
 {
     private readonly IUserAddressService _userAddressService;
+    private readonly IValidator<UserAddressRequestDto> _userAddressValidator;
 
-    public UserAddressController(IUserAddressService userAddressService)
+    public UserAddressController(IUserAddressService userAddressService, IValidator<UserAddressRequestDto> userAddressValidator)
     {
         _userAddressService = userAddressService;
+        _userAddressValidator = userAddressValidator;
     }
 
     [HttpGet]
@@ -28,16 +31,18 @@ public class UserAddressController : Controller
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> CreateUserAddress(CreateUserAddressRequestDto param)
+    public async Task<IActionResult> CreateUserAddress(UserAddressRequestDto param)
     {
+        _userAddressValidator.Validate(param);
         var result = await _userAddressService.CreateUserAddressAsync(param);
         return Ok(result);
     }
 
     [HttpPut("{userAddressId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> UpdateUserAddress(Guid userAddressId, [FromBody] UpdateUserAddressResquestDto param)
+    public async Task<IActionResult> UpdateUserAddress(Guid userAddressId, [FromBody] UserAddressRequestDto param)
     {
+        _userAddressValidator.Validate(param);
         var result = await _userAddressService.UpdateUserAddressAsync(param, userAddressId);
         return Ok(result);
     }

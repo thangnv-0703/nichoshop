@@ -1,5 +1,5 @@
-using NichoShop.Application.Extensions;
-using NichoShop.Application.Middleware;
+ï»¿using NichoShop.Application.Extensions;
+using NichoShop.Application.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -8,13 +8,8 @@ var configuration = builder.Configuration;
 builder.Services
     .AddSetupOption(configuration)
     .AddApplicationServices(configuration)
-    .AddInfrastructureServices(configuration);
-
-// Thêm filter vào MVC
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ApiResponseFilter>();
-});
+    .AddInfrastructureServices(configuration)
+    .AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
