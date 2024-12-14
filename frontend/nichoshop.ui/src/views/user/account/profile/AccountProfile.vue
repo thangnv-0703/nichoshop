@@ -150,7 +150,6 @@ export default {
     const module = "moduleUser";
     const editMode = proxy.$nicho.enumeration.editMode.Edit;
     const customParam = () => {
-      debugger;
       return { ...proxy.model, gender: 1 };
     };
     return { model, module, loadEditData, editMode, customParam };

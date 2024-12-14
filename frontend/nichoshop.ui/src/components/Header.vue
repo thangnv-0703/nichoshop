@@ -19,9 +19,22 @@
           <div class="line"></div>
           <span>Tiếng Việt</span>
           <div class="line"></div>
-          <span>Đăng ký</span>
-          <div class="line"></div>
-          <RouterLink to="/login">Đăng nhập</RouterLink>
+          <span v-if="!authHelper.isAuthenticated()">Đăng ký</span>
+          <div v-if="!authHelper.isAuthenticated()" class="line"></div>
+          <RouterLink v-if="!authHelper.isAuthenticated()" to="/login"
+            >Đăng nhập</RouterLink
+          >
+          <div v-if="authHelper.isAuthenticated()" @click="toggle">
+            thothoikhon
+          </div>
+          <Popover ref="op">
+            <div class="flex flex-col gap-4">
+              <div>
+                <span class="font-medium block mb-2">Team Members</span>
+                <ul class="list-none p-0 m-0 flex flex-col"></ul>
+              </div>
+            </div>
+          </Popover>
         </div>
       </div>
       <div class="header-bottom">
@@ -69,10 +82,12 @@
 <script>
 import { defineComponent } from "vue";
 import { RouterLink } from "vue-router";
+import AuthHelper from "@/helpers/AuthHelper";
 export default defineComponent({
   name: "Header",
   data() {
     return {
+      authHelper: AuthHelper,
       searchQuery: "",
       suggestions: [
         "Chặn Cửa",
@@ -90,6 +105,9 @@ export default defineComponent({
     search() {
       console.log(`Searching for: ${this.searchQuery}`);
       // Thêm logic tìm kiếm ở đây
+    },
+    toggle(event) {
+      this.$refs["op"].toggle(event);
     },
   },
 });
