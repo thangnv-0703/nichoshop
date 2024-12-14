@@ -30,8 +30,8 @@
           <Popover ref="op">
             <div class="flex flex-col gap-4">
               <div>
-                <span class="font-medium block mb-2">Team Members</span>
-                <ul class="list-none p-0 m-0 flex flex-col"></ul>
+                <span class="font-medium block mb-2">Tài khoản của tôi</span>
+                <span class="font-medium block mb-2">Đăng xuất</span>
               </div>
             </div>
           </Popover>
