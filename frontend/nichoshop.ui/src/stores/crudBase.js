@@ -93,7 +93,6 @@ export default class Crud {
         commit("setLoading", true);
         try {
           const res = await me.api.delete(id);
-          debugger
           if (res) {
             commit("setItems", state.items.filter(item => item[state.config.fieldId] !== id));
           }

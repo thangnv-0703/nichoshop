@@ -31,7 +31,6 @@ export default defineComponent({
       this.save();
     },
     async save() {
-      debugger
       let param = this.model;
       param = this.customParam(param);
       let res

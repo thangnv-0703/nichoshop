@@ -77,7 +77,7 @@ const onFormSubmit = ({ valid }) => {
       Password: model.value.Password,
     })
     .then((res) => {
-      if (res?.data?.token) {
+      if (res?.data?.data?.token) {
         router.push("/");
       }
     })
