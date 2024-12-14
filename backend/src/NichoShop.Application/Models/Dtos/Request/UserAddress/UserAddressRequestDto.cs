@@ -1,6 +1,6 @@
 ﻿namespace NichoShop.Application.Models.Dtos.Request.UserAddress;
 
-public class UpdateUserAddressResquestDto
+public class UserAddressRequestDto
 {
     public string FullName { get; set; } = string.Empty;
     public string Street { get; set; } = string.Empty;

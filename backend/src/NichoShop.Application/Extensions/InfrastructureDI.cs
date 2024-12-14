@@ -9,12 +9,12 @@ public static class InfrastructureDI
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.ConfigreDbContext(configuration);
+        services.ConfigreDatabaseContext(configuration);
         services.ConfigureRepositories();
         return services;
     }
 
-    public static IServiceCollection ConfigreDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigreDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<NichoShopDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("NichoShopDB"), b => b.MigrationsAssembly("NichoShop.Application")));

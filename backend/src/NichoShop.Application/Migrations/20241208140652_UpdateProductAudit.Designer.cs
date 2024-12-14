@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NichoShop.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NichoShop.Application.Migrations
 {
     [DbContext(typeof(NichoShopDbContext))]
-    partial class NichoShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241208140652_UpdateProductAudit")]
+    partial class UpdateProductAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -426,218 +429,6 @@ namespace NichoShop.Application.Migrations
                     b.ToTable("user_addresses", (string)null);
                 });
 
-            modelBuilder.Entity("NichoShop.Domain.Location.AdministrativeRegion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("CodeNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("administrative_regions", (string)null);
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.AdministrativeUnit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("CodeNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("ShortNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("administrative_units", (string)null);
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.District", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<int>("AdministrativeUnitId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("ProvinceCode")
-                        .IsRequired()
-                        .HasColumnType("character varying(20)");
-
-                    b.HasKey("Code");
-
-                    b.HasIndex("AdministrativeUnitId");
-
-                    b.HasIndex("ProvinceCode");
-
-                    b.ToTable("districts", (string)null);
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.Province", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<int>("AdministrativeRegionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AdministrativeUnitId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("provinces", (string)null);
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.Ward", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<int>("AdministrativeUnitId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("DistrictCode")
-                        .IsRequired()
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("FullNameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Code");
-
-                    b.HasIndex("AdministrativeUnitId");
-
-                    b.HasIndex("DistrictCode");
-
-                    b.ToTable("wards", (string)null);
-                });
-
             modelBuilder.Entity("Category", b =>
                 {
                     b.HasOne("Category", "Parent")
@@ -904,36 +695,6 @@ namespace NichoShop.Application.Migrations
                         });
 
                     b.Navigation("PhoneNumber")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.District", b =>
-                {
-                    b.HasOne("NichoShop.Domain.Location.AdministrativeUnit", null)
-                        .WithMany()
-                        .HasForeignKey("AdministrativeUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NichoShop.Domain.Location.Province", null)
-                        .WithMany()
-                        .HasForeignKey("ProvinceCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.Location.Ward", b =>
-                {
-                    b.HasOne("NichoShop.Domain.Location.AdministrativeUnit", null)
-                        .WithMany()
-                        .HasForeignKey("AdministrativeUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NichoShop.Domain.Location.District", null)
-                        .WithMany()
-                        .HasForeignKey("DistrictCode")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
