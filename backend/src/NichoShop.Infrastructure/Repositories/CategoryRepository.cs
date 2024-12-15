@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using NichoShop.Domain.AggergateModels;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Infrastructure.Repositories;

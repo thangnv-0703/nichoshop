@@ -3,15 +3,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NichoShop.Domain.AggergateModels;
 
 namespace NichoShop.Infrastructure.EntityConfigurations;
-public class ProductAttributeEntityConfiguration : IEntityTypeConfiguration<ProductAttribute>
+public class AttributeProductEntityConfiguration : IEntityTypeConfiguration<AttributeProduct>
 {
-    public void Configure(EntityTypeBuilder<ProductAttribute> builder)
+    public void Configure(EntityTypeBuilder<AttributeProduct> builder)
     {
         builder.ToTable("attributes");
+
+        builder.Property<int>("Id")
+            .UseHiLo("AttributeProductSeq");
 
         builder.Property(a => a.Name)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property(a => a.ValueId)
+            .IsRequired();
 
         builder.Property(a => a.DisplayName)
             .IsRequired()
@@ -27,5 +33,9 @@ public class ProductAttributeEntityConfiguration : IEntityTypeConfiguration<Prod
             .WithMany(a => a.Children)
             .HasForeignKey(a => a.ParentId)
             .IsRequired(false);
+
+        builder.HasMany(p => p.Categories)
+               .WithMany(c => c.Attributes)
+               .UsingEntity(j => j.ToTable("attribute_categories"));
     }
 }

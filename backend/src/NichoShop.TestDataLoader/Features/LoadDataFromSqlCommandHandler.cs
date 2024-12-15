@@ -4,7 +4,7 @@ using NichoShop.Infrastructure;
 
 namespace NichoShop.TestDataLoader.Features;
 
-public class LoadDataFromSqlCommand : IRequest
+public record LoadDataFromSqlCommand : IRequest
 {
     public string FileName { get; set; } = string.Empty;
 }

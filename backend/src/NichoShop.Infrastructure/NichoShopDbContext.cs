@@ -18,7 +18,7 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
     public DbSet<Category> Category { get; set; }
     public DbSet<User> User { get; set; }
     public DbSet<UserAddress> UserAddress { get; set; }
-    public DbSet<ProductAttribute> ProductAttribute { get; set; }
+    public DbSet<AttributeProduct> AttributeProduct { get; set; }
     public DbSet<ProductAttributeValue> ProductAttributeValue { get; set; }
     public DbSet<Product> Product { get; set; }
     public DbSet<ProductVariant> ProductVariant { get; set; }
@@ -51,11 +51,15 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
             .StartsAt(100_000)
             .IncrementsBy(10);
 
+        modelBuilder.HasSequence<int>("AttributeProductSeq")
+            .StartsAt(100_000)
+            .IncrementsBy(100);
+
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         modelBuilder.ApplyConfiguration(new UserAddressEntityConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new ProductAttributeEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AttributeProductEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductVariantEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductCategoryEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductAttributeValueEntityConfiguration());
