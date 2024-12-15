@@ -43,7 +43,7 @@
           <div class="flex">
             <button
               @click="decreaseQuantity(slotProps.data)"
-              class="w-[32px] decrease grid cursor-pointer"
+              class="w-[32px] decrease div-center cursor-pointer"
             >
               <svg class="icon">
                 <polygon
@@ -54,7 +54,7 @@
             <div class="quantity">{{ slotProps.data.quantity }}</div>
             <button
               @click="increaseQuantity(slotProps.data)"
-              class="w-[32px] increase grid cursor-pointer"
+              class="w-[32px] increase div-center cursor-pointer"
             >
               <svg class="icon">
                 <polygon
