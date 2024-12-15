@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using NichoShop.Domain.AggergateModels;
 using NichoShop.Infrastructure;
 using NichoShop.TestDataLoader.Features.RefitModels;
-using System.Net;
 
 namespace NichoShop.TestDataLoader.Features;
 
