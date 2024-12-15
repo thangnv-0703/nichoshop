@@ -21,13 +21,7 @@ app.config.globalProperties.$nicho = {
   enumeration: enumeration,
   // commonFn: commonFn,
 };
-const initialiseStorePlugin = {
-  install(app) {
-    store.commit('initialiseStore');
-  },
-};
 
-app.use(initialiseStorePlugin);
 app.use(PrimeVue, {
   theme: {
     preset: MyPreset,
