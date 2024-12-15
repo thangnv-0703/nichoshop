@@ -13,28 +13,16 @@ export default {
       fullName: null,
       phoneNumber: null,
       street: null,
+      province: null,
+      district: null,
+      ward: null,
     });
     const { proxy } = getCurrentInstance();
-    onMounted(() => {
-      console.log(proxy);
-    });
     const module = "moduleUserAddress";
-    const selectedCountry = ref();
-    const countries = ref([
-      { name: "Australia", code: "AU" },
-      { name: "Brazil", code: "BR" },
-      { name: "China", code: "CN" },
-      { name: "Egypt", code: "EG" },
-      { name: "France", code: "FR" },
-      { name: "Germany", code: "DE" },
-      { name: "India", code: "IN" },
-      { name: "Japan", code: "JP" },
-      { name: "Spain", code: "ES" },
-      { name: "United States", code: "US" },
-    ]);
-
+    const provinces = ref([]);
+    const districts = ref([]);
+    const wards = ref([]);
     const center = { lat: 21.028511, lng: 105.804817 };
-
     const resolver = ref(
       zodResolver(
         z.object({
@@ -42,7 +30,42 @@ export default {
         })
       )
     );
-    return { model, module, resolver, center, countries };
+    onMounted(async () => {
+      const res = await proxy.$store.dispatch("moduleLocation/getLocation", {
+        type: 1, //enum
+      });
+      provinces.value = res.data;
+    });
+
+    const onChangeProvince = async (data) => {
+      debugger;
+      const res = await proxy.$store.dispatch("moduleLocation/getLocation", {
+        type: 2, //enum
+        parentCode: provinces.value.find((item) => item.name === data.value)
+          ?.code,
+      });
+      districts.value = res.data;
+    };
+
+    const onChangeDistrict = async (data) => {
+      const res = await proxy.$store.dispatch("moduleLocation/getLocation", {
+        type: 3, //enum
+        parentCode: districts.value.find((item) => item.name === data.value)
+          ?.code,
+      });
+      wards.value = res.data;
+    };
+    return {
+      model,
+      module,
+      resolver,
+      center,
+      provinces,
+      districts,
+      wards,
+      onChangeProvince,
+      onChangeDistrict,
+    };
   },
 };
 </script>
@@ -105,23 +128,31 @@ export default {
 
           <div class="grid grid-cols-3 gap-1">
             <Select
+              @change="onChangeProvince"
+              v-model="model.province"
+              optionValue="name"
               filter
-              name="city"
-              :options="countries"
+              name="provinces"
+              :options="provinces"
               optionLabel="name"
               placeholder="Tỉnh/Thành phố"
             />
             <Select
               filter
-              name="city"
-              :options="countries"
+              @change="onChangeDistrict"
+              v-model="model.district"
+              optionValue="name"
+              name="districts"
+              :options="districts"
               optionLabel="name"
               placeholder="Quận/huyện"
             />
             <Select
               filter
-              name="city"
-              :options="countries"
+              v-model="model.ward"
+              name="wards"
+              optionValue="name"
+              :options="wards"
               optionLabel="name"
               placeholder="Phường/xã"
             />
