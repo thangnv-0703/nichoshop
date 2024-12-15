@@ -52,6 +52,7 @@ public static class ApplicationDI
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IUserAddressService, UserAddressService>();
+        services.AddScoped<ILocationService, LocationService>();
         return services;
     }
 
