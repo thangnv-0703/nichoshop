@@ -19,14 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Sql\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NichoShop.Application\NichoShop.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Sql\attribute.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sql\attribute_category.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Sql\category.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,5 +1,7 @@
 ﻿using NichoShop.Domain.SeedWork;
 
+namespace NichoShop.Domain.AggergateModels;
+
 public class Category : AggregateRoot<int>
 {
     public string Name { get; private set; }
@@ -8,14 +10,6 @@ public class Category : AggregateRoot<int>
 
     private readonly List<Category> _children = [];
 
-    public Category(int id, string name, string displayName, int? parentId)
-    {
-        Id = id;
-        Name = name;
-        DisplayName = displayName;
-        ParentId = parentId;
-    }
-
     public IReadOnlyCollection<Category> Children => _children.AsReadOnly();
 
     public bool HasChildren => _children.Count > 0;
@@ -23,14 +17,14 @@ public class Category : AggregateRoot<int>
     public int? ParentId { get; private set; }
     public Category? Parent { get; private set; }
 
-    private void SetParent(Category parent)
-    {
-        Parent = parent;
-    }
+    private readonly List<AttributeProduct> _attributes = [];
+    public IReadOnlyCollection<AttributeProduct> Attributes => _attributes.AsReadOnly();
 
-    public void AddChild(Category category)
+    public Category(int id, string name, string displayName, int? parentId)
     {
-        category.SetParent(this);
-        _children.Add(category);
+        Id = id;
+        Name = name;
+        DisplayName = displayName;
+        ParentId = parentId;
     }
 }

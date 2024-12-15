@@ -5,7 +5,7 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using NichoShop.Infrastructure;
-using NichoShop.TestDataLoader.Features.Refit;
+using NichoShop.TestDataLoader.Features.RefitModels;
 using Refit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization.ContractResolverExtentions;
