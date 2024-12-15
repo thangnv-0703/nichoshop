@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import routerPage from "./routerPage";
 
 const routes = [
-  ...routerPage,
   {
     path: "",
     component: () => import("@/layouts/MainLayout.vue"),
@@ -42,6 +41,12 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("@/views/cart/Cart.vue"),
+  },
+  ...routerPage,
 ];
 
 const router = createRouter({
