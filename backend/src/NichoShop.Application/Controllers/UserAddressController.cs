@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
 using System.Net;
 
