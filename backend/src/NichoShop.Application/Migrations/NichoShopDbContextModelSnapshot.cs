@@ -22,6 +22,10 @@ namespace NichoShop.Application.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence<int>("AttributeProductSeq")
+                .StartsAt(100000L)
+                .IncrementsBy(100);
+
             modelBuilder.HasSequence<int>("ProductAttributeValueSeq")
                 .StartsAt(100000L)
                 .IncrementsBy(100);
@@ -60,6 +64,40 @@ namespace NichoShop.Application.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("categories", (string)null);
+                });
+
+            modelBuilder.Entity("NichoShop.Domain.AggergateModels.AttributeProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "AttributeProductSeq");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("Mandatory")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ValueId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("attributes", (string)null);
                 });
 
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.OrderAggregate.Order", b =>
@@ -237,40 +275,6 @@ namespace NichoShop.Application.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("product_variants", (string)null);
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.AggergateModels.ProductAttribute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<bool>("Mandatory")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ValueId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("attributes", (string)null);
                 });
 
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.ShoppingCartAggregate.CartItem", b =>
@@ -648,6 +652,15 @@ namespace NichoShop.Application.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("NichoShop.Domain.AggergateModels.AttributeProduct", b =>
+                {
+                    b.HasOne("NichoShop.Domain.AggergateModels.AttributeProduct", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.OrderAggregate.Order", b =>
                 {
                     b.OwnsOne("NichoShop.Domain.AggergateModels.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
@@ -805,15 +818,6 @@ namespace NichoShop.Application.Migrations
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("NichoShop.Domain.AggergateModels.ProductAttribute", b =>
-                {
-                    b.HasOne("NichoShop.Domain.AggergateModels.ProductAttribute", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.ShoppingCartAggregate.CartItem", b =>
                 {
                     b.HasOne("NichoShop.Domain.AggergateModels.ShoppingCartAggregate.ShoppingCart", null)
@@ -942,6 +946,11 @@ namespace NichoShop.Application.Migrations
                     b.Navigation("Children");
                 });
 
+            modelBuilder.Entity("NichoShop.Domain.AggergateModels.AttributeProduct", b =>
+                {
+                    b.Navigation("Children");
+                });
+
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.OrderAggregate.Order", b =>
                 {
                     b.Navigation("Items");
@@ -954,11 +963,6 @@ namespace NichoShop.Application.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Variants");
-                });
-
-            modelBuilder.Entity("NichoShop.Domain.AggergateModels.ProductAttribute", b =>
-                {
-                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.ShoppingCartAggregate.ShoppingCart", b =>

@@ -10,4 +10,5 @@ public class MenuOption(int id, string name, IRequest command) : Enumeration(id,
         new(1, "Load categoy data from sql", new LoadDataFromSqlCommand() { FileName = "category.sql" });
     public static readonly MenuOption LoadLocationDataFromSql = 
         new(2, "Load location data from sql", new LoadDataFromSqlCommand() { FileName = "location.sql" });
+    public static readonly MenuOption SyncShoppeData = new(3, "Sync shoppe data", new SyncShoppeDataCommand());
 }

@@ -5,6 +5,10 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using NichoShop.Infrastructure;
+using NichoShop.TestDataLoader.Features.Refit;
+using Refit;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization.ContractResolverExtentions;
 
 namespace NichoShop.TestDataLoader;
 
@@ -26,6 +30,22 @@ internal class Program
                 services.AddDbContext<NichoShopDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("NichoShopDB")));
                 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+                services.AddRefitClient<IShoppeApi>()
+                    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://banhang.shopee.vn/api/v3"))
+                    .AddTypedClient(client =>
+                    {
+                        var refitSettings = new RefitSettings
+                        {
+                            ContentSerializer = new NewtonsoftJsonContentSerializer(
+                                new JsonSerializerSettings
+                                {
+                                    ContractResolver = new SnakeCasePropertyNamesContractResolver()
+                                })
+                        };
+
+                        return RestService.For<IShoppeApi>(client, refitSettings);
+                    });
             })
             .Build();
 
