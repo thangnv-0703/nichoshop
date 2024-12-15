@@ -5,12 +5,9 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import Index from "@/components/home/Index.vue";
 
 export default {
   name: "Home",
-  components: [Header, Index],
 };
 </script>
 
