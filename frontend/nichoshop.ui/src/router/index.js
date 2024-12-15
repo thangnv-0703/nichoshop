@@ -13,6 +13,11 @@ const routes = [
         component: () => import("@/pages/Home.vue"),
       },
       {
+        path: "/product-detail", // Đường dẫn cho trang chủ
+        name: "productDetail", // Tên của route
+        component: () => import("@/pages/ProductDetail.vue"),
+      },
+      {
         path: "/user",
         component: () => import("@/layouts/UserLayout.vue"),
         meta: {},
