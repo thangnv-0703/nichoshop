@@ -13,6 +13,6 @@ public class CategoryService(IUserContext userContext, IQueryService queryServic
     public async Task<List<CategoryViewModel>> GetCategoryAsync()
     {
         var user = _userContext.UserId;
-        return await queryService.GetCategoryViewModelsAsync();
+        return await _queryService.GetCategoryViewModelsAsync();
     }
 }

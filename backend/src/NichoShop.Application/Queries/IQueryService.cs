@@ -5,4 +5,5 @@ namespace NichoShop.Application.Queries;
 public interface IQueryService
 {
     Task<List<CategoryViewModel>> GetCategoryViewModelsAsync();
+    Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode);
 }

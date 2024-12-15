@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Application.Enums;
 using NichoShop.Application.Models.ViewModels;
 using NichoShop.Infrastructure;
 
@@ -17,5 +18,57 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 DisplayName = c.DisplayName
             })
             .ToListAsync();
+    }
+
+    public async Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode)
+    {
+        // Get provinces
+        if (type == (int)LocationEnum.Province)
+        {
+            return await _dbContext.Province
+                .Select(c => new LocationViewModel
+                {
+                    Code = c.Code,
+                    Name = c.Name,
+                    FullName = c.FullName,
+                    NameEn = c.NameEn,
+                    FullNameEn = c.FullNameEn,
+                    CodeName = c.CodeName,
+                })
+                .ToListAsync();
+        }
+        // Get districts
+        else if (type == (int)LocationEnum.District)
+        {
+            return await _dbContext.District
+                .Where(x => x.ProvinceCode == parentCode)
+                .Select(c => new LocationViewModel
+                {
+                    Code = c.Code,
+                    Name = c.Name,
+                    FullName = c.FullName,
+                    NameEn = c.NameEn,
+                    FullNameEn = c.FullNameEn,
+                    CodeName = c.CodeName,
+                })
+                .ToListAsync();
+        }
+        // Get wards
+        else if (type == (int)LocationEnum.Ward)
+        {
+            return await _dbContext.Ward
+                .Where(x => x.DistrictCode == parentCode)
+                .Select(c => new LocationViewModel
+                {
+                    Code = c.Code,
+                    Name = c.Name,
+                    FullName = c.FullName,
+                    NameEn = c.NameEn,
+                    FullNameEn = c.FullNameEn,
+                    CodeName = c.CodeName,
+                })
+                .ToListAsync();
+        }
+        return new List<LocationViewModel>();
     }
 }
