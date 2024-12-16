@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NichoShop.Domain.AggergateModels;
 using NichoShop.Domain.AggergateModels.ProductAggregate;
 
 namespace NichoShop.Infrastructure.EntityConfigurations;
@@ -24,5 +25,9 @@ public class ProductAttributeValueEntityConfiguration : IEntityTypeConfiguration
 
         builder.Property(o => o.ValueId)
             .IsRequired();
+
+        builder.HasOne<AttributeProduct>()
+            .WithMany()
+            .HasForeignKey(o => o.AttributeId);
     }
 }
