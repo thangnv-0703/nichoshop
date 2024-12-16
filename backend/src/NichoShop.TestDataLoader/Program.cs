@@ -29,6 +29,7 @@ internal class Program
                 var configuration = context.Configuration;
                 services.AddDbContext<NichoShopDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("NichoShopDB")));
+
                 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
                 services.AddRefitClient<IShoppeApi>()
