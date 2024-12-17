@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import routerPage from "./routerPage";
+import authHelper from "../helpers/authHelper";
 
 const routes = [
   {
@@ -58,5 +59,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.anonymous) {
+    next();
+    return;
+  }
+  if (!authHelper.isAuthenticated()) {
+    next({ path: "/login" });
+    return;
+  }
 
+  next();
+});
 export default router;
