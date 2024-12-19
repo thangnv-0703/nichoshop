@@ -1,4 +1,4 @@
-﻿namespace NichoShop.Application.Models.AppSettings;
+﻿namespace NichoShop.Commons.Models;
 
 public class JwtOptions
 {

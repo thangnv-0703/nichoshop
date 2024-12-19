@@ -1,4 +1,5 @@
 ﻿using NichoShop.Application.Models.AppSettings;
+using NichoShop.Commons.Models;
 
 namespace NichoShop.Application.Extensions;
 

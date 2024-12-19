@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NichoShop.Application.CommonService.Implementation;
-using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.AppSettings;
 using NichoShop.Application.Models.Dtos.Request.User;
@@ -12,7 +10,10 @@ using NichoShop.Application.Queries;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
 using NichoShop.Application.Validators.UserAddress;
+using NichoShop.Common.Service;
+using NichoShop.Common.Interface;
 using System.Text;
+using NichoShop.Commons.Models;
 
 namespace NichoShop.Application.Extensions;
 
@@ -53,13 +54,14 @@ public static class ApplicationDI
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IUserAddressService, UserAddressService>();
         services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IFileService, FileService>();
         return services;
     }
 
     private static IServiceCollection ConfigureCustomService(this IServiceCollection services)
     {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserContext, UserContext>();
         return services;
     }
