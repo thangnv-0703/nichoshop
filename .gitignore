@@ -12,3 +12,5 @@
 
 /backend/src/NichoShop.TestDataLoader/bin/Debug/net8.0
 /backend/src/NichoShop.TestDataLoader/obj
+/backend/src/NichoShop.Common/Common/bin/Debug/net8.0
+/backend/src/NichoShop.Common/Common/obj

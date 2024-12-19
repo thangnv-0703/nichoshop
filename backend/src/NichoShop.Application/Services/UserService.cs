@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
-using NichoShop.Application.CommonService.Interface;
 using NichoShop.Application.Helpers;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Response.User;
+using NichoShop.Common.Interface;
+using NichoShop.Common.Models;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class UserService(IUserRepository userRepository, IJwtProvider jwtProvider, IUserContext userContext, IMapper mapper) : IUserService
+public class UserService(IUserRepository userRepository, IJwtService jwtService, IUserContext userContext, IMapper mapper) : IUserService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IUserRepository _userRepository = userRepository;
-    private readonly IJwtProvider _jwtProvider = jwtProvider;
+    private readonly IJwtService _jwtService = jwtService;
     private readonly IUserContext _userContext = userContext;
     public async Task<Guid> CreateUserAsync(CreateUserRequestDto requestDto)
     {
@@ -21,10 +22,10 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
 
         if (user is not null)
         {
-            throw new Exception("Pphone number already exists");
+            throw new Exception("Phone number already exists");
         }
 
-        var passwordHashed = PasswordHelper.Hash(requestDto.Password);
+        var passwordHashed = PasswordHelper.Hash(requestDto.Password); 
         var newUser = new User(
             requestDto.PhoneNumber,
             passwordHashed,
@@ -42,7 +43,7 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
     {
-        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new Exception("Pphone number already exists");
+        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new Exception("Phone number not found");
 
         var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
 
@@ -51,7 +52,13 @@ public class UserService(IUserRepository userRepository, IJwtProvider jwtProvide
             throw new Exception("Password is incorrect");
         }
 
-        return new LoginResponseDto { Token = _jwtProvider.GenerateToken(user) };
+        var identity = new Identity 
+        {
+            UserId = user.Id,
+            PhoneNumber = user.PhoneNumber.Value,
+            Email = user.Email ?? ""
+        };
+        return new LoginResponseDto { Token = _jwtService.GenerateToken(identity) };
     }
 
     public async Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param)
