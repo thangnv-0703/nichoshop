@@ -32,7 +32,7 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
             requestDto.UserName,
             null,
             null,
-            null);
+            null, null);
 
         _userRepository.Add(newUser);
         await _userRepository.SaveChangesAsync();
@@ -65,7 +65,7 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
     {
         var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
 
-        user.UpdateUserInfo(param.UserName, param.FullName, param.Email, param.PhoneNumber, param.Gender);
+        user.UpdateUserInfo(param.UserName, param.FullName, param.Email, param.PhoneNumber, param.Gender, param.DateOfBirth);
         await _userRepository.SaveChangesAsync();
         return true;
     }
