@@ -9,6 +9,6 @@ namespace NichoShop.Application.Models.Dtos.Request.User
         public string? Email { get; set; }
         public string PhoneNumber { get; set; }
         public Gender? Gender { get; set; }
-
+        public DateTime? DateOfBirth { get; set; }
     }
 }
