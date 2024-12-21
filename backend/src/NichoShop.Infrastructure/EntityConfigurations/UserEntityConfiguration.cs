@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NichoShop.Domain.AggergateModels.UserAggregate;
-using NichoShop.Domain.Shared;
-using System.Reflection.Emit;
 
 namespace NichoShop.Infrastructure.EntityConfigurations;
 public class UserEntityConfiguration : IEntityTypeConfiguration<User>
@@ -39,13 +37,17 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .HasConversion<int>()
             .IsRequired(false);
 
+        builder.Property(o => o.DateOfBirth)
+            .HasConversion<DateTime>()
+            .IsRequired(false);
+
         builder.OwnsOne(o => o.PhoneNumber, phoneBuilder =>
         {
             phoneBuilder.Property(p => p.Value)
                 .HasColumnType("varchar(15)")
                 .HasColumnName(nameof(User.PhoneNumber))
                 .HasMaxLength(15)
-                .IsRequired(); 
+                .IsRequired();
         });
 
         var navigation = builder.Metadata.FindNavigation(nameof(User.Addresses))!;

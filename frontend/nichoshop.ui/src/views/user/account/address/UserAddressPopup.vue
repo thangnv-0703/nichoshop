@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted, getCurrentInstance, watch } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { GoogleMap, Marker } from "vue3-google-map";
@@ -37,11 +37,24 @@ export default {
       provinces.value = res.data;
     });
 
+    watch(
+      () => [model.value.province, provinces.value],
+      async (newValue, oldValue) => {
+        onChangeProvince(newValue[0]);
+      }
+    );
+
+    watch(
+      () => [model.value.district, districts.value],
+      async (newValue, oldValue) => {
+        onChangeDistrict(newValue[0]);
+      }
+    );
+
     const onChangeProvince = async (data) => {
-      debugger;
       const res = await proxy.$store.dispatch("moduleLocation/getLocation", {
         type: 2, //enum
-        parentCode: provinces.value.find((item) => item.name === data.value)
+        parentCode: provinces.value.find((item) => item.fullName === data)
           ?.code,
       });
       districts.value = res.data;
@@ -50,7 +63,7 @@ export default {
     const onChangeDistrict = async (data) => {
       const res = await proxy.$store.dispatch("moduleLocation/getLocation", {
         type: 3, //enum
-        parentCode: districts.value.find((item) => item.name === data.value)
+        parentCode: districts.value.find((item) => item.fullName === data)
           ?.code,
       });
       wards.value = res.data;
@@ -128,32 +141,30 @@ export default {
 
           <div class="grid grid-cols-3 gap-1">
             <Select
-              @change="onChangeProvince"
               v-model="model.province"
-              optionValue="name"
+              optionValue="fullName"
               filter
               name="provinces"
               :options="provinces"
-              optionLabel="name"
+              optionLabel="fullName"
               placeholder="Tỉnh/Thành phố"
             />
             <Select
               filter
-              @change="onChangeDistrict"
               v-model="model.district"
-              optionValue="name"
+              optionValue="fullName"
               name="districts"
               :options="districts"
-              optionLabel="name"
+              optionLabel="fullName"
               placeholder="Quận/huyện"
             />
             <Select
               filter
               v-model="model.ward"
               name="wards"
-              optionValue="name"
+              optionValue="fullName"
               :options="wards"
-              optionLabel="name"
+              optionLabel="fullName"
               placeholder="Phường/xã"
             />
           </div>
