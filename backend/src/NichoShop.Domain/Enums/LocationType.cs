@@ -1,6 +1,6 @@
 ﻿namespace NichoShop.Application.Enums
 {
-    public enum LocationEnum
+    public enum LocationType
     {
         Province = 1,
         District = 2,

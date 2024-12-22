@@ -12,11 +12,17 @@ const routes = [
         path: "", // Đường dẫn cho trang chủ
         name: "", // Tên của route
         component: () => import("@/pages/Home.vue"),
+        meta: {
+          anonymous: true,
+        }
       },
       {
-        path: "/product-detail", // Đường dẫn cho trang chủ
+        path: "/product-detail", // Đường dẫn cho chi tiết
         name: "productDetail", // Tên của route
         component: () => import("@/pages/ProductDetail.vue"),
+        meta: {
+          anonymous: true,
+        }
       },
       {
         path: "/user",
