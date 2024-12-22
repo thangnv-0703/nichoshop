@@ -10,10 +10,10 @@ using NichoShop.Application.Queries;
 using NichoShop.Application.Services;
 using NichoShop.Application.Validators.User;
 using NichoShop.Application.Validators.UserAddress;
-using NichoShop.Common.Service;
 using NichoShop.Common.Interface;
-using System.Text;
+using NichoShop.Common.Service;
 using NichoShop.Commons.Models;
+using System.Text;
 
 namespace NichoShop.Application.Extensions;
 
@@ -51,6 +51,7 @@ public static class ApplicationDI
     private static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IUserAddressService, UserAddressService>();
         services.AddScoped<ILocationService, LocationService>();
