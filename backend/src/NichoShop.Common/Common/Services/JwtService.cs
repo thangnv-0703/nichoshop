@@ -1,23 +1,24 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NichoShop.Application.CommonService.Interface;
-using NichoShop.Application.Models.AppSettings;
-using NichoShop.Domain.AggergateModels.UserAggregate;
+using NichoShop.Common.Interface;
+using NichoShop.Common.Models;
+using NichoShop.Commons.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace NichoShop.Application.CommonService.Implementation;
-public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
+namespace NichoShop.Common.Service;
+public sealed class JwtService(IOptions<JwtOptions> jwtOptions) : IJwtService
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
-    public string GenerateToken(User user)
+    public string GenerateToken(Identity user)
     {
         var claims = new Claim[]
         {
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber.Value),
+            new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber),
+            new(JwtRegisteredClaimNames.Email, user.Email),
         };
 
         var signingCredentials = new SigningCredentials(

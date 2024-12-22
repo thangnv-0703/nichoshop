@@ -1,7 +1,8 @@
-﻿namespace NichoShop.Application.CommonService.Interface;
+﻿namespace NichoShop.Common.Interface;
 public interface IUserContext
 {
     bool IsAuthenticated { get; }
     Guid UserId { get; }
     string PhoneNumber { get; }
+    string Email { get; }
 }

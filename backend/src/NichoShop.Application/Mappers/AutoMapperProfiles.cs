@@ -14,5 +14,7 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<User, UserInfoDto>()
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber.Value));
+
+
     }
 }

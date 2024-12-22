@@ -23,11 +23,13 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
     public DbSet<Product> Product { get; set; }
     public DbSet<ProductVariant> ProductVariant { get; set; }
     public DbSet<ProductCategory> ProductCategory { get; set; }
+    public DbSet<ProductImage> ProductImage { get; set; }
     public DbSet<CartItem> CartItem { get; set; }
     public DbSet<ShoppingCart> ShoppingCart { get; set; }
     public DbSet<Order> Order { get; set; }
     public DbSet<OrderItem> OrderItem { get; set; }
     public DbSet<Sku> Sku { get; set; }
+
 
     #region location
     public DbSet<Province> Province { get; set; }
@@ -62,6 +64,7 @@ public class NichoShopDbContext(DbContextOptions<NichoShopDbContext> options, IC
         modelBuilder.ApplyConfiguration(new AttributeProductEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductVariantEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductCategoryEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductImageEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductAttributeValueEntityConfiguration());
         modelBuilder.ApplyConfiguration(new CartItemEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ShoppingCartEntityConfiguration());

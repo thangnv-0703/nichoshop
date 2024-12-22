@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using NichoShop.Application.CommonService.Interface;
+using NichoShop.Common.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
 using NichoShop.Domain.AggergateModels.UserAggregate;

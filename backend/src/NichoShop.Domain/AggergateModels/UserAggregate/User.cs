@@ -16,6 +16,7 @@ public class User : AggregateRoot<Guid>
     public string PasswordHashed { get; private set; }
 
     public Gender? Gender { get; private set; }
+    public DateTime? DateOfBirth { get; private set; }
 
     private readonly List<UserAddress> _addresses = [];
     public IReadOnlyCollection<UserAddress> Addresses => _addresses.AsReadOnly();
@@ -28,7 +29,8 @@ public class User : AggregateRoot<Guid>
         string userName,
         string? fullName,
         string? email,
-        Gender? gender = null)
+        Gender? gender = null,
+        DateTime? dob = null)
     {
         PhoneNumber = new PhoneNumber(phoneNumber);
         PasswordHashed = password;
@@ -36,6 +38,7 @@ public class User : AggregateRoot<Guid>
         FullName = fullName;
         Email = email;
         Gender = gender;
+        DateOfBirth = dob;
     }
 
     public UserAddress AddAddress(UserAddressProps props)
@@ -58,13 +61,14 @@ public class User : AggregateRoot<Guid>
         address.UpdateAddress(props);
     }
 
-    public void UpdateUserInfo(string userName, string? fullName, string? email, string? phoneNumber, Gender? gender)
+    public void UpdateUserInfo(string userName, string? fullName, string? email, string? phoneNumber, Gender? gender, DateTime? dob)
     {
         if (!string.IsNullOrWhiteSpace(userName)) UserName = userName;
         if (!string.IsNullOrWhiteSpace(fullName)) FullName = fullName;
         if (!string.IsNullOrWhiteSpace(email)) Email = email;
         if (!string.IsNullOrWhiteSpace(phoneNumber) && PhoneNumber.Value != phoneNumber) PhoneNumber = new PhoneNumber(phoneNumber);
         if (gender is not null) Gender = (Gender)gender;
+        if (!string.IsNullOrWhiteSpace(email)) DateOfBirth = dob;
     }
 
     public void SetDefaultAddress(Guid userAddressId)

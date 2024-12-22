@@ -12,7 +12,7 @@ public class Product : AggregateRoot<int>, IAuditable
 
     public DateTimeOffset CreatedAt { get; private set; } = default!;
     public DateTimeOffset? UpdatedAt { get; private set; }
-    public string CreatedBy { get; private set; }
+    public string CreatedBy { get; private set; } = default!;
     public string? UpdatedBy { get; private set; }
 
 
@@ -25,11 +25,14 @@ public class Product : AggregateRoot<int>, IAuditable
     private readonly List<ProductVariant> _variants = [];
     public IReadOnlyCollection<ProductVariant> Variants => _variants.AsReadOnly();
 
+    private readonly List<ProductImage> _images = [];
+    public IReadOnlyCollection<ProductImage> Images => _images.AsReadOnly();
+
     private Product()
     {
     }
 
-    public Product(string name, string description, ProductStatus status, List<ProductCategory> categories, List<ProductAttributeValue> attributeValues, List<ProductVariant> productVariants)
+    public Product(string name, string description, ProductStatus status, List<ProductCategory> categories, List<ProductAttributeValue> attributeValues, List<ProductVariant> productVariants, List<ProductImage> images)
     {
         Name = name;
         Description = description;
@@ -37,6 +40,7 @@ public class Product : AggregateRoot<int>, IAuditable
         _categories = categories;
         _attributeValues = attributeValues;
         _variants = productVariants;
+        _images = images;
 
         if (IsInvalid())
         {

@@ -63,19 +63,28 @@
                   <div class="flex flex-wrap gap-4">
                     <RadioButtonGroup
                       v-model="model.gender"
+                      @change="onChangeGender"
                       name="gender"
                       class="flex flex-wrap gap-4"
                     >
                       <div class="flex items-center gap-2">
-                        <RadioButton inputId="male" name="gender" value="0" />
+                        <RadioButton inputId="male" name="gender" :value="0" />
                         <label for="male">Nam</label>
                       </div>
                       <div class="flex items-center gap-2">
-                        <RadioButton inputId="female" name="gender" value="1" />
+                        <RadioButton
+                          inputId="female"
+                          name="gender"
+                          :value="1"
+                        />
                         <label for="female">Nữ</label>
                       </div>
                       <div class="flex items-center gap-2">
-                        <RadioButton inputId="others" name="gender" value="2" />
+                        <RadioButton
+                          inputId="others"
+                          name="gender"
+                          :value="2"
+                        />
                         <label for="others">Khác</label>
                       </div>
                     </RadioButtonGroup>
@@ -86,7 +95,8 @@
                 <td class="text-gray-400 text-right">Ngày sinh</td>
                 <td class="pl-4 min-w-[500px]">
                   <DatePicker
-                    v-model="icondisplay"
+                    dateFormat="yy-mm-dd"
+                    v-model="model.dateOfBirth"
                     showIcon
                     fluid
                     iconDisplay="input"
@@ -145,14 +155,18 @@ export default {
       email: null,
       phoneNumber: null,
       gender: null,
+      dateOfBirth: null,
     });
     const loadEditData = true;
     const module = "moduleUser";
     const editMode = proxy.$nicho.enumeration.editMode.Edit;
-    const customParam = () => {
-      return { ...proxy.model, gender: 1 };
+
+    return {
+      model,
+      module,
+      loadEditData,
+      editMode,
     };
-    return { model, module, loadEditData, editMode, customParam };
   },
 };
 </script>

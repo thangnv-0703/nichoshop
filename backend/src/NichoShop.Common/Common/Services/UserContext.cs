@@ -1,17 +1,14 @@
-﻿using NichoShop.Application.CommonService.Interface;
+﻿using Microsoft.AspNetCore.Http;
+using NichoShop.Common.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace NichoShop.Application.CommonService.Implementation;
+namespace NichoShop.Common.Service;
 
-public sealed class UserContext
-    : IUserContext
+public sealed class UserContext(IHttpContextAccessor httpContextAccessor)
+        : IUserContext
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    public UserContext(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-    }
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
     private ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User
         ?? throw new UnauthorizedAccessException("HttpContext is unavailable.");
@@ -23,7 +20,9 @@ public sealed class UserContext
 
     public string PhoneNumber => User.FindFirstValue(JwtRegisteredClaimNames.PhoneNumber) ??
         throw new UnauthorizedAccessException();
+    public string Email => User.FindFirstValue(JwtRegisteredClaimNames.Email) ?? "";
 
     public bool IsAuthenticated => User.Identity?.IsAuthenticated ??
         throw new ApplicationException("User context is unavailable");
+
 }
