@@ -1,4 +1,5 @@
-﻿using NichoShop.Domain.Enums;
+﻿using NichoShop.Domain.AggergateModels.SkuAggregate;
+using NichoShop.Domain.Enums;
 using NichoShop.Domain.SeedWork;
 
 namespace NichoShop.Domain.AggergateModels.ProductAggregate;
@@ -27,6 +28,9 @@ public class Product : AggregateRoot<int>, IAuditable
 
     private readonly List<ProductImage> _images = [];
     public IReadOnlyCollection<ProductImage> Images => _images.AsReadOnly();
+
+    private readonly List<Sku> _skus = [];
+    public IReadOnlyCollection<Sku> Skus => _skus.AsReadOnly();
 
     private Product()
     {
