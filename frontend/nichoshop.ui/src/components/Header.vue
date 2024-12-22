@@ -39,7 +39,7 @@
       </div>
       <div class="header-bottom">
         <div class="header-container">
-          <div class="logo">
+          <div class="logo" @click="goToHomePage">
             <svg viewBox="0 0 192 65" class="shopee-svg-icon header-with-search__shopee-logo icon-shopee-logo">
               <g fill-rule="evenodd">
                 <path
@@ -108,8 +108,12 @@ export default defineComponent({
     ]);
 
     const search = () => {
-      router.push('/product-detail');
+      router.push('/search');
     };
+
+    const goToHomePage = () => {
+      router.push('/');
+    }
 
     const toggle = (event) => {
       const op = ref(null);
@@ -124,6 +128,7 @@ export default defineComponent({
       suggestions,
       search,
       toggle,
+      goToHomePage
     };
   },
 });
@@ -171,6 +176,7 @@ $navbar-color: #f53d2d;
       margin: 0 auto;
 
       .logo {
+        cursor: pointer;
         display: flex;
         align-items: center;
         color: #fff;
