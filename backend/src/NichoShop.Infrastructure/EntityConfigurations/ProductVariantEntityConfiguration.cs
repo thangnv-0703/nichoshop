@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 using NichoShop.Domain.AggergateModels.ProductAggregate;
-using System.Text.Json;
 
 namespace NichoShop.Infrastructure.EntityConfigurations;
 public class ProductVariantEntityConfiguration : IEntityTypeConfiguration<ProductVariant>
@@ -19,18 +17,35 @@ public class ProductVariantEntityConfiguration : IEntityTypeConfiguration<Produc
             .HasMaxLength(100);
 
         builder.Property(pv => pv.Options)
-                .HasConversion(
-                    options => JsonSerializer.Serialize(options, (JsonSerializerOptions)null!),
-                    json => JsonSerializer.Deserialize<List<ProductVariantOption>>(json!, (JsonSerializerOptions)null)
-                )
-                .HasColumnType("jsonb") // Use PostgreSQL's JSONB column type
-                .HasColumnName("Options")
-                .IsRequired()
-                .Metadata.SetValueComparer(
-                    new ValueComparer<IReadOnlyCollection<ProductVariantOption>>(
-                    (c1, c2) => (c1 ?? new List<ProductVariantOption>()).SequenceEqual(c2 ?? new List<ProductVariantOption>()),
-                    c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c == null ? new List<ProductVariantOption>() : c.ToList())
-                );
+            .HasConversion(
+                // Convert List<ProductVariantOption> to JSON string using Newtonsoft.Json
+                options => JsonConvert.SerializeObject(options, Formatting.None),
+                // Convert JSON string back to List<ProductVariantOption> using Newtonsoft.Json
+                json => JsonConvert.DeserializeObject<List<ProductVariantOption>>(json, new JsonConverter[] { new ProductVariantOptionConverter() }) ?? new List<ProductVariantOption>()
+            )
+            .HasColumnType("jsonb") // PostgreSQL JSONB column type
+            .IsRequired();
+    }
+}
+
+public class ProductVariantOptionConverter : JsonConverter<ProductVariantOption>
+{
+    public override ProductVariantOption? ReadJson(JsonReader reader, Type objectType, ProductVariantOption? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        // Read the value as a string
+        var value = reader.Value?.ToString();
+        if (string.IsNullOrEmpty(value))
+        {
+            return null;
+        }
+
+        // Use the private constructor to create the object
+        return new ProductVariantOption(value);
+    }
+
+    public override void WriteJson(JsonWriter writer, ProductVariantOption? value, JsonSerializer serializer)
+    {
+        // Write the value to JSON (assuming it's just a string)
+        writer.WriteValue(value?.Value);
     }
 }

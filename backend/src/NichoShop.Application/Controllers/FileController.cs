@@ -8,7 +8,7 @@ namespace NichoShop.Application.Controllers;
 
 [Route("api/v1/files")]
 [ApiController]
-public class FileControllerr(IFileService fileService) : Controller
+public class FileController(IFileService fileService) : Controller
 {
     private readonly IFileService _fileService = fileService;
 
