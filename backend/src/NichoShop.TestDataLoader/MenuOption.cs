@@ -27,4 +27,5 @@ public class MenuOption(int id, string name, IRequest command) : Enumeration(id,
 
     public static readonly MenuOption LoadSkuDataFromSql = 
         new(7, "Load sku data from sql", new LoadDataFromSqlCommand() { FileName = "sku.sql" });
+
 }
