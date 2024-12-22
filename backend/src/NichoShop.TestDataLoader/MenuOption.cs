@@ -26,5 +26,5 @@ public class MenuOption(int id, string name, IRequest command) : Enumeration(id,
         new(6, "Load product data from sql", new LoadDataFromSqlCommand() { FileName = "product.sql" });
 
     public static readonly MenuOption LoadSkuDataFromSql = 
-        new(6, "Load sku data from sql", new LoadDataFromSqlCommand() { FileName = "sku.sql" });
+        new(7, "Load sku data from sql", new LoadDataFromSqlCommand() { FileName = "sku.sql" });
 }
