@@ -24,6 +24,7 @@ public static class InfrastructureDI
     public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         return services;
     }

@@ -10,9 +10,9 @@ public class FileService : IFileService
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly IUserContext _userContext;
-    public FileService(IUserContext userContext)
+    public FileService(IUserContext userContext, IConfiguration _configuration)
     {
-        string connectionString = "";
+        string connectionString = _configuration.GetSection("AzureBlobStorage:Connectionstring").Value ?? throw new ArgumentNullException();
         _blobServiceClient = new BlobServiceClient(connectionString);
         this._userContext = userContext;
     }
