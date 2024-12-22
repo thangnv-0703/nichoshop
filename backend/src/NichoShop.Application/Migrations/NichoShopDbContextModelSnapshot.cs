@@ -348,7 +348,7 @@ namespace NichoShop.Application.Migrations
                     b.ToTable("shopping_carts", (string)null);
                 });
 
-            modelBuilder.Entity("NichoShop.Domain.AggergateModels.Sku", b =>
+            modelBuilder.Entity("NichoShop.Domain.AggergateModels.SkuAggregate.Sku", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -358,10 +358,6 @@ namespace NichoShop.Application.Migrations
 
                     b.Property<bool>("InActive")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("ProducVarianttName")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
@@ -373,6 +369,11 @@ namespace NichoShop.Application.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<string>("SkuVariants")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("SkuVariants");
 
                     b.HasKey("Id");
 
@@ -893,7 +894,7 @@ namespace NichoShop.Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NichoShop.Domain.AggergateModels.Sku", b =>
+            modelBuilder.Entity("NichoShop.Domain.AggergateModels.SkuAggregate.Sku", b =>
                 {
                     b.OwnsOne("NichoShop.Domain.Shared.Money", "Price", b1 =>
                         {
