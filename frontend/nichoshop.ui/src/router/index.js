@@ -25,6 +25,14 @@ const routes = [
         }
       },
       {
+        path: "/search", // Đường dẫn cho chi tiết
+        name: "search", // Tên của route
+        component: () => import("@/pages/Search.vue"),
+        meta: {
+          anonymous: true,
+        }
+      },
+      {
         path: "/user",
         component: () => import("@/layouts/UserLayout.vue"),
         meta: {},
