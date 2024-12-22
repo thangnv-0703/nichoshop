@@ -4,6 +4,7 @@ using NichoShop.Domain.AggergateModels;
 using NichoShop.Domain.AggergateModels.OrderAggregate;
 using NichoShop.Domain.AggergateModels.ProductAggregate;
 using NichoShop.Domain.AggergateModels.ShoppingCartAggregate;
+using NichoShop.Domain.AggergateModels.SkuAggregate;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Location;
 using NichoShop.Infrastructure.EntityConfigurations;
