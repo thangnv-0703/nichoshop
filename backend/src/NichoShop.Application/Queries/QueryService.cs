@@ -23,7 +23,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
     public async Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode)
     {
         // Get provinces
-        if (type == (int)LocationEnum.Province)
+        if (type == (int)LocationType.Province)
         {
             return await _dbContext.Province
                 .Select(c => new LocationViewModel
@@ -38,7 +38,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 .ToListAsync();
         }
         // Get districts
-        else if (type == (int)LocationEnum.District)
+        else if (type == (int)LocationType.District)
         {
             return await _dbContext.District
                 .Where(x => x.ProvinceCode == parentCode)
@@ -54,7 +54,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 .ToListAsync();
         }
         // Get wards
-        else if (type == (int)LocationEnum.Ward)
+        else if (type == (int)LocationType.Ward)
         {
             return await _dbContext.Ward
                 .Where(x => x.DistrictCode == parentCode)
