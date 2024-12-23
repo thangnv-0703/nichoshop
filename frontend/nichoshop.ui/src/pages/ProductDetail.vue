@@ -45,9 +45,7 @@
             </div>
           </div>
           <div class="right">
-            <span class="name"
-              >Ghế công thái học Sihoo A3 (Doro C300) chính hãng</span
-            >
+            <span class="name">{{ product.name }}</span>
             <div class="vote">
               <span class="star">
                 <span>4.9</span>
@@ -61,7 +59,7 @@
               <div class="sold">20 <span class="gray">đã bán</span></div>
             </div>
             <div class="price">
-              <span class="price-new">₫6.840.000</span>
+              <span class="price-new">{{ getDisplayedPrice() }}</span>
               <span class="price-old">₫7.200.000</span>
               <span class="discount">-5%</span>
             </div>
@@ -95,18 +93,17 @@
                 >
               </div>
             </div>
-            <div class="attribute-first">
-              <h3 class="title">Màu Sắc</h3>
+
+            <div v-for="variant in product.variants" class="attribute-first">
+              <h3 class="title">{{ variant.name }}</h3>
               <div class="desc">
-                <button class="active">đen</button>
-                <button>trắng xám</button>
-              </div>
-            </div>
-            <div class="attribute-second">
-              <h3 class="title">Gác chân</h3>
-              <div class="desc">
-                <button class="active">có gác</button>
-                <button>không gác</button>
+                <button
+                  v-for="option in variant.options"
+                  :class="{ active: isVariantSelected(variant, option) }"
+                  @click="selectVariant(variant, option)"
+                >
+                  {{ option.value }}
+                </button>
               </div>
             </div>
             <div class="quantity">
@@ -115,7 +112,9 @@
                 <button class="decrease">-</button>
                 <input type="text" value="1" />
                 <button class="increase">+</button>
-                <span class="inventory">94 sản phẩm có sẵn</span>
+                <span class="inventory"
+                  >{{ selectedSKU.quantity }} sản phẩm có sẵn</span
+                >
               </div>
             </div>
             <div class="button">
@@ -276,13 +275,14 @@
 
 <script>
 import { defineComponent, onMounted, getCurrentInstance, ref } from "vue";
-import commonFunction from "../../common/commonFunction";
+import commonFunction from "../common/commonFunction";
 
 export default defineComponent({
   name: "ProductDetail",
   setup() {
     const { proxy } = getCurrentInstance();
     const product = ref({});
+    const selectedSKU = ref({});
     const selectProductVariants = ref([]);
 
     onMounted(async () => {
@@ -292,8 +292,20 @@ export default defineComponent({
         selectProductVariants.value = res?.data.variants?.map((variant) => {
           return { name: variant.name, value: variant.options[0].value };
         });
+        setSelectedSKU();
       }
     });
+
+    const setSelectedSKU = () => {
+      selectedSKU.value = product.value?.skus?.find((list1) => {
+        return list1.skuVariants.every((item1) => {
+          const item2 = selectProductVariants.value.find(
+            (item) => item.name === item1.name && item.value === item1.value
+          );
+          return !!item2;
+        });
+      });
+    };
 
     const selectVariant = (variant, option) => {
       const index = selectProductVariants.value.findIndex(
@@ -307,6 +319,7 @@ export default defineComponent({
           value: option.value,
         });
       }
+      setSelectedSKU();
     };
 
     const isVariantSelected = (variant, option) => {
@@ -316,18 +329,10 @@ export default defineComponent({
     };
 
     const getDisplayedPrice = () => {
-      let foundSKU = product.value?.skus?.find((list1) => {
-        return list1.skuVariants.every((item1) => {
-          const item2 = selectProductVariants.value.find(
-            (item) => item.name === item1.name && item.value === item1.value
-          );
-          return !!item2;
-        });
-      });
-      return foundSKU
+      return selectedSKU.value.price
         ? commonFunction.getDisplayedPrice(
-            foundSKU.price.amount,
-            foundSKU.price.currency
+            selectedSKU.value?.price?.amount,
+            selectedSKU.value?.price?.currency
           )
         : "";
       // return commonFunction.getDisplayedPrice(product.price, product.currency);
@@ -339,6 +344,7 @@ export default defineComponent({
       selectProductVariants,
       isVariantSelected,
       selectVariant,
+      selectedSKU,
     };
   },
 });
