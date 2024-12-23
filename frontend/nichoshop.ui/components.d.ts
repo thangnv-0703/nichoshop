@@ -17,6 +17,7 @@ declare module 'vue' {
     Index: typeof import('./src/components/home/Index.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     Menu: typeof import('primevue/menu')['default']
+    Message: typeof import('primevue/message')['default']
     Order: typeof import('./src/components/home/Order.vue')['default']
     Password: typeof import('primevue/password')['default']
     Popover: typeof import('primevue/popover')['default']

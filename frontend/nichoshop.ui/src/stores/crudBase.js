@@ -46,6 +46,7 @@ export default class Crud {
         try {
           const response = await me.api.getItem(id);
           commit("setItem", response.data);
+          return response;
         } catch (error) {
           commit("setError", error);
         } finally {
