@@ -4,7 +4,7 @@ using System.Net;
 
 namespace NichoShop.Application.Controllers
 {
-    [Route("api/v1/product")]
+    [Route("api/v1/products")]
     [ApiController]
     //[Authorize]
     public class ProductController : Controller
@@ -16,7 +16,7 @@ namespace NichoShop.Application.Controllers
             _productService = productService;
         }
 
-        [HttpPut("{productId}")]
+        [HttpGet("{productId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetProductDetail(int productId)
         {

@@ -26,6 +26,7 @@ public static class InfrastructureDI
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         return services;
     }
 }

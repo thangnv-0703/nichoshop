@@ -1,14 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NichoShop.Domain.AggergateModels.SkuAggregate;
 using NichoShop.Domain.Enums;
 using NichoShop.Domain.Shared;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace NichoShop.Infrastructure.EntityConfigurations;
 public class SkuEntityConfiguration : IEntityTypeConfiguration<Sku>
 {
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     public void Configure(EntityTypeBuilder<Sku> builder)
     {
         builder.ToTable("skus");
@@ -25,20 +31,14 @@ public class SkuEntityConfiguration : IEntityTypeConfiguration<Sku>
         builder.Property(o => o.ProductId)
             .IsRequired();
 
-        builder.Property(pv => pv.SkuVariants)
-             .HasConversion(
-                 options => JsonSerializer.Serialize(options, (JsonSerializerOptions)null!),
-                 json => JsonSerializer.Deserialize<List<SkuVariant>>(json!, (JsonSerializerOptions)null)
-             )
-             .HasColumnType("jsonb") // Use PostgreSQL's JSONB column type
-             .HasColumnName("SkuVariants")
-             .IsRequired()
-             .Metadata.SetValueComparer(
-                 new ValueComparer<IReadOnlyCollection<SkuVariant>>(
-                 (c1, c2) => (c1 ?? new List<SkuVariant>()).SequenceEqual(c2 ?? new List<SkuVariant>()),
-                 c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                 c => c == null ? new List<SkuVariant>() : c.ToList())
-             );
+        // Cấu hình SkuVariants để lưu JSON
+        builder.Property(s => s.SkuVariants)
+            .HasConversion(
+                skuVariants => JsonSerializer.Serialize(skuVariants, _jsonSerializerOptions), // Serialize thành JSON
+                json => JsonSerializer.Deserialize<List<SkuVariant>>(json ?? "[]", _jsonSerializerOptions) ?? new List<SkuVariant>() // Deserialize thành danh sách
+            )
+            .HasColumnType("jsonb") // PostgreSQL JSONB
+            .IsRequired();
 
         builder.OwnsOne(o => o.Price, priceBuilder =>
         {

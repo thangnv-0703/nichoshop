@@ -16,6 +16,15 @@ export default class BaseCrudApi extends BaseApi {
     const apiURL = this.getApiURL("paging");
     return httpClient.post(apiURL, payload);
   }
+
+  getItem(id) {
+    if (!id) {
+      return null;
+    }
+    const apiURL = this.getApiURL(id);
+    return httpClient.get(apiURL);
+  }
+
   create(payload) {
     if (!payload) {
       return null;
