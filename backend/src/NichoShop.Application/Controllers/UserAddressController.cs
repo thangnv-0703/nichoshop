@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
-using NichoShop.Application.Models.Dtos.Request.User;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
 using System.Net;
 
@@ -32,7 +31,7 @@ public class UserAddressController : Controller
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> CreateUserAddress(UserAddressRequestDto param)
+    public async Task<IActionResult> CreateUserAddress([FromBody] UserAddressRequestDto param)
     {
         _userAddressValidator.Validate(param);
         var result = await _userAddressService.CreateUserAddressAsync(param);
