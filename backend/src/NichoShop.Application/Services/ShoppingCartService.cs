@@ -38,24 +38,9 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
         
         // bước 2.1: nếu có rồi thì get giỏ hàng đó
         // bước 2.2: nếu chưa có thì tạo ShoppingCart theo UserId đó
-        if (cart is not null)
-        {
-            
-        }
-        else
-        {
-            ShoppingCart newCart = new ShoppingCart()
-            {
-                Id = Guid.NewGuid(),
-                CustomerId = userId,
-            }
-        }
-            
-
         // bước 3: check xem item đó trong giỏ chưa
         // bước 4.1: nếu chưa thì add
         // bước 4.2: nếu có thì add thêm số lượng
-
         // bước 5: save db
     }
 }
