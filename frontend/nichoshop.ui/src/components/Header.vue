@@ -72,7 +72,16 @@
             </button>
           </div>
           <div class="cart">
-            <i class="cart-icon"></i>
+            <a class="cart-drawer">
+              <svg style="height: 26px; width: 26px;" viewBox="0 0 26.6 25.6"
+                class="shopee-svg-icon navbar__link-icon icon-shopping-cart-2">
+                <title>Shopping Cart Icon</title>
+                <polyline fill="none" points="2 1.7 5.5 1.7 9.6 18.3 21.2 18.3 24.6 6.1 7 6.1" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5"></polyline>
+                <circle cx="10.7" cy="23" r="2.2" stroke="none"></circle>
+                <circle cx="19.7" cy="23" r="2.2" stroke="none"></circle>
+              </svg>
+            </a>
           </div>
         </div>
         <div class="suggestions">
@@ -211,15 +220,23 @@ $navbar-color: #f53d2d;
       }
 
       .cart {
-        display: flex;
-        align-items: center;
+        margin-right: 10px;
 
-        .cart-icon {
-          display: inline-block;
-          width: 24px;
-          height: 24px;
-          background: url("@/assets/icons/cart-icon.png") no-repeat center;
-          background-size: cover;
+        .cart-drawer .icon-shopping-cart-2 {
+          color: #fff;
+          stroke: #fff;
+        }
+
+        .navbar__link-icon.icon-shopping-cart-2 {
+          fill: currentColor;
+          cursor: pointer;
+          height: 26px;
+          width: 26px;
+        }
+
+        .navbar__link-icon {
+          font-size: 1.0625rem;
+          margin-right: .625rem;
         }
       }
     }
