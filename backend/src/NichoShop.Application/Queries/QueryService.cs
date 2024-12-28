@@ -72,7 +72,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 })
                 .ToListAsync();
         }
-        return new List<LocationViewModel>();
+        return [];
     }
 
     public async Task<List<CartItemViewModel>> GetCartItemViewModelsAsync(Guid userId)
