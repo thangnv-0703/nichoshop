@@ -69,6 +69,6 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 })
                 .ToListAsync();
         }
-        return new List<LocationViewModel>();
+        return [];
     }
 }
