@@ -17,6 +17,15 @@ public class CartItem : Entity<Guid>
         }
     }
 
+    public void SetQuantity(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new Exception("Invalid cart item");
+        }
+        Quantity = quantity;
+    }
+
     private bool IsInvalid()
     {
         return Quantity <= 0 || SkuId <= 0;
