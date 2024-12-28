@@ -3,7 +3,7 @@
     public class AddItemToCartRequestDto
     {
         public int ProductId { get; set; }
-        public string SkuNo { get; set; }
+        public int SkuId { get; set; }
         public int Quantity { get; set; }
     }
 }

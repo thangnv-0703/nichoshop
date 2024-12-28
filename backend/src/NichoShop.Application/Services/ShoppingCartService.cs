@@ -1,4 +1,5 @@
 ﻿using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Application.Models.ViewModels;
 using NichoShop.Application.Queries;
 using NichoShop.Common.Interface;
@@ -7,11 +8,12 @@ using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository) : IShoppingCartService
+public class ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository, ISkuRepository skuRepository) : IShoppingCartService
 {
     private readonly IQueryService _queryService = queryService;
     private readonly IUserContext _userContext = userContext;
     private readonly IShoppingCartRepository _shoppingCartRepository = shoppingCartRepository;
+    private readonly ISkuRepository _skuRepository = skuRepository;
 
     public async Task<CartViewModel> GetShoppingCartByUserIdAsync()
     {
@@ -30,17 +32,42 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
         return result;
     }
 
-    public async Task AddItemToCartAsync()
+    public async Task<bool> AddItemToCartAsync(AddItemToCartRequestDto param)
     {
-        // bước 1: kiểm tra xem user đó có giỏ hàng chưa
         var userId = _userContext.UserId;
-        var cartById = await _shoppingCartRepository.GetShoppingCartByUserIdAsync(userId);
-        
-        // bước 2.1: nếu có rồi thì get giỏ hàng đó
-        // bước 2.2: nếu chưa có thì tạo ShoppingCart theo UserId đó
-        // bước 3: check xem item đó trong giỏ chưa
-        // bước 4.1: nếu chưa thì add
-        // bước 4.2: nếu có thì add thêm số lượng
-        // bước 5: save db
+        var cart = await _shoppingCartRepository.GetShoppingCartByUserIdAsync(userId);
+
+        if (cart is null)
+        {
+            cart = new ShoppingCart(userId);
+            _shoppingCartRepository.Add(cart);
+        }
+
+        if (await IsValidQuantitySkuAsync(param.Quantity, param.SkuId))
+        {
+            cart.AddItem(param.Quantity, param.SkuId);
+            await _shoppingCartRepository.SaveChangesAsync();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="quantity"></param>
+    /// <param name="skuId"></param>
+    /// <returns></returns>
+    private async Task<bool> IsValidQuantitySkuAsync(int quantity, int skuId)
+    {
+        var sku = await _skuRepository.GetByIdAsync(skuId);
+        if (sku is not null)
+        {
+            return sku.Quantity >= quantity;
+        }
+        return false;
     }
 }

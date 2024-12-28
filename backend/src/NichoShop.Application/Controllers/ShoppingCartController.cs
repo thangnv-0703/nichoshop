@@ -28,8 +28,12 @@ public class ShoppingCartController : Controller
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int)HttpStatusCode.UnprocessableContent)]
     public async Task<IActionResult> AddItemToCart([FromBody] AddItemToCartRequestDto param)
     {
-        return Ok();
+        var result = await _shoppingCartService.AddItemToCartAsync(param);
+        return Ok(result);
     }
 }
