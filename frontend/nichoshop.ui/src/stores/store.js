@@ -3,8 +3,9 @@ import { createStore } from "vuex";
 import moduleUser from "./modules/moduleUser";
 import moduleUserAddress from "./modules/moduleUserAddress";
 import moduleLocation from "./modules/moduleLocation";
+import moduleProduct from './modules/moduleProduct';
 const store = createStore({
-  modules: { moduleUser, moduleUserAddress, moduleLocation },
+  modules: { moduleUser, moduleUserAddress, moduleLocation, moduleProduct },
   plugins: [
     createPersistedState({
       key: 'vuex',

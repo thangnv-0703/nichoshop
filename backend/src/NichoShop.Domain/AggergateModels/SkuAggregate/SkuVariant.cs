@@ -1,11 +1,19 @@
 ﻿using NichoShop.Domain.SeedWork;
+using System.Text.Json.Serialization;
 
 namespace NichoShop.Domain.AggergateModels.SkuAggregate;
 
-public class SkuVariant(string name, string value) : ValueObject
+public class SkuVariant : ValueObject
 {
-    public string Name { get; private set; } = name;
-    public string Value { get; private set; } = value;
+    public string Name { get; private set; }
+    public string Value { get; private set; }
+
+    [JsonConstructor]
+    public SkuVariant(string name, string value)
+    {
+        Name = name;
+        Value = value;
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

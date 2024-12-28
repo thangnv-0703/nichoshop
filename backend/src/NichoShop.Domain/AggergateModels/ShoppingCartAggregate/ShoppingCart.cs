@@ -11,8 +11,13 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
 
     public void AddItem(int quantity, int skuId)
     {
-        var item = new CartItem(skuId, quantity);
-        _items.Add(item);
+        CartItem? item = _items.FirstOrDefault(x => x.SkuId == skuId);
+        if (item is null)
+        {
+            item = new CartItem(skuId, quantity);
+            _items.Add(item);
+        }
+        item.SetQuantity(quantity);
     }
 
     public void RemoveItem(int skuId)

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.Product;
 using System.Net;
 
 namespace NichoShop.Application.Controllers
 {
-    [Route("api/v1/product")]
+    [Route("api/v1/products")]
     [ApiController]
     //[Authorize]
     public class ProductController : Controller
@@ -16,11 +17,19 @@ namespace NichoShop.Application.Controllers
             _productService = productService;
         }
 
-        [HttpPut("{productId}")]
+        [HttpGet("{productId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetProductDetail(int productId)
         {
             var result = await _productService.GetProductDetailAsync(productId);
+            return Ok(result);
+        }
+
+        [HttpPost("search")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetProductSearchViewModel([FromBody] ProductSearchRequestDto param)
+        {
+            var result = await _productService.GetProductSearchViewModelAsync(param);
             return Ok(result);
         }
     }
