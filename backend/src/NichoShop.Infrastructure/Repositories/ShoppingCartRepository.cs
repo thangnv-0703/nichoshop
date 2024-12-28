@@ -12,4 +12,10 @@ public class ShoppingCartRepository(NichoShopDbContext context) : BaseRepository
             .Include(x => x.Items)
             .FirstOrDefaultAsync();
     }
+
+    protected override IQueryable<ShoppingCart> ApplyIncludeDetail(IQueryable<ShoppingCart> query)
+    {
+        return query
+            .Include(x => x.Items);
+    }
 }

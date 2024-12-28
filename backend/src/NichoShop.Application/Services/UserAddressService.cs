@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using NichoShop.Common.Interface;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
+using NichoShop.Common.Interface;
 using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Repositories;
 

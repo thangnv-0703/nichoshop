@@ -21,6 +21,7 @@ namespace NichoShop.Application.Services
         public async Task<Product> GetProductDetailAsync(int productId)
         {
             var product = await _productRepository.GetByIdAsync(productId, includeDetail: true) ?? throw new Exception("Product not found");
+            _queryService.GetCategoryTree(productId);
             return product;
         }
 

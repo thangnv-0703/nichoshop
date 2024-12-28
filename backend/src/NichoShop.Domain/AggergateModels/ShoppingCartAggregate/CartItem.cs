@@ -8,7 +8,7 @@ public class CartItem : Entity<Guid>
     public int SkuId { get; private set; }
 
     public CartItem(int skuId, int quantity)
-    {  
+    {
         SkuId = skuId;
         Quantity = quantity;
         if (IsInvalid())

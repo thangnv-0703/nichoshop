@@ -2,6 +2,7 @@
 using NichoShop.Application.Enums;
 using NichoShop.Application.Models.Dtos.Request.Product;
 using NichoShop.Application.Models.ViewModels;
+using NichoShop.Domain.AggergateModels;
 using NichoShop.Infrastructure;
 using Npgsql;
 using System.Data;
@@ -87,7 +88,9 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
               STRING_AGG(attr ->> 'value', ', ') AS ProductVariantName,
               s.""Amount"" AS Price,
               ci.""Quantity"",
-              s.""Currency""
+              s.""Currency"",
+              ci.""SkuId""
+            
             FROM shopping_carts sc
                    LEFT JOIN cart_items ci
                      ON sc.""Id"" = ci.""ShoppingCartId""
@@ -101,7 +104,8 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                      p.""Name"",
                      s.""Amount"",
                      ci.""Quantity"",
-                     s.""Currency"";";
+                     s.""Currency"",
+                     ci.""SkuId"";";
 
         var cartItems = await _dbContext.Database.ExecuteSqlRawAsync(query);
 
@@ -124,6 +128,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                         Amount = reader.GetDecimal(3),
                         Quantity = reader.GetInt32(4),
                         Currency = reader.GetString(5),
+                        SkuId = reader.GetInt32(6)
                     };
                     res.Add(cartItem);
                 }
@@ -194,6 +199,61 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                         ProductImage = reader.GetString(4),
                     };
                     res.Add(product);
+                }
+            }
+            await _dbContext.Database.CloseConnectionAsync();
+        }
+        return res;
+    }
+    public async Task<List<Category>> GetCategoryTree(int productId)
+    {
+        var res = new List<Category>();
+        var paramUserId = new NpgsqlParameter("@productId", productId);
+
+        string query = $@"
+            SELECT
+              ci.""Id"",
+              p.""Name"" AS ProductName,
+              STRING_AGG(attr ->> 'value', ', ') AS ProductVariantName,
+              s.""Amount"" AS Price,
+              ci.""Quantity"",
+              s.""Currency""
+            FROM shopping_carts sc
+                   LEFT JOIN cart_items ci
+                     ON sc.""Id"" = ci.""ShoppingCartId""
+                   LEFT JOIN skus s
+                     ON ci.""SkuId"" = s.""Id""
+                   LEFT JOIN products p
+                     ON p.""Id"" = s.""ProductId"",
+                 LATERAL jsonb_array_elements(s.""SkuVariants"") AS attr
+            WHERE sc.""CustomerId"" = '{productId.ToString()}'
+            GROUP BY ci.""Id"",
+                     p.""Name"",
+                     s.""Amount"",
+                     ci.""Quantity"",
+                     s.""Currency"";";
+
+        var cartItems = await _dbContext.Database.ExecuteSqlRawAsync(query);
+
+        using (var command = _dbContext.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = query;
+            command.CommandType = CommandType.Text;
+
+            await _dbContext.Database.OpenConnectionAsync();
+
+            using (var reader = await command.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    var cartItem = new Category
+                    (
+                       reader.GetInt32(1),
+                       reader.GetString(2),
+                       reader.GetString(3),
+                       reader.GetInt32(4)
+                    );
+                    res.Add(cartItem);
                 }
             }
             await _dbContext.Database.CloseConnectionAsync();
