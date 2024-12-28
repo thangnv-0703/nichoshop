@@ -19,7 +19,7 @@ public class CartItem : Entity<Guid>
 
     public void SetQuantity(int quantity)
     {
-        if (quantity < 0)
+        if (quantity <= 0)
         {
             throw new Exception("Invalid cart item");
         }

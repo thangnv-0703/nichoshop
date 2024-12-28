@@ -8,7 +8,9 @@ public class ShoppingCartRepository(NichoShopDbContext context) : BaseRepository
 {
     public async Task<ShoppingCart?> GetShoppingCartByUserIdAsync(Guid userId)
     {
-        return await _context.ShoppingCart.Where(x => x.CustomerId == userId).FirstOrDefaultAsync();
+        return await _context.ShoppingCart.Where(x => x.CustomerId == userId)
+            .Include(x => x.Items)
+            .FirstOrDefaultAsync();
     }
 
     protected override IQueryable<ShoppingCart> ApplyIncludeDetail(IQueryable<ShoppingCart> query)

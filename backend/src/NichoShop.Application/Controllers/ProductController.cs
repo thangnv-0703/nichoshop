@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.Product;
 using System.Net;
 
 namespace NichoShop.Application.Controllers
@@ -21,6 +22,14 @@ namespace NichoShop.Application.Controllers
         public async Task<IActionResult> GetProductDetail(int productId)
         {
             var result = await _productService.GetProductDetailAsync(productId);
+            return Ok(result);
+        }
+
+        [HttpPost("search")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetProductSearchViewModel([FromBody] ProductSearchRequestDto param)
+        {
+            var result = await _productService.GetProductSearchViewModelAsync(param);
             return Ok(result);
         }
     }

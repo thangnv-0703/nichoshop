@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Application.Models.Dtos.Request.CartItem;
 using System.Net;
 
@@ -23,6 +24,17 @@ public class ShoppingCartController : Controller
     public async Task<IActionResult> GetShoppingCartByUserId()
     {
         var result = await _shoppingCartService.GetShoppingCartByUserIdAsync();
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int)HttpStatusCode.UnprocessableContent)]
+    public async Task<IActionResult> AddItemToCart([FromBody] AddItemToCartRequestDto param)
+    {
+        var result = await _shoppingCartService.AddItemToCartAsync(param);
         return Ok(result);
     }
     [AllowAnonymous]

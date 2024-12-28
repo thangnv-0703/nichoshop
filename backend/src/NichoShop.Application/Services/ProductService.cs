@@ -1,4 +1,6 @@
 ﻿using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.Product;
+using NichoShop.Application.Models.ViewModels;
 using NichoShop.Application.Queries;
 using NichoShop.Domain.AggergateModels.ProductAggregate;
 using NichoShop.Domain.Repositories;
@@ -7,8 +9,8 @@ namespace NichoShop.Application.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _productRepository;
         private readonly IQueryService _queryService;
+        private readonly IProductRepository _productRepository;
 
         public ProductService(IProductRepository productRepository, IQueryService queryService)
         {
@@ -21,6 +23,11 @@ namespace NichoShop.Application.Services
             var product = await _productRepository.GetByIdAsync(productId, includeDetail: true) ?? throw new Exception("Product not found");
             _queryService.GetCategoryTree(productId);
             return product;
+        }
+
+        public async Task<List<ProductSearchViewModel>> GetProductSearchViewModelAsync(ProductSearchRequestDto param)
+        {
+            return await _queryService.GetProductSearchViewModelAsync(param);
         }
     }
 }

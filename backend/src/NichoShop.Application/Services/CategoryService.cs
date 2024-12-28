@@ -1,6 +1,6 @@
 ﻿using NichoShop.Application.Interfaces;
-using NichoShop.Application.Queries;
 using NichoShop.Application.Models.ViewModels;
+using NichoShop.Application.Queries;
 using NichoShop.Common.Interface;
 
 namespace NichoShop.Application.Services;

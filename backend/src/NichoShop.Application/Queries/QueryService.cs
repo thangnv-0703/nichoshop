@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NichoShop.Application.Enums;
+using NichoShop.Application.Models.Dtos.Request.Product;
 using NichoShop.Application.Models.ViewModels;
 using NichoShop.Domain.AggergateModels;
 using NichoShop.Infrastructure;
@@ -72,7 +73,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                 })
                 .ToListAsync();
         }
-        return new List<LocationViewModel>();
+        return [];
     }
 
     public async Task<List<CartItemViewModel>> GetCartItemViewModelsAsync(Guid userId)
@@ -126,6 +127,74 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                         Currency = reader.GetString(5),
                     };
                     res.Add(cartItem);
+                }
+            }
+            await _dbContext.Database.CloseConnectionAsync();
+        }
+        return res;
+    }
+
+    public async Task<List<ProductSearchViewModel>> GetProductSearchViewModelAsync(ProductSearchRequestDto param)
+    {
+        List<ProductSearchViewModel> res = new List<ProductSearchViewModel>();
+
+        // Handle sort
+        string querySort = string.Empty;
+        if (param.Sort == "ASC")
+        {
+            querySort = @"ORDER BY skus.""Amount"" ";
+        }
+        else if (param.Sort == "DESC")
+        {
+            querySort = @"ORDER BY skus.""Amount"" DESC ";
+        }
+
+        // Handle offset
+        int offSet = param.PageSize * (param.PageIndex - 1);
+
+        string query = $@"
+            WITH first_sku_per_product
+            AS
+            (SELECT
+                skus.*,
+                ROW_NUMBER() OVER (PARTITION BY skus.""ProductId""
+                ORDER BY skus.""Id"") AS rn
+              FROM skus)
+            SELECT
+              p.""Id"" AS ProductId,
+              p.""Name"" AS ProductName,
+              skus.""Amount"",
+              skus.""Currency"",
+              'https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m3kcw18uw8ip34_tn.webp' AS ProductImage
+            FROM products p
+              LEFT JOIN first_sku_per_product AS skus
+                ON p.""Id"" = skus.""ProductId""
+                AND skus.rn = 1
+            WHERE p.""Name"" LIKE '%{param.Keyword}%' " +
+            querySort.ToString()
+            + $@"LIMIT {param.PageSize} OFFSET {offSet};";
+        var items = await _dbContext.Database.ExecuteSqlRawAsync(query);
+
+        using (var command = _dbContext.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = query;
+            command.CommandType = CommandType.Text;
+
+            await _dbContext.Database.OpenConnectionAsync();
+
+            using (var reader = await command.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    var product = new ProductSearchViewModel
+                    {
+                        ProductId = reader.GetInt32(0),
+                        ProductName = reader.GetString(1),
+                        Amount = reader.GetDecimal(2),
+                        Currency = reader.GetString(3),
+                        ProductImage = reader.GetString(4),
+                    };
+                    res.Add(product);
                 }
             }
             await _dbContext.Database.CloseConnectionAsync();
