@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
-using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Application.Models.Dtos.Request.CartItem;
+using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using System.Net;
 
 namespace NichoShop.Application.Controllers;
@@ -37,8 +37,7 @@ public class ShoppingCartController : Controller
         var result = await _shoppingCartService.AddItemToCartAsync(param);
         return Ok(result);
     }
-    [AllowAnonymous]
-    [HttpPost]
+    [HttpPut("items/quantity")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {

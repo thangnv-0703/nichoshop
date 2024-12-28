@@ -1,6 +1,6 @@
 ﻿using NichoShop.Application.Interfaces;
-using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Application.Models.Dtos.Request.CartItem;
+using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Application.Models.ViewModels;
 using NichoShop.Application.Queries;
 using NichoShop.Common.Interface;
@@ -35,6 +35,11 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
     public async Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
         var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new Exception("Shopping cart is undefined");
+        if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
+        {
+            throw new Exception("Invalid Quantity Sku");
+        }
+
         cart.UpdateCartItem(new CartItem(updateCartItemRequestDto.Id, updateCartItemRequestDto.Quantity));
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
@@ -66,16 +71,13 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
             _shoppingCartRepository.Add(cart);
         }
 
-        if (await IsValidQuantitySkuAsync(param.Quantity, param.SkuId))
+        if (!await IsValidQuantitySkuAsync(param.Quantity, param.SkuId))
         {
-            cart.AddItem(param.Quantity, param.SkuId);
-            await _shoppingCartRepository.SaveChangesAsync();
-            return true;
+            throw new Exception("Invalid Quantity Sku");
         }
-        else
-        {
-            return false;
-        }
+
+        cart.AddItem(param.Quantity, param.SkuId);
+        return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
 
     /// <summary>
