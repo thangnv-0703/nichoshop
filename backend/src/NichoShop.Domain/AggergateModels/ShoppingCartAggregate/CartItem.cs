@@ -8,13 +8,22 @@ public class CartItem : Entity<Guid>
     public int SkuId { get; private set; }
 
     public CartItem(int skuId, int quantity)
-    {  
+    {
         SkuId = skuId;
         Quantity = quantity;
         if (IsInvalid())
         {
             throw new Exception("Invalid cart item");
         }
+    }
+
+    public void SetQuantity(int quantity)
+    {
+        if (quantity < 0)
+        {
+            throw new Exception("Invalid cart item");
+        }
+        Quantity = quantity;
     }
 
     private bool IsInvalid()

@@ -22,20 +22,20 @@
                 style="vertical-align: middle"
               />
               <span>
-                {{ slotProps.data.name }}
+                {{ slotProps.data.productName }}
               </span>
             </div>
             <div>
               <div>Phân loại hàng</div>
-              <div>Đen, L</div>
+              <div>{{ slotProps.data.productVariantName }}</div>
             </div>
           </div>
         </template></Column
       >
 
-      <Column field="price" header="Đơn giá" style="min-width: 170px">
+      <Column field="amount" header="Đơn giá" style="min-width: 170px">
         <template #body="slotProps">
-          ₫ {{ slotProps.data.price.toLocaleString("vi-VN") }}
+          ₫ {{ slotProps.data.amount.toLocaleString("vi-VN") }}
         </template>
       </Column>
       <Column field="quantity" header="Số lượng" style="min-width: 160px">
@@ -74,7 +74,7 @@
         <template #body="slotProps">
           ₫
           {{
-            (slotProps.data.quantity * slotProps.data.price).toLocaleString(
+            (slotProps.data.quantity * slotProps.data.amount).toLocaleString(
               "vi-VN"
             )
           }}
@@ -91,7 +91,7 @@
           </div>
         </template>
       </Column>
-      <template #groupheader="slotProps">
+      <template v-if="false" #groupheader="slotProps">
         <div class="flex items-center gap-2">
           <Checkbox
             @update:modelValue="
@@ -140,78 +140,81 @@
 
 <script>
 import baseList from "@/views/base/baseList.js";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import _ from "lodash";
 
 export default {
   extends: baseList,
   setup() {
-    onMounted(() => {
-      products.value = [
-        {
-          id: 1033,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 85,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-        {
-          id: 1034,
-          name: "Alishia Sergi",
-          price: 99999,
-          quantity: 1,
-          verified: false,
-          activity: 46,
-          representative: {
-            name: "Ivan Magalhaes",
-            image: "ivanmagalhaes.png",
-          },
-        },
-        {
-          id: 1035,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 32,
-          representative: {
-            name: "Onyama Limba",
-            image: "onyamalimba.png",
-          },
-        },
-
-        {
-          id: 1038,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 25,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-        {
-          id: 1039,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 25,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-      ];
+    onMounted(async () => {
+      const res = await proxy.$store.dispatch("moduleCart/getItem");
+      products.value = res?.data?.items || [];
+      // products.value = [
+      //   {
+      //     id: 1033,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 85,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1034,
+      //     name: "Alishia Sergi",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: false,
+      //     activity: 46,
+      //     representative: {
+      //       name: "Ivan Magalhaes",
+      //       image: "ivanmagalhaes.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1035,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 32,
+      //     representative: {
+      //       name: "Onyama Limba",
+      //       image: "onyamalimba.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1038,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 25,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1039,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 25,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      // ];
     });
-    const module = "moduleUserAddress";
+    const { proxy } = getCurrentInstance();
+
+    const module = "moduleCart";
     const products = ref([]);
     const selectedProducts = ref([]);
     const selectAllProducts = (isChecked) => {
@@ -256,6 +259,7 @@ export default {
       if (product) {
         product.quantity--;
       }
+      proxy.$store.dispatch("moduleCart/updateItem", product);
     };
     const increaseQuantity = (item) => {
       const product = products.value.find((product) => product.id === item.id);

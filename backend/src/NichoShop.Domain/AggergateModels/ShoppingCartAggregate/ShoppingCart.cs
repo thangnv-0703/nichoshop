@@ -15,10 +15,18 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
         _items.Add(item);
     }
 
-    public void RemoveItem(int skuId)
+    public void RemoveItem(Guid cartItem)
     {
-        var deletedItemIndex = _items.FindIndex(x => x.SkuId == skuId);
+        var deletedItemIndex = _items.FindIndex(x => x.Id == cartItem);
         if (deletedItemIndex == -1) throw new Exception("Item not found");
         _items.RemoveAt(deletedItemIndex);
+    }
+
+    public void UpdateCartItem(CartItem cartItem)
+    {
+        var foundCartItem = _items.Find(x => x.SkuId == cartItem.SkuId);
+        if (foundCartItem is null) throw new Exception("Item not found");
+
+        foundCartItem.SetQuantity(cartItem.Quantity);
     }
 }

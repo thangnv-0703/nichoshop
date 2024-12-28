@@ -10,4 +10,10 @@ public class ShoppingCartRepository(NichoShopDbContext context) : BaseRepository
     {
         return await _context.ShoppingCart.Where(x => x.CustomerId == userId).FirstOrDefaultAsync();
     }
+
+    protected override IQueryable<ShoppingCart> ApplyIncludeDetail(IQueryable<ShoppingCart> query)
+    {
+        return query
+            .Include(x => x.Items);
+    }
 }

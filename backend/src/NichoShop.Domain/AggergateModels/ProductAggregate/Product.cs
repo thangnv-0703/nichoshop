@@ -66,4 +66,16 @@ public class Product : AggregateRoot<int>, IAuditable
     {
         Description = description;
     }
+
+    public void AddCategory(ProductCategory category)
+    {
+        if (category == null) throw new ArgumentNullException(nameof(category));
+        _categories.Add(category);
+    }
+
+    public void RemoveCategory(ProductCategory category)
+    {
+        if (category == null) throw new ArgumentNullException(nameof(category));
+        _categories.Remove(category);
+    }
 }
