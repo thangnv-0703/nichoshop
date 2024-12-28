@@ -11,9 +11,17 @@ class CartApi extends BaseApi {
         const apiURL = this.getApiURL();
         return httpClient.get(apiURL);
     }
-    update(id, payload) {
-        const apiURL = this.getApiURL();
+    updateCartItemQuantity(id, payload) {
+        const apiURL = this.getApiURL('items/quantity');
         return httpClient.put(apiURL, payload);
+    }
+    delete(id, payload) {
+        if (!id) {
+            return null;
+        }
+
+        const apiURL = this.getApiURL(`items/${id}`);
+        return httpClient.delete(apiURL);
     }
 }
 export default new CartApi();

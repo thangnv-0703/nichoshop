@@ -6,6 +6,6 @@
         public Guid CartId { get; set; }
         public int Quantity { get; set; }
 
-        public int OldQuantity { get; set; }
+        public int? OldQuantity { get; set; }
     }
 }

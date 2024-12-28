@@ -91,6 +91,7 @@ export default class Crud {
         }
       },
       async deleteItem({ commit, state }, id) {
+        debugger
         commit("setLoading", true);
         try {
           const res = await me.api.delete(id);

@@ -11,6 +11,18 @@ const getters = {
 };
 const actions = {
     ...crud.actions,
+    async getItem(store, id) {
+        store.commit("setLoading", true);
+        try {
+            const response = await api.getItem(id);
+            store.commit("moduleCartItem/setItems", response.data?.items, { root: true });
+            return response;
+        } catch (error) {
+            store.commit("setError", error);
+        } finally {
+            store.commit("setLoading", false);
+        }
+    },
 };
 const mutations = {
     ...crud.mutations,

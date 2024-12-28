@@ -19,6 +19,7 @@ declare module 'vue' {
     InputText: typeof import('primevue/inputtext')['default']
     Menu: typeof import('primevue/menu')['default']
     Order: typeof import('./src/components/home/Order.vue')['default']
+    Password: typeof import('primevue/password')['default']
     Popover: typeof import('primevue/popover')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
     RadioButtonGroup: typeof import('primevue/radiobuttongroup')['default']

@@ -88,7 +88,9 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
               STRING_AGG(attr ->> 'value', ', ') AS ProductVariantName,
               s.""Amount"" AS Price,
               ci.""Quantity"",
-              s.""Currency""
+              s.""Currency"",
+              ci.""SkuId""
+            
             FROM shopping_carts sc
                    LEFT JOIN cart_items ci
                      ON sc.""Id"" = ci.""ShoppingCartId""
@@ -102,7 +104,8 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                      p.""Name"",
                      s.""Amount"",
                      ci.""Quantity"",
-                     s.""Currency"";";
+                     s.""Currency"",
+                     ci.""SkuId"";";
 
         var cartItems = await _dbContext.Database.ExecuteSqlRawAsync(query);
 
@@ -125,6 +128,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                         Amount = reader.GetDecimal(3),
                         Quantity = reader.GetInt32(4),
                         Currency = reader.GetString(5),
+                        SkuId = reader.GetInt32(6)
                     };
                     res.Add(cartItem);
                 }
