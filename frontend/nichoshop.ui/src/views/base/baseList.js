@@ -49,8 +49,9 @@ export default defineComponent({
     },
     save(editMode) { },
     deleteOne(record) {
+      let moduleConfigName = this.$store.state[this.module].config?.name;
       this.confirm.require({
-        message: `Bạn có chắc chắn muốn xóa ${this.$store.state[this.module].config?.name} này?`,
+        message: `Bạn có chắc chắn muốn xóa ${moduleConfigName ? moduleConfigName + 'này' : ""} ?`,
         header: 'Cảnh báo',
         icon: 'pi pi-info-circle',
         rejectLabel: 'Hủy',

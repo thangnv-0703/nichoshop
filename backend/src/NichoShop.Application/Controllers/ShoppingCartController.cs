@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.CartItem;
 using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using System.Net;
 
@@ -34,6 +35,21 @@ public class ShoppingCartController : Controller
     public async Task<IActionResult> AddItemToCart([FromBody] AddItemToCartRequestDto param)
     {
         var result = await _shoppingCartService.AddItemToCartAsync(param);
+        return Ok(result);
+    }
+    [HttpPut("items/quantity")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
+    {
+        var result = await _shoppingCartService.UpdateCartItem(updateCartItemRequestDto);
+        return Ok(result);
+    }
+
+    [HttpDelete("items/{cartItemId}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> DeleteCartItem(Guid cartItemId)
+    {
+        var result = await _shoppingCartService.DeleteCartItem(cartItemId);
         return Ok(result);
     }
 }

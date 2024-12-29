@@ -1,224 +1,231 @@
 <template>
   <Header />
   <div class="card nicho-container">
-    <DataTable
-      v-model:selection="selectedProducts"
-      :value="products"
-      rowGroupMode="subheader"
-      groupRowsBy="representative.name"
-      sortMode="single"
-      sortField="representative.name"
-      :sortOrder="1"
-    >
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="representative.name" header="Representative"></Column>
-      <Column field="name" header="Sản phẩm" style="min-width: 520px">
-        <template #body="slotProps">
-          <div class="flex gap-3">
-            <div class="flex gap-3 w-[350px]">
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750"
-                width="80"
-                style="vertical-align: middle"
-              />
-              <span>
-                {{ slotProps.data.name }}
-              </span>
-            </div>
-            <div>
-              <div>Phân loại hàng</div>
-              <div>Đen, L</div>
-            </div>
-          </div>
-        </template></Column
+    <div v-if="items.length > 0">
+      <DataTable
+        v-model:selection="selectedProducts"
+        :value="items"
+        rowGroupMode="subheader"
+        groupRowsBy="representative.name"
+        sortMode="single"
+        sortField="representative.name"
+        :sortOrder="1"
       >
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column field="representative.name" header="Representative"></Column>
+        <Column field="name" header="Sản phẩm" style="min-width: 520px">
+          <template #body="slotProps">
+            <div class="flex gap-3">
+              <div class="flex gap-3 w-[350px]">
+                <img
+                  src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750"
+                  width="80"
+                  style="vertical-align: middle"
+                />
+                <span>
+                  {{ slotProps.data.productName }}
+                </span>
+              </div>
+              <div>
+                <div>Phân loại hàng</div>
+                <div>{{ slotProps.data.productVariantName }}</div>
+              </div>
+            </div>
+          </template></Column
+        >
 
-      <Column field="price" header="Đơn giá" style="min-width: 170px">
-        <template #body="slotProps">
-          ₫ {{ slotProps.data.price.toLocaleString("vi-VN") }}
-        </template>
-      </Column>
-      <Column field="quantity" header="Số lượng" style="min-width: 160px">
-        <template #body="slotProps">
-          <div class="flex">
-            <button
-              @click="decreaseQuantity(slotProps.data)"
-              class="w-[32px] decrease div-center cursor-pointer"
-            >
-              <svg class="icon">
-                <polygon
-                  points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"
-                ></polygon>
-              </svg>
-            </button>
-            <div class="quantity">{{ slotProps.data.quantity }}</div>
-            <button
-              @click="increaseQuantity(slotProps.data)"
-              class="w-[32px] increase div-center cursor-pointer"
-            >
-              <svg class="icon">
-                <polygon
-                  points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"
-                ></polygon>
-              </svg>
-            </button>
+        <Column field="amount" header="Đơn giá" style="min-width: 170px">
+          <template #body="slotProps">
+            ₫ {{ slotProps.data.amount.toLocaleString("vi-VN") }}
+          </template>
+        </Column>
+        <Column field="quantity" header="Số lượng" style="min-width: 160px">
+          <template #body="slotProps">
+            <div class="flex">
+              <button
+                @click="updateQuantity(slotProps.data, true)"
+                class="w-[32px] decrease div-center cursor-pointer"
+              >
+                <svg class="icon">
+                  <polygon
+                    points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"
+                  ></polygon>
+                </svg>
+              </button>
+              <div class="quantity">{{ slotProps.data.quantity }}</div>
+              <button
+                @click="updateQuantity(slotProps.data, false)"
+                class="w-[32px] increase div-center cursor-pointer"
+              >
+                <svg class="icon">
+                  <polygon
+                    points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"
+                  ></polygon>
+                </svg>
+              </button>
+            </div>
+          </template>
+        </Column>
+        <Column
+          field="price"
+          header="Số tiền"
+          style="min-width: 120px"
+          bodyStyle=" color: #ee4d2d"
+        >
+          <template #body="slotProps">
+            ₫
+            {{
+              (slotProps.data.quantity * slotProps.data.amount).toLocaleString(
+                "vi-VN"
+              )
+            }}
+          </template>
+        </Column>
+        <Column :exportable="false" style="width: 50px">
+          <template #body="slotProps">
+            <div class="flex justify-end">
+              <span
+                @click="deleteOne(slotProps.data)"
+                class="text-[#0B80CC] cursor-pointer ml-3"
+                >Xóa</span
+              >
+            </div>
+          </template>
+        </Column>
+        <template v-if="false" #groupheader="slotProps">
+          <div class="flex items-center gap-2">
+            <Checkbox
+              @update:modelValue="
+                (value) => selectProductsInGroup(value, slotProps.data)
+              "
+              :modelValue="isGroupChecked(slotProps.data)"
+              binary
+            />
+            <img
+              :alt="slotProps.data.representative.name"
+              :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.data.representative.image}`"
+              width="32"
+              style="vertical-align: middle"
+            />
+            <span>{{ slotProps.data.representative.name }}</span>
           </div>
         </template>
-      </Column>
-      <Column
-        field="price"
-        header="Số tiền"
-        style="min-width: 120px"
-        bodyStyle=" color: #ee4d2d"
-      >
-        <template #body="slotProps">
-          ₫
-          {{
-            (slotProps.data.quantity * slotProps.data.price).toLocaleString(
-              "vi-VN"
-            )
-          }}
-        </template>
-      </Column>
-      <Column :exportable="false" style="width: 50px">
-        <template #body="slotProps">
-          <div class="flex justify-end">
-            <span
-              @click="deleteOne(slotProps.data)"
-              class="text-[#0B80CC] cursor-pointer ml-3"
-              >Xóa</span
-            >
-          </div>
-        </template>
-      </Column>
-      <template #groupheader="slotProps">
-        <div class="flex items-center gap-2">
-          <Checkbox
-            @update:modelValue="
-              (value) => selectProductsInGroup(value, slotProps.data)
-            "
-            :modelValue="isGroupChecked(slotProps.data)"
-            binary
-          />
-          <img
-            :alt="slotProps.data.representative.name"
-            :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.data.representative.image}`"
-            width="32"
-            style="vertical-align: middle"
-          />
-          <span>{{ slotProps.data.representative.name }}</span>
-        </div>
-      </template>
-      <!-- <template #groupfooter="slotProps">
+        <!-- <template #groupfooter="slotProps">
         <div class="flex justify-end font-bold w-full">
-          Total products:
+          Total items:
           {{ calculateCustomerTotal(slotProps.data.representative.name) }}
         </div>
       </template> -->
-    </DataTable>
+      </DataTable>
 
-    <div class="cart-footer">
-      <div class="flex justify-between">
-        <div class="flex items-center gap-4">
-          <Checkbox
-            @update:modelValue="(value) => selectAllProducts(value)"
-            :modelValue="selectedProducts.length == products.length"
-            binary
-          />
-          <button>Chọn tất cả</button>
-          <button>Xóa</button>
-        </div>
-        <div class="flex items-center gap-4">
-          <span>Tổng thanh toán (0 sản phẩm)</span>
-          <span> đ 0</span>
-          <Button label="Mua hàng" class="w-[210px]" severity="warn" />
+      <div class="cart-footer">
+        <div class="flex justify-between">
+          <div class="flex items-center gap-4">
+            <Checkbox
+              @update:modelValue="(value) => selectAllProducts(value)"
+              :modelValue="selectedProducts.length == items.length"
+              binary
+            />
+            <button>Chọn tất cả</button>
+            <button>Xóa</button>
+          </div>
+          <div class="flex items-center gap-4">
+            <span
+              >Tổng thanh toán ({{ selectedProducts.length }} sản phẩm)</span
+            >
+            <span> đ {{ getTotalPrice() }}</span>
+            <Button label="Mua hàng" class="w-[210px]" severity="warn" />
+          </div>
         </div>
       </div>
     </div>
+    <div class="list-empty" v-else>Không có dữ liệu</div>
   </div>
 </template>
 
 <script>
 import baseList from "@/views/base/baseList.js";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import _ from "lodash";
 
 export default {
   extends: baseList,
   setup() {
-    onMounted(() => {
-      products.value = [
-        {
-          id: 1033,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 85,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-        {
-          id: 1034,
-          name: "Alishia Sergi",
-          price: 99999,
-          quantity: 1,
-          verified: false,
-          activity: 46,
-          representative: {
-            name: "Ivan Magalhaes",
-            image: "ivanmagalhaes.png",
-          },
-        },
-        {
-          id: 1035,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 32,
-          representative: {
-            name: "Onyama Limba",
-            image: "onyamalimba.png",
-          },
-        },
-
-        {
-          id: 1038,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 25,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-        {
-          id: 1039,
-          name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-          price: 99999,
-          quantity: 1,
-          verified: true,
-          activity: 25,
-          representative: {
-            name: "Bernardo Dominic",
-            image: "bernardodominic.png",
-          },
-        },
-      ];
+    onMounted(async () => {
+      const res = await proxy.$store.dispatch("moduleCart/getItem");
+      cartId.value = res?.data?.id;
+      // items.value = [
+      //   {
+      //     id: 1033,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 85,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1034,
+      //     name: "Alishia Sergi",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: false,
+      //     activity: 46,
+      //     representative: {
+      //       name: "Ivan Magalhaes",
+      //       image: "ivanmagalhaes.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1035,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 32,
+      //     representative: {
+      //       name: "Onyama Limba",
+      //       image: "onyamalimba.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1038,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 25,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      //   {
+      //     id: 1039,
+      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
+      //     price: 99999,
+      //     quantity: 1,
+      //     verified: true,
+      //     activity: 25,
+      //     representative: {
+      //       name: "Bernardo Dominic",
+      //       image: "bernardodominic.png",
+      //     },
+      //   },
+      // ];
     });
-    const module = "moduleUserAddress";
-    const products = ref([]);
+    const { proxy } = getCurrentInstance();
+    const cartId = ref(null);
+    const module = "moduleCartItem";
     const selectedProducts = ref([]);
     const selectAllProducts = (isChecked) => {
       if (isChecked) {
         selectedProducts.value = _.unionBy(
           selectedProducts.value,
-          products.value,
+          proxy.items,
           "id"
         );
       } else {
@@ -227,7 +234,7 @@ export default {
     };
     const selectProductsInGroup = (isChecked, data) => {
       if (isChecked) {
-        let productInGroup = products.value.filter((item) => {
+        let productInGroup = proxy.items.filter((item) => {
           return item.representative.name === data.representative.name;
         });
         selectedProducts.value = _.unionBy(
@@ -246,32 +253,37 @@ export default {
         selectedProducts.value.filter((item) => {
           return item.representative.name === data.representative.name;
         }).length ===
-        products.value.filter((item) => {
+        proxy.items.filter((item) => {
           return item.representative.name === data.representative.name;
         }).length
       );
     };
-    const decreaseQuantity = (item) => {
-      const product = products.value.find((product) => product.id === item.id);
-      if (product) {
-        product.quantity--;
-      }
+    const updateQuantity = (item, isDecrease) => {
+      const product = proxy.items.find((product) => product.id === item.id);
+
+      proxy.$store.dispatch("moduleCartItem/updateItem", {
+        Id: product?.skuId,
+        CartId: cartId.value,
+        Quantity: isDecrease ? --product.quantity : ++product.quantity,
+      });
     };
-    const increaseQuantity = (item) => {
-      const product = products.value.find((product) => product.id === item.id);
-      if (product) {
-        product.quantity++;
-      }
+
+    const getTotalPrice = () => {
+      return selectedProducts.value
+        .reduce((acc, item) => {
+          return acc + item.amount * item.quantity;
+        }, 0)
+        .toLocaleString("vi-VN");
     };
+
     return {
-      products,
       selectedProducts,
-      decreaseQuantity,
-      increaseQuantity,
+      updateQuantity,
       module,
       isGroupChecked,
       selectProductsInGroup,
       selectAllProducts,
+      getTotalPrice,
     };
   },
 };

@@ -4,8 +4,10 @@ import moduleUser from "./modules/moduleUser";
 import moduleUserAddress from "./modules/moduleUserAddress";
 import moduleLocation from "./modules/moduleLocation";
 import moduleProduct from './modules/moduleProduct';
+import moduleCart from './modules/moduleCart';
+import moduleCartItem from './modules/moduleCartItem';
 const store = createStore({
-  modules: { moduleUser, moduleUserAddress, moduleLocation, moduleProduct },
+  modules: { moduleUser, moduleUserAddress, moduleLocation, moduleProduct, moduleCart, moduleCartItem },
   plugins: [
     createPersistedState({
       key: 'vuex',
