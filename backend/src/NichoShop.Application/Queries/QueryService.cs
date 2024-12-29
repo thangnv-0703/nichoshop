@@ -2,7 +2,6 @@
 using NichoShop.Application.Enums;
 using NichoShop.Application.Models.Dtos.Request.Product;
 using NichoShop.Application.Models.ViewModels;
-using NichoShop.Domain.AggergateModels;
 using NichoShop.Infrastructure;
 using Npgsql;
 using System.Data;
@@ -205,35 +204,18 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
         }
         return res;
     }
-    public async Task<List<Category>> GetCategoryTree(int productId)
+    public async Task<List<ProductCategoryViewModel>> GetCategoryTree(int productId)
     {
-        var res = new List<Category>();
+        var res = new List<ProductCategoryViewModel>();
         var paramUserId = new NpgsqlParameter("@productId", productId);
 
         string query = $@"
-            SELECT
-              ci.""Id"",
-              p.""Name"" AS ProductName,
-              STRING_AGG(attr ->> 'value', ', ') AS ProductVariantName,
-              s.""Amount"" AS Price,
-              ci.""Quantity"",
-              s.""Currency""
-            FROM shopping_carts sc
-                   LEFT JOIN cart_items ci
-                     ON sc.""Id"" = ci.""ShoppingCartId""
-                   LEFT JOIN skus s
-                     ON ci.""SkuId"" = s.""Id""
-                   LEFT JOIN products p
-                     ON p.""Id"" = s.""ProductId"",
-                 LATERAL jsonb_array_elements(s.""SkuVariants"") AS attr
-            WHERE sc.""CustomerId"" = '{productId.ToString()}'
-            GROUP BY ci.""Id"",
-                     p.""Name"",
-                     s.""Amount"",
-                     ci.""Quantity"",
-                     s.""Currency"";";
-
-        var cartItems = await _dbContext.Database.ExecuteSqlRawAsync(query);
+           WITH RECURSIVE t(""Id"",""Name"", ""DisplayName"", ""ParentId"") AS (
+                    Select * from categories WHERE ""Id""= '{productId}'
+                  UNION ALL
+                   Select pc.* from t JOIN categories pc on pc.""Id"" = t.""ParentId""
+                )
+                SELECT * FROM t";
 
         using (var command = _dbContext.Database.GetDbConnection().CreateCommand())
         {
@@ -246,14 +228,13 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
             {
                 while (await reader.ReadAsync())
                 {
-                    var cartItem = new Category
-                    (
-                       reader.GetInt32(1),
-                       reader.GetString(2),
-                       reader.GetString(3),
-                       reader.GetInt32(4)
-                    );
-                    res.Add(cartItem);
+                    var categoryViewModel = new ProductCategoryViewModel
+                    {
+                        CategoryId = reader.GetInt32(0),
+                        CategoryName = reader.GetString(2),
+                        ParentId = reader.IsDBNull(3) ? null : reader.GetInt32(3)
+                    };
+                    res.Add(categoryViewModel);
                 }
             }
             await _dbContext.Database.CloseConnectionAsync();
