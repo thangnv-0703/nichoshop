@@ -1,6 +1,5 @@
 ﻿using NichoShop.Application.Models.Dtos.Request.Product;
 using NichoShop.Application.Models.ViewModels;
-using NichoShop.Domain.AggergateModels;
 
 namespace NichoShop.Application.Queries;
 
@@ -10,5 +9,5 @@ public interface IQueryService
     Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode);
     Task<List<CartItemViewModel>> GetCartItemViewModelsAsync(Guid userId);
     Task<List<ProductSearchViewModel>> GetProductSearchViewModelAsync(ProductSearchRequestDto param);
-    Task<List<Category>> GetCategoryTree(int categoryId);
+    Task<List<ProductCategoryViewModel>> GetCategoryTree(int categoryId);
 }
