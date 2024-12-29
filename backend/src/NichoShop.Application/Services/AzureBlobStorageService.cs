@@ -3,24 +3,26 @@ using NichoShop.Application.Interfaces;
 using NichoShop.Domain.Enums;
 using NichoShop.Application.Extensions;
 using NichoShop.Common.Interface;
+using Azure.Storage.Blobs.Models;
 
 namespace NichoShop.Application.Services;
 
-public class FileService : IFileService
+public class AzureBlobStorageService : IStorageService
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly IUserContext _userContext;
-    public FileService(IUserContext userContext, IConfiguration _configuration)
+
+    public AzureBlobStorageService(IUserContext userContext, IConfiguration _configuration)
     {
         string connectionString = _configuration.GetSection("AzureBlobStorage:Connectionstring").Value ?? throw new ArgumentNullException();
         _blobServiceClient = new BlobServiceClient(connectionString);
-        this._userContext = userContext;
+        _userContext = userContext;
     }
 
     private async Task<BlobContainerClient> GetContainerClient(string containerName)
     {
         BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-        await containerClient.CreateIfNotExistsAsync();
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
         return containerClient;
     }
 
@@ -49,35 +51,27 @@ public class FileService : IFileService
             throw new FileNotFoundException();
 
         return blobClient.Uri.ToString();
-        //var blobProperties = await blobClient.GetPropertiesAsync();
-
-        //var sasBuilder = new BlobSasBuilder
-        //{
-        //    BlobContainerName = containerClient.Name,
-        //    BlobName = fileId.ToString(),
-        //    Resource = "b", // Blob
-        //    ExpiresOn = DateTimeOffset.UtcNow.AddHours(1) // Valid for 1 hour
-        //};
-
-        //sasBuilder.SetPermissions(Azure.Storage.Sas.BlobContainerSasPermissions.Read);
-        //sasBuilder.ContentType = "image";
-        //Uri sasUri = blobClient.GenerateSasUri(sasBuilder);
-
-        //return sasUri.ToString();
     }
 
-    public async Task<Guid> UploadFile(IFormFile file, StorageType type)
+    public async Task<Guid> UploadFromFileAsync(IFormFile file, StorageType type)
     {
         if (file == null || file.Length == 0)
         {
             throw new Exception("No file uploaded.");
         }
 
+        using var stream = file.OpenReadStream();
+        return await UploadFileAsync(stream, file.ContentType, type);
+    }
+
+    private async Task<Guid> UploadFileAsync(Stream stream, string contentType, StorageType type)
+    {
         var containerClient = await GetContainerClient(type.GetDisplayName());
-        var fileId =  type switch
+        var fileId = type switch
         {
             StorageType.Avatar => _userContext.UserId,
             StorageType.ProductImages => Guid.NewGuid(),
+            StorageType.CategoryImages => Guid.NewGuid(),
             _ => throw new NotImplementedException()
         };
         var blobClient = containerClient.GetBlobClient(fileId.ToString());
@@ -86,14 +80,18 @@ public class FileService : IFileService
         {
             HttpHeaders = new Azure.Storage.Blobs.Models.BlobHttpHeaders
             {
-                ContentType = file.ContentType
+                ContentType = contentType
             }
         };
 
-        using (var stream = file.OpenReadStream())
-        {
-            await blobClient.UploadAsync(stream, uploadOptions); 
-        }
+        await blobClient.UploadAsync(stream, uploadOptions);
+
         return fileId;
+    }
+
+    public async Task<Guid> UploadFromByteDataAsync(byte[] data, StorageType type, string contentType = "application/octet-stream")
+    {
+        using var stream = new MemoryStream(data);
+        return await UploadFileAsync(stream, contentType, type);
     }
 }

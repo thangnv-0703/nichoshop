@@ -1,4 +1,4 @@
-﻿namespace NichoShop.TestDataLoader.Features.RefitModels;
+﻿namespace NichoShop.TestDataLoader.Features.Models;
 
 public class ShoppeResponse<T>
 {

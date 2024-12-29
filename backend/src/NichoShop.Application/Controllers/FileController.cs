@@ -8,9 +8,9 @@ namespace NichoShop.Application.Controllers;
 
 [Route("api/v1/files")]
 [ApiController]
-public class FileController(IFileService fileService) : Controller
+public class FileController(IStorageService fileService) : Controller
 {
-    private readonly IFileService _fileService = fileService;
+    private readonly IStorageService _fileService = fileService;
 
     [HttpGet("preview/{type}/{fileId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -25,7 +25,7 @@ public class FileController(IFileService fileService) : Controller
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] StorageType type)
     {
-        var result = await _fileService.UploadFile(file, type);
+        var result = await _fileService.UploadFromFileAsync(file, type);
         return Ok(result);
     }
 }

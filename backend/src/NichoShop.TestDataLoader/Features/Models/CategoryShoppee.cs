@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NichoShop.TestDataLoader.Features.RefitModels;
+namespace NichoShop.TestDataLoader.Features.Models;
 
 public class CategoryShoppe
 {
@@ -26,7 +26,7 @@ public class CategoryShoppe
     public List<CategoryShoppe> Children { get; set; } = new List<CategoryShoppe>();
 
     [JsonProperty("region_setting")]
-    public object RegionSetting { get; set; } = new ();
+    public object RegionSetting { get; set; } = new();
 
     [JsonProperty("is_prohibit")]
     public bool IsProhibit { get; set; }
