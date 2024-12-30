@@ -76,12 +76,12 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
             throw new Exception("Invalid Quantity Sku");
         }
 
-        cart.AddItem(param.Quantity, param.SkuId);
+        cart.AddItem(param.Quantity, param.SkuId, param.IsSelected);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
 
     /// <summary>
-    /// 
+    /// Check if the quantity of a SKU is valid
     /// </summary>
     /// <param name="quantity"></param>
     /// <param name="skuId"></param>

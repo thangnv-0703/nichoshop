@@ -18,6 +18,9 @@ public class CartItemEntityConfiguration : IEntityTypeConfiguration<CartItem>
         builder.Property(o => o.Quantity)
             .IsRequired();
 
+        builder.Property(o => o.IsSelected)
+            .IsRequired();
+
         builder.Property<Guid>("ShoppingCartId");
     }
 }

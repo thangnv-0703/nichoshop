@@ -299,8 +299,7 @@ namespace NichoShop.Application.Migrations
 
                     b.Property<string>("Options")
                         .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("Options");
+                        .HasColumnType("jsonb");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("integer");
@@ -317,6 +316,9 @@ namespace NichoShop.Application.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
@@ -372,10 +374,11 @@ namespace NichoShop.Application.Migrations
 
                     b.Property<string>("SkuVariants")
                         .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("SkuVariants");
+                        .HasColumnType("jsonb");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("skus", (string)null);
                 });
@@ -896,6 +899,12 @@ namespace NichoShop.Application.Migrations
 
             modelBuilder.Entity("NichoShop.Domain.AggergateModels.SkuAggregate.Sku", b =>
                 {
+                    b.HasOne("NichoShop.Domain.AggergateModels.ProductAggregate.Product", null)
+                        .WithMany("Skus")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("NichoShop.Domain.Shared.Money", "Price", b1 =>
                         {
                             b1.Property<int>("SkuId")
@@ -1030,6 +1039,8 @@ namespace NichoShop.Application.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Images");
+
+                    b.Navigation("Skus");
 
                     b.Navigation("Variants");
                 });
