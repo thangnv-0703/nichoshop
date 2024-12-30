@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NichoShop.Application.Filters;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.AppSettings;
 using NichoShop.Application.Models.Dtos.Request.User;
@@ -29,6 +30,7 @@ public static class ApplicationDI
         services.ConfigureCustomService();
         services.ConfigureAuthencation(configuration);
         services.ConfigureQuery();
+        services.ConfigureControllers();
         services.ConfigureCors(configuration);
         return services;
     }
@@ -109,6 +111,14 @@ public static class ApplicationDI
                 );
             });
         }
+        return services;
+    }
+    public static IServiceCollection ConfigureControllers(this IServiceCollection services)
+    {
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<CustomExceptionFilter>();
+        });
         return services;
     }
 

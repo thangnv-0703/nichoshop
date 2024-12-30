@@ -1,4 +1,5 @@
-﻿using NichoShop.Domain.SeedWork;
+﻿using NichoShop.Domain.Exceptions;
+using NichoShop.Domain.SeedWork;
 
 namespace NichoShop.Domain.AggergateModels.ShoppingCartAggregate;
 
@@ -23,7 +24,7 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
     public void RemoveItem(Guid cartItem)
     {
         var deletedItemIndex = _items.FindIndex(x => x.Id == cartItem);
-        if (deletedItemIndex == -1) throw new Exception("Item not found");
+        if (deletedItemIndex == -1) throw new NotFoundException("Item not found");
         _items.RemoveAt(deletedItemIndex);
     }
 
