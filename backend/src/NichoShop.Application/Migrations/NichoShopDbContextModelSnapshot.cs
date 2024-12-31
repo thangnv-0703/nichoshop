@@ -320,6 +320,9 @@ namespace NichoShop.Application.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
