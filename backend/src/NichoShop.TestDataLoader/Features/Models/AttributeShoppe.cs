@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace NichoShop.TestDataLoader.Features.RefitModels;
+namespace NichoShop.TestDataLoader.Features.Models;
 public class AttributeShoppe
 {
     [JsonPropertyName("attribute_id")]
@@ -35,7 +35,7 @@ public class AttributeShoppe
     public List<AttributeShoppe> Children { get; set; } = [];
 
     [JsonPropertyName("attribute_info")]
-    public object AttributeInfo { get; set; } = new ();
+    public object AttributeInfo { get; set; } = new();
 
     [JsonPropertyName("attribute_model_id")]
     public int AttributeModelId { get; set; }

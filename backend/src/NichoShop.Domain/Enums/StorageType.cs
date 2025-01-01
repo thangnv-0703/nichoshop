@@ -7,5 +7,8 @@ public enum StorageType
     ProductImages = 1,
 
     [Display(Name = "avatar")]
-    Avatar = 2
+    Avatar = 2,
+
+    [Display(Name = "categoryimage")]
+    CategoryImages = 3,
 }
