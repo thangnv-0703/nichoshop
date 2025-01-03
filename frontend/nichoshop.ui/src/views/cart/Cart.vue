@@ -2,26 +2,20 @@
   <Header />
   <div class="card nicho-container">
     <div v-if="items.length > 0">
-      <DataTable
-        v-model:selection="selectedProducts"
-        :value="items"
-        rowGroupMode="subheader"
-        groupRowsBy="representative.name"
-        sortMode="single"
-        sortField="representative.name"
-        :sortOrder="1"
-      >
-        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-        <Column field="representative.name" header="Representative"></Column>
+      <DataTable v-model:selection="selectedProducts" :value="items" rowGroupMode="subheader"
+        groupRowsBy="representative.name" sortMode="single" sortField="representative.name" :sortOrder="1">
+        <Column field="isSelected" selectionMode="multiple" headerStyle="width: 3rem">
+          <!-- <template #body="slotProps">
+            <Checkbox :value="slotProps.data.isSelected" />
+          </template> -->
+        </Column>
+        <!-- <Column field="representative.name" header="Representative"></Column> -->
         <Column field="name" header="Sản phẩm" style="min-width: 520px">
           <template #body="slotProps">
             <div class="flex gap-3">
               <div class="flex gap-3 w-[350px]">
-                <img
-                  src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750"
-                  width="80"
-                  style="vertical-align: middle"
-                />
+                <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750" width="80"
+                  style="vertical-align: middle" />
                 <span>
                   {{ slotProps.data.productName }}
                 </span>
@@ -31,8 +25,8 @@
                 <div>{{ slotProps.data.productVariantName }}</div>
               </div>
             </div>
-          </template></Column
-        >
+          </template>
+        </Column>
 
         <Column field="amount" header="Đơn giá" style="min-width: 170px">
           <template #body="slotProps">
@@ -42,36 +36,23 @@
         <Column field="quantity" header="Số lượng" style="min-width: 160px">
           <template #body="slotProps">
             <div class="flex">
-              <button
-                @click="updateQuantity(slotProps.data, true)"
-                class="w-[32px] decrease div-center cursor-pointer"
-              >
+              <button @click="updateQuantity(slotProps.data, true)" class="w-[32px] decrease div-center cursor-pointer">
                 <svg class="icon">
-                  <polygon
-                    points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"
-                  ></polygon>
+                  <polygon points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"></polygon>
                 </svg>
               </button>
               <div class="quantity">{{ slotProps.data.quantity }}</div>
-              <button
-                @click="updateQuantity(slotProps.data, false)"
-                class="w-[32px] increase div-center cursor-pointer"
-              >
+              <button @click="updateQuantity(slotProps.data, false)"
+                class="w-[32px] increase div-center cursor-pointer">
                 <svg class="icon">
-                  <polygon
-                    points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"
-                  ></polygon>
+                  <polygon points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5">
+                  </polygon>
                 </svg>
               </button>
             </div>
           </template>
         </Column>
-        <Column
-          field="price"
-          header="Số tiền"
-          style="min-width: 120px"
-          bodyStyle=" color: #ee4d2d"
-        >
+        <Column field="price" header="Số tiền" style="min-width: 120px" bodyStyle=" color: #ee4d2d">
           <template #body="slotProps">
             ₫
             {{
@@ -84,29 +65,17 @@
         <Column :exportable="false" style="width: 50px">
           <template #body="slotProps">
             <div class="flex justify-end">
-              <span
-                @click="deleteOne(slotProps.data)"
-                class="text-[#0B80CC] cursor-pointer ml-3"
-                >Xóa</span
-              >
+              <span @click="deleteOne(slotProps.data)" class="text-[#0B80CC] cursor-pointer ml-3">Xóa</span>
             </div>
           </template>
         </Column>
         <template v-if="false" #groupheader="slotProps">
           <div class="flex items-center gap-2">
-            <Checkbox
-              @update:modelValue="
-                (value) => selectProductsInGroup(value, slotProps.data)
-              "
-              :modelValue="isGroupChecked(slotProps.data)"
-              binary
-            />
-            <img
-              :alt="slotProps.data.representative.name"
+            <Checkbox @update:modelValue="(value) => selectProductsInGroup(value, slotProps.data)
+              " :modelValue="isGroupChecked(slotProps.data)" binary />
+            <img :alt="slotProps.data.representative.name"
               :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.data.representative.image}`"
-              width="32"
-              style="vertical-align: middle"
-            />
+              width="32" style="vertical-align: middle" />
             <span>{{ slotProps.data.representative.name }}</span>
           </div>
         </template>
@@ -121,18 +90,13 @@
       <div class="cart-footer">
         <div class="flex justify-between">
           <div class="flex items-center gap-4">
-            <Checkbox
-              @update:modelValue="(value) => selectAllProducts(value)"
-              :modelValue="selectedProducts.length == items.length"
-              binary
-            />
+            <Checkbox @update:modelValue="(value) => selectAllProducts(value)"
+              :modelValue="selectedProducts.length == items.length" binary />
             <button>Chọn tất cả</button>
             <button>Xóa</button>
           </div>
           <div class="flex items-center gap-4">
-            <span
-              >Tổng thanh toán ({{ selectedProducts.length }} sản phẩm)</span
-            >
+            <span>Tổng thanh toán ({{ selectedProducts.length }} sản phẩm)</span>
             <span> đ {{ getTotalPrice() }}</span>
             <Button label="Mua hàng" class="w-[210px]" severity="warn" />
           </div>
@@ -154,73 +118,13 @@ export default {
     onMounted(async () => {
       const res = await proxy.$store.dispatch("moduleCart/getItem");
       cartId.value = res?.data?.id;
-      // items.value = [
-      //   {
-      //     id: 1033,
-      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-      //     price: 99999,
-      //     quantity: 1,
-      //     verified: true,
-      //     activity: 85,
-      //     representative: {
-      //       name: "Bernardo Dominic",
-      //       image: "bernardodominic.png",
-      //     },
-      //   },
-      //   {
-      //     id: 1034,
-      //     name: "Alishia Sergi",
-      //     price: 99999,
-      //     quantity: 1,
-      //     verified: false,
-      //     activity: 46,
-      //     representative: {
-      //       name: "Ivan Magalhaes",
-      //       image: "ivanmagalhaes.png",
-      //     },
-      //   },
-      //   {
-      //     id: 1035,
-      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-      //     price: 99999,
-      //     quantity: 1,
-      //     verified: true,
-      //     activity: 32,
-      //     representative: {
-      //       name: "Onyama Limba",
-      //       image: "onyamalimba.png",
-      //     },
-      //   },
-      //   {
-      //     id: 1038,
-      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-      //     price: 99999,
-      //     quantity: 1,
-      //     verified: true,
-      //     activity: 25,
-      //     representative: {
-      //       name: "Bernardo Dominic",
-      //       image: "bernardodominic.png",
-      //     },
-      //   },
-      //   {
-      //     id: 1039,
-      //     name: "Áo khoác nam ROWAY chất liệu kaki cao cấp | Jacket Kaki",
-      //     price: 99999,
-      //     quantity: 1,
-      //     verified: true,
-      //     activity: 25,
-      //     representative: {
-      //       name: "Bernardo Dominic",
-      //       image: "bernardodominic.png",
-      //     },
-      //   },
-      // ];
+      selectedProducts.value = proxy.items.filter((x) => x.isSelected);
     });
     const { proxy } = getCurrentInstance();
     const cartId = ref(null);
     const module = "moduleCartItem";
     const selectedProducts = ref([]);
+
     const selectAllProducts = (isChecked) => {
       if (isChecked) {
         selectedProducts.value = _.unionBy(
@@ -289,15 +193,21 @@ export default {
 };
 </script>
 <style scoped>
+.card.nicho-container {
+  color: black;
+}
+
 .quantity,
 .decrease,
 .increase {
   border: 1px solid rgba(0, 0, 0, 0.09);
 }
+
 .quantity {
   text-align: center;
   width: 50px;
 }
+
 .increase .icon,
 .decrease .icon {
   flex-shrink: 0;
@@ -305,6 +215,7 @@ export default {
   height: 10px;
   width: 10px;
 }
+
 .cart-footer {
   z-index: 1;
   position: sticky;
@@ -313,6 +224,7 @@ export default {
   bottom: 0;
   background-color: #fff;
 }
+
 .cart-footer:before {
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.06));
   content: "";
@@ -321,5 +233,22 @@ export default {
   position: absolute;
   top: -1.25rem;
   width: 100%;
+}
+
+:deep(.p-datatable-tbody > tr) {
+  background: white;
+}
+
+:deep(.p-datatable-header-cell) {
+  background: white;
+  color: black;
+}
+
+:deep(.p-datatable-tbody tr) {
+  color: black;
+}
+
+:deep(.p-checkbox-box) {
+  background: white;
 }
 </style>
