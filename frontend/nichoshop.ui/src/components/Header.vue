@@ -162,7 +162,6 @@ export default defineComponent({
     };
 
     const toggle = (event) => {
-      debugger;
       if (popOver.value) {
         popOver.value.toggle(event);
       }
