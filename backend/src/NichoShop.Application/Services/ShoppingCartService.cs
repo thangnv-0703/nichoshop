@@ -71,12 +71,13 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
             _shoppingCartRepository.Add(cart);
         }
 
-        if (!await IsValidQuantitySkuAsync(param.Quantity, param.SkuId))
+        var itemCartAdd = cart.AddItem(param.Quantity, param.SkuId, param.IsSelected);
+
+        if (!await IsValidQuantitySkuAsync(itemCartAdd.Quantity, itemCartAdd.SkuId))
         {
             throw new Exception("Invalid Quantity Sku");
         }
 
-        cart.AddItem(param.Quantity, param.SkuId, param.IsSelected);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
 
