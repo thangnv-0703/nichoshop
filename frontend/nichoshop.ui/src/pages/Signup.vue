@@ -1,32 +1,6 @@
 <template>
-  <auth-layout>
-    <p class="text-2xl text-center py-6">Nhanh chóng và miễn phí để bắt đầu</p>
-    <div
-      class="tabs bg-gray-100 flex justify-between p-[6px] mb-[32px] rounded gap-2"
-    >
-      <div
-        @click="onSwitchTab(tabs.personal)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
-        :class="[
-          currentTab === tabs.personal
-            ? 'bg-white text-[#0B80CC] shadow-md'
-            : 'text-[#B2B2C2]',
-        ]"
-      >
-        Cá nhân
-      </div>
-      <div
-        @click="onSwitchTab(tabs.business)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
-        :class="[
-          currentTab === tabs.business
-            ? 'bg-white text-[#0B80CC] shadow-md'
-            : 'text-[#B2B2C2]',
-        ]"
-      >
-        Doanh nghiệp
-      </div>
-    </div>
+  <auth-layout title="Đăng ký">
+    <p class="text-2xl py-6 w-full">Đăng ký</p>
     <Form
       v-slot="$form"
       :resolver="resolver"
@@ -86,11 +60,11 @@
           </template>
         </div>
       </div>
-      <Button type="submit" label="Tạo tài khoản" />
+      <Button type="submit" severity="danger" label="Tạo tài khoản" />
       <div class="flex items-center justify-center">
         <p class="text-[#81818F]">Đã có tài khoản?</p>
         <p
-          class="text-[#0B80CC] ml-[4px] cursor-pointer"
+          class="text-[#ee4d2d] ml-[4px] cursor-pointer"
           @click="onClickGoToLoginPage"
         >
           Đăng nhập

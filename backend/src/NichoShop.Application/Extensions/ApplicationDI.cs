@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NichoShop.Application.Filters;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.AppSettings;
 using NichoShop.Application.Models.Dtos.Request.User;
@@ -13,6 +14,7 @@ using NichoShop.Application.Validators.UserAddress;
 using NichoShop.Common.Interface;
 using NichoShop.Common.Service;
 using NichoShop.Commons.Models;
+using NLog.Extensions.Logging;
 using System.Text;
 
 namespace NichoShop.Application.Extensions;
@@ -21,9 +23,13 @@ public static class ApplicationDI
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<CustomExceptionFilter>();
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.ConfigureSwagger();
+        //services.ConfigureLogging();
         services.ConfigureApplicationService();
         services.ConfigureFluentValidation();
         services.ConfigureCustomService();
@@ -37,6 +43,15 @@ public static class ApplicationDI
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        return services;
+    }
+    private static IServiceCollection ConfigureLogging(this IServiceCollection services)
+    {
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddNLog();
+        });
         return services;
     }
 

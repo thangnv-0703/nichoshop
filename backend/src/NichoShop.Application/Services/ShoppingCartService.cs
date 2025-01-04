@@ -5,6 +5,7 @@ using NichoShop.Application.Models.ViewModels;
 using NichoShop.Application.Queries;
 using NichoShop.Common.Interface;
 using NichoShop.Domain.AggergateModels.ShoppingCartAggregate;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
@@ -34,7 +35,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
     public async Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new Exception("Shopping cart is undefined");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
         if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
         {
             throw new Exception("Invalid Quantity Sku");
@@ -52,7 +53,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
         if (shoppingCart is null)
         {
-            throw new Exception("Shopping cart is undefined");
+            throw new NotFoundException("Shopping cart not found");
         }
 
         shoppingCart.RemoveItem(cartItemId);

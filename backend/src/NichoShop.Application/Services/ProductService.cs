@@ -3,6 +3,7 @@ using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.Product;
 using NichoShop.Application.Models.ViewModels;
 using NichoShop.Application.Queries;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services
@@ -22,7 +23,7 @@ namespace NichoShop.Application.Services
 
         public async Task<ProductDetailViewModel> GetProductDetailAsync(int productId)
         {
-            var product = await _productRepository.GetByIdAsync(productId, includeDetail: true) ?? throw new Exception("Product not found");
+            var product = await _productRepository.GetByIdAsync(productId, includeDetail: true) ?? throw new NotFoundException("Product not found");
             var productDetailViewModel = _mapper.Map<ProductDetailViewModel>(product);
             if (product?.Categories != null && product.Categories.Count > 0)
             {
