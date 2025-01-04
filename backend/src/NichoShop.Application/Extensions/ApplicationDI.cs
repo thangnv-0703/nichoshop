@@ -14,6 +14,7 @@ using NichoShop.Application.Validators.UserAddress;
 using NichoShop.Common.Interface;
 using NichoShop.Common.Service;
 using NichoShop.Commons.Models;
+using NLog.Extensions.Logging;
 using System.Text;
 
 namespace NichoShop.Application.Extensions;
@@ -22,15 +23,18 @@ public static class ApplicationDI
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<CustomExceptionFilter>();
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.ConfigureSwagger();
+        //services.ConfigureLogging();
         services.ConfigureApplicationService();
         services.ConfigureFluentValidation();
         services.ConfigureCustomService();
         services.ConfigureAuthencation(configuration);
         services.ConfigureQuery();
-        services.ConfigureControllers();
         services.ConfigureCors(configuration);
         return services;
     }
@@ -39,6 +43,15 @@ public static class ApplicationDI
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        return services;
+    }
+    private static IServiceCollection ConfigureLogging(this IServiceCollection services)
+    {
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddNLog();
+        });
         return services;
     }
 
@@ -111,14 +124,6 @@ public static class ApplicationDI
                 );
             });
         }
-        return services;
-    }
-    public static IServiceCollection ConfigureControllers(this IServiceCollection services)
-    {
-        services.AddControllers(options =>
-        {
-            options.Filters.Add<CustomExceptionFilter>();
-        });
         return services;
     }
 

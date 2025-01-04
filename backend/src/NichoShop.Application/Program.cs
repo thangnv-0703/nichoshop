@@ -1,6 +1,9 @@
 ﻿using NichoShop.Application.Extensions;
 using NichoShop.Application.Mappers;
+using NLog;
+using NLog.Web;
 
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
@@ -10,6 +13,9 @@ builder.Services
     .AddApplicationServices(configuration)
     .AddInfrastructureServices(configuration)
     .AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 var app = builder.Build();
 
@@ -22,7 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 
 app.UseCors("_myAllowSpecificOrigins");

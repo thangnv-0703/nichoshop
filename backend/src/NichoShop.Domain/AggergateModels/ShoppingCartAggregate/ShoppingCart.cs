@@ -31,7 +31,7 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
     public void UpdateCartItem(CartItem cartItem)
     {
         var foundCartItem = _items.Find(x => x.SkuId == cartItem.SkuId);
-        if (foundCartItem is null) throw new Exception("Item not found");
+        if (foundCartItem is null) throw new NotFoundException("Item not found");
 
         foundCartItem.SetQuantity(cartItem.Quantity);
     }

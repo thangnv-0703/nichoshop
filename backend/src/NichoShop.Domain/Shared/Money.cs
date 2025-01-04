@@ -1,4 +1,5 @@
 ﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.SeedWork;
 
 namespace NichoShop.Domain.Shared;
@@ -14,7 +15,11 @@ public class Money : ValueObject
         Currency = currency;
         if (IsInvalid())
         {
-            throw new Exception("Invalid money");
+            throw new DomainException
+            {
+                Message = "Invalid money",
+                FieldError = "Amount"
+            };
         }
     }
 

@@ -23,8 +23,19 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
         if (user is not null)
         {
-            throw new Exception("Phone number already exists");
+            throw new DomainException { FieldError = "PhoneNumber", Message = "Phone number already exists" };
         }
+
+        if (false)
+        {
+            throw new DomainException { FieldError = "PhoneNumber", Message = "aaaaa" };
+        }
+
+
+
+
+
+
 
         var passwordHashed = PasswordHelper.Hash(requestDto.Password);
         var newUser = new User(
@@ -50,7 +61,7 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
         if (!isVerified)
         {
-            throw new Exception("Password is incorrect");
+            throw new UnauthorizedAccessException("Password is incorrect");
         }
 
         var identity = new Identity

@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using NichoShop.Application.Exceptions;
+using NichoShop.Domain.Exceptions;
 
 namespace NichoShop.Application.Filters
 {
     public class CustomExceptionFilter : IExceptionFilter
     {
+        private readonly ILogger<CustomExceptionFilter> _logger;
+
+        public CustomExceptionFilter(ILogger<CustomExceptionFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public void OnException(ExceptionContext context)
         {
+            _logger.LogError("HELLO WORLD LOGGING");
+
             //TODO:  Logging 
 
             context.ExceptionHandled = true;
@@ -24,7 +33,8 @@ namespace NichoShop.Application.Filters
                 case UnauthorizedAccessException unauthorizedAccessException:
                     context.Result = new ObjectResult(unauthorizedAccessException)
                     {
-                        StatusCode = 401
+                        StatusCode = 401,
+                        Value = unauthorizedAccessException.Message
                     };
                     break;
 
@@ -32,7 +42,7 @@ namespace NichoShop.Application.Filters
                     context.Result = new ObjectResult(domainException)
                     {
                         StatusCode = 422,
-                        Value = domainException
+                        Value = domainException.ToString()
                     };
                     break;
                 default:
