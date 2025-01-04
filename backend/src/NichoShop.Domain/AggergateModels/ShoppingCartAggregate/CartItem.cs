@@ -7,6 +7,8 @@ public class CartItem : Entity<Guid>
 
     public int SkuId { get; private set; }
 
+    public bool IsSelected { get; private set; }
+
     public CartItem(int skuId, int quantity)
     {
         SkuId = skuId;
@@ -24,6 +26,11 @@ public class CartItem : Entity<Guid>
             throw new Exception("Invalid cart item");
         }
         Quantity = quantity;
+    }
+
+    public void SetIsSelected(bool isSelected)
+    {
+        IsSelected = isSelected;
     }
 
     private bool IsInvalid()

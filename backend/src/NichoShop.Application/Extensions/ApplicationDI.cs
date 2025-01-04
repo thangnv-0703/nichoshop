@@ -70,7 +70,7 @@ public static class ApplicationDI
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IUserAddressService, UserAddressService>();
         services.AddScoped<ILocationService, LocationService>();
-        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IStorageService, AzureBlobStorageService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         return services;
     }

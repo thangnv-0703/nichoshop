@@ -37,6 +37,7 @@ public class ShoppingCartController : Controller
         var result = await _shoppingCartService.AddItemToCartAsync(param);
         return Ok(result);
     }
+
     [HttpPut("items/quantity")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)

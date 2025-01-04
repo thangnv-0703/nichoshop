@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace NichoShop.TestDataLoader.Features.RefitModels;
+namespace NichoShop.TestDataLoader.Features.Models;
 public interface IShoppeApi
 {
     [Get("/category/get_category_tree")]

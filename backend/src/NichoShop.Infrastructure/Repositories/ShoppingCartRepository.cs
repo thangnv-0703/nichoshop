@@ -15,7 +15,6 @@ public class ShoppingCartRepository(NichoShopDbContext context) : BaseRepository
 
     protected override IQueryable<ShoppingCart> ApplyIncludeDetail(IQueryable<ShoppingCart> query)
     {
-        return query
-            .Include(x => x.Items);
+        return query.Include(x => x.Items);
     }
 }

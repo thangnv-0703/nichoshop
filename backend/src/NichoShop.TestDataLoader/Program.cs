@@ -5,10 +5,13 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using NichoShop.Infrastructure;
-using NichoShop.TestDataLoader.Features.RefitModels;
 using Refit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization.ContractResolverExtentions;
+using NichoShop.TestDataLoader.Features.Models;
+using NichoShop.Application.Services;
+using NichoShop.Application.Interfaces;
+using NichoShop.Common.Interface;
 
 namespace NichoShop.TestDataLoader;
 
@@ -31,6 +34,9 @@ internal class Program
                     options.UseNpgsql(configuration.GetConnectionString("NichoShopDB")));
 
                 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+                services.AddScoped<IStorageService, AzureBlobStorageService>();
+                services.AddScoped<IUserContext, UserContextFake>();
 
                 services.AddRefitClient<IShoppeApi>()
                     .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://banhang.shopee.vn/api/v3"))

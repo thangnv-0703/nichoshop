@@ -1,20 +1,27 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using NichoShop.Application.Interfaces;
 using NichoShop.Domain.AggergateModels;
+using NichoShop.Domain.Enums;
 using NichoShop.Infrastructure;
-using NichoShop.TestDataLoader.Features.RefitModels;
+using NichoShop.TestDataLoader.Features.Models;
+using System;
 
 namespace NichoShop.TestDataLoader.Features;
 
 public record SyncShoppeDataCommand : IRequest { }
 
-public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration configuration, NichoShopDbContext context) : IRequestHandler<SyncShoppeDataCommand>
+public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration configuration, NichoShopDbContext context, IStorageService storageService) : IRequestHandler<SyncShoppeDataCommand>
 {
+    private readonly IStorageService _storageService = storageService;
     private readonly IShoppeApi _shoppeApi = shoppeApi;
     private readonly IConfiguration _configuration = configuration;
     private readonly NichoShopDbContext _context = context;
     private readonly Dictionary<string, AttributeProduct> _attributeDict = [];
     private readonly Dictionary<int, Category> _categoryDict = [];
+    private readonly Dictionary<string, string> _categoryImageDict = [];
+    private readonly string _shoppeImageBaseUrl = "https://down-vn.img.susercontent.com/file";
     public async Task Handle(SyncShoppeDataCommand request, CancellationToken cancellationToken)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
@@ -28,8 +35,9 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
 
         if (string.IsNullOrEmpty(cookie)) return;
 
+        await LoadCategoryImageAsync();
         var categoryIds = await SyncCategoryDataAsync(cookie);
-        await SyncAttributeDataAsync(cookie, categoryIds);
+        //await SyncAttributeDataAsync(cookie, categoryIds);
     }
 
     private async Task<List<int>> SyncCategoryDataAsync(string cookie)
@@ -63,11 +71,11 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
             categoryIds.AddRange(InsertCategory(category));
         }
 
-         await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return categoryIds;
     }
 
-    private List<int> InsertCategory(CategoryShoppe categoryShoppe)
+    private List<int> InsertCategory(CategoryShoppe categoryShoppe, string? parentName = null)
     {
         var ids = new List<int>
         {
@@ -75,19 +83,61 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
         };
 
         int? parentId = categoryShoppe.ParentId == 0 ? null : categoryShoppe.ParentId;
-        var category = new Category(categoryShoppe.Id, categoryShoppe.Name, categoryShoppe.DisplayName, parentId);
+
+        _categoryImageDict.TryGetValue($"{categoryShoppe.Name}-{parentName}", out var fileImageId);
+        var category = new Category(categoryShoppe.Id, categoryShoppe.Name, categoryShoppe.DisplayName, parentId, fileImageId);
 
         _context.Category.Add(category);
         _categoryDict.Add(category.Id, category);
 
         foreach (var childCategory in categoryShoppe.Children)
         {
-            ids.AddRange(InsertCategory(childCategory));
+            ids.AddRange(InsertCategory(childCategory, categoryShoppe.Name));
         }
         return ids;
     }
 
-    private async Task SyncAttributeDataAsync(string cookie, List<int> categoryIds) 
+    private async Task LoadCategoryImageAsync()
+    {
+        string jsonFilePath = "Json/categories.json"; // Path to your JSON file
+                                                      // Read JSON file
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), jsonFilePath);
+        string jsonContent = File.ReadAllText(filePath);
+        var categories = JsonConvert.DeserializeObject<List<CategoryJson>>(jsonContent);
+
+
+
+        if (categories is null)
+        {
+            return;
+        }
+
+        foreach (var category in categories)
+        {
+            await UpdateCategoryImageDictAsync(category);
+        }
+
+        async Task UpdateCategoryImageDictAsync(CategoryJson category, string? parentName = null)
+        {
+            if (!string.IsNullOrEmpty(category.Image))
+            {
+                byte[] imageData = await DownloadImageAsync($"{_shoppeImageBaseUrl}/{category.Image}");
+                string fileImageId = (await _storageService.UploadFromByteDataAsync(imageData, StorageType.CategoryImages, "image/jpeg")).ToString();
+                _categoryImageDict.Add($"{category.Name}-{parentName}", fileImageId);
+            }
+            foreach (CategoryJson childCategory in category.Children ?? [])
+            {
+                await UpdateCategoryImageDictAsync(childCategory, category.Name);
+            }
+        }
+    }
+    static async Task<byte[]> DownloadImageAsync(string url)
+    {
+        using HttpClient client = new();
+        return await client.GetByteArrayAsync(url);
+    }
+
+    private async Task SyncAttributeDataAsync(string cookie, List<int> categoryIds)
     {
         _context.AttributeProduct.RemoveRange(_context.AttributeProduct);
         await _context.SaveChangesAsync();
@@ -106,7 +156,7 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
                 SPC_CDS: "ceccc5ce-6922-452a-865d-d6b2ed41e63a",
                 SPC_CDS_VER: "2");
 
-            if (!response.IsSuccessStatusCode || response?.Content?.Data?.List is null || response.Content.Data.List[0] is null || 
+            if (!response.IsSuccessStatusCode || response?.Content?.Data?.List is null || response.Content.Data.List[0] is null ||
                 response.Content.Data.List[0].AttributeTree is null)
             {
                 continue;
@@ -135,7 +185,7 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
             attribute = dictValue;
         }
         else
-        { 
+        {
             attribute = new AttributeProduct(
                 attributeShoppe.Name,
                 attributeShoppe.DisplayName,
