@@ -10,17 +10,17 @@
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <InputText
-            name="fullname"
+            name="UserName"
             type="text"
-            v-model="model.FullName"
-            placeholder="Họ và tên"
+            v-model="model.UserName"
+            placeholder="Tên đăng nhập"
           />
           <Message
-            v-if="$form.fullname?.invalid"
+            v-if="$form.userName?.invalid"
             severity="error"
             size="small"
             variant="simple"
-            >{{ $form.fullname.error?.message }}</Message
+            >{{ $form.userName.error?.message }}</Message
           >
         </div>
         <div class="flex flex-col gap-1">
@@ -87,14 +87,14 @@ const tabs = ref({
 });
 const currentTab = ref(tabs.value.personal);
 const model = ref({
-  FullName: null,
+  UserName: null,
   PhoneNumber: null,
   Password: null,
 });
 const resolver = ref(
   zodResolver(
     z.object({
-      fullname: z.string({ required_error: "Không được để trống" }),
+      userName: z.string({ required_error: "Không được để trống" }),
       phoneNumber: z
         .string({ required_error: "Không được để trống" })
         .regex(/^84(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/, {
@@ -118,7 +118,7 @@ const onFormSubmit = ({ valid }) => {
   }
   proxy.$store
     .dispatch("moduleUser/signup", {
-      FullName: model.value.FullName,
+      UserName: model.value.UserName,
       PhoneNumber: model.value.PhoneNumber,
       Password: model.value.Password,
     })
