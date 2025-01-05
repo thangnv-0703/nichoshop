@@ -12,7 +12,7 @@ const getters = {
 const actions = {
     ...crud.actions,
     async getItem(store, id) {
-        store.commit("setLoading", true);
+        store.commit("moduleLoading/setLoading", true, { root: true });
         try {
             const response = await api.getItem(id);
             store.commit("moduleCartItem/setItems", response.data?.items, { root: true });
@@ -20,18 +20,18 @@ const actions = {
         } catch (error) {
             store.commit("setError", error);
         } finally {
-            store.commit("setLoading", false);
+            store.commit("moduleLoading/setLoading", false, { root: true });
         }
     },
-    async addItemToCart({ commit }, payload) {
-        commit("setLoading", true);
+    async addItemToCart(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
         try {
             let res = await api.addItemToCart(payload);
             return res;
         } catch (error) {
-            commit("setError", error);
+            store.commit("setError", error);
         } finally {
-            commit("setLoading", false);
+            store.commit("moduleLoading/setLoading", false, { root: true });
         }
     }
 };

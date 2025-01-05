@@ -13,7 +13,8 @@ const getters = {
 const actions = {
     ...crud.actions,
     async updateItem({ commit, state }, payload) {
-        commit("setLoading", true);
+        store.commit("moduleLoading/setLoading", true, { root: true });
+
         try {
             const res = await api.updateCartItemQuantity(payload.id, payload);
             if (res?.data) {
@@ -29,7 +30,7 @@ const actions = {
         } catch (error) {
             commit("setError", error);
         } finally {
-            commit("setLoading", false);
+            store.commit("moduleLoading/setLoading", false, { root: true });
         }
     },
 };

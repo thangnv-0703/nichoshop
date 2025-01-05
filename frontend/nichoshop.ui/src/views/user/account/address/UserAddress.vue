@@ -11,6 +11,7 @@
       </div>
 
       <DataTable
+        v-if="items.length > 0"
         :ref="baseGrid"
         v-model:selection="selectedProducts"
         :value="items"
@@ -69,6 +70,8 @@
           </template>
         </Column>
       </DataTable>
+
+      <div class="list-empty" v-else>Không có dữ liệu</div>
     </div>
   </div>
 </template>
@@ -85,9 +88,7 @@ export default {
     const autoLoadGrid = true;
     const { proxy } = getCurrentInstance();
     const module = "moduleUserAddress";
-    onMounted(() => {
-      //   ProductService.getProducts().then((data) => (products.value = data));
-    });
+
     const dt = ref();
     const products = ref([{}, {}]);
     const selectedProducts = ref();
