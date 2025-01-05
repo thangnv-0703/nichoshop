@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NichoShop.Application.Migrations
 {
     [DbContext(typeof(NichoShopDbContext))]
-    [Migration("20241228161746_AddCategoryImageCOlumn")]
-    partial class AddCategoryImageCOlumn
+    [Migration("20250105034046_UpdateModel")]
+    partial class UpdateModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -322,6 +322,9 @@ namespace NichoShop.Application.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
