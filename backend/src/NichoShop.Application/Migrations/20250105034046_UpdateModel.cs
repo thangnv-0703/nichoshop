@@ -5,7 +5,7 @@
 namespace NichoShop.Application.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategoryImageCOlumn : Migration
+    public partial class UpdateModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,6 +15,13 @@ namespace NichoShop.Application.Migrations
                 table: "categories",
                 type: "text",
                 nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsSelected",
+                table: "cart_items",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.CreateIndex(
                 name: "IX_skus_ProductId",
@@ -44,6 +51,10 @@ namespace NichoShop.Application.Migrations
             migrationBuilder.DropColumn(
                 name: "FileImageId",
                 table: "categories");
+
+            migrationBuilder.DropColumn(
+                name: "IsSelected",
+                table: "cart_items");
         }
     }
 }

@@ -15,3 +15,5 @@
 /backend/src/NichoShop.Common/Common/bin/Debug/net8.0
 /backend/src/NichoShop.Common/Common/obj
 /backend/src/.vs/NichoShop
+/backend/src/bin/Debug
+/.idea
