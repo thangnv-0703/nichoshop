@@ -1,4 +1,5 @@
 ﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.SeedWork;
 using NichoShop.Domain.Shared;
 
@@ -34,7 +35,11 @@ public class Sku : AggregateRoot<int>
 
         if (IsInvalid())
         {
-            throw new Exception("Invalid sku");
+            throw new DomainException
+            {
+                FieldError = "Quantity",
+                Message = "Invalid sku"
+            };
         }
     }
 

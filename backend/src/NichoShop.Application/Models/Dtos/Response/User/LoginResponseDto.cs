@@ -3,4 +3,5 @@
 public class LoginResponseDto
 {
     public string Token { get; set; } = string.Empty;
+    public ContextData ContextData { get; set; }
 }

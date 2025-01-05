@@ -1,32 +1,6 @@
 <template>
-  <auth-layout>
-    <p class="text-2xl text-center py-6">Nhanh chóng và miễn phí để bắt đầu</p>
-    <div
-      class="tabs bg-gray-100 flex justify-between p-[6px] mb-[32px] rounded gap-2"
-    >
-      <div
-        @click="onSwitchTab(tabs.personal)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
-        :class="[
-          currentTab === tabs.personal
-            ? 'bg-white text-[#0B80CC] shadow-md'
-            : 'text-[#B2B2C2]',
-        ]"
-      >
-        Cá nhân
-      </div>
-      <div
-        @click="onSwitchTab(tabs.business)"
-        class="cursor-pointer rounded tab-item py-[6px] px-[36px]"
-        :class="[
-          currentTab === tabs.business
-            ? 'bg-white text-[#0B80CC] shadow-md'
-            : 'text-[#B2B2C2]',
-        ]"
-      >
-        Doanh nghiệp
-      </div>
-    </div>
+  <auth-layout title="Đăng ký">
+    <p class="text-2xl py-6 w-full">Đăng ký</p>
     <Form
       v-slot="$form"
       :resolver="resolver"
@@ -36,17 +10,17 @@
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <InputText
-            name="fullname"
+            name="UserName"
             type="text"
-            v-model="model.FullName"
-            placeholder="Họ và tên"
+            v-model="model.UserName"
+            placeholder="Tên đăng nhập"
           />
           <Message
-            v-if="$form.fullname?.invalid"
+            v-if="$form.userName?.invalid"
             severity="error"
             size="small"
             variant="simple"
-            >{{ $form.fullname.error?.message }}</Message
+            >{{ $form.userName.error?.message }}</Message
           >
         </div>
         <div class="flex flex-col gap-1">
@@ -86,11 +60,11 @@
           </template>
         </div>
       </div>
-      <Button type="submit" label="Tạo tài khoản" />
+      <Button type="submit" severity="danger" label="Tạo tài khoản" />
       <div class="flex items-center justify-center">
         <p class="text-[#81818F]">Đã có tài khoản?</p>
         <p
-          class="text-[#0B80CC] ml-[4px] cursor-pointer"
+          class="text-[#ee4d2d] ml-[4px] cursor-pointer"
           @click="onClickGoToLoginPage"
         >
           Đăng nhập
@@ -113,14 +87,14 @@ const tabs = ref({
 });
 const currentTab = ref(tabs.value.personal);
 const model = ref({
-  FullName: null,
+  UserName: null,
   PhoneNumber: null,
   Password: null,
 });
 const resolver = ref(
   zodResolver(
     z.object({
-      fullname: z.string({ required_error: "Không được để trống" }),
+      userName: z.string({ required_error: "Không được để trống" }),
       phoneNumber: z
         .string({ required_error: "Không được để trống" })
         .regex(/^84(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/, {
@@ -144,7 +118,7 @@ const onFormSubmit = ({ valid }) => {
   }
   proxy.$store
     .dispatch("moduleUser/signup", {
-      FullName: model.value.FullName,
+      UserName: model.value.UserName,
       PhoneNumber: model.value.PhoneNumber,
       Password: model.value.Password,
     })

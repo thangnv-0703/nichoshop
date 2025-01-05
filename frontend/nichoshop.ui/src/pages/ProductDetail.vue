@@ -16,32 +16,20 @@
         <div class="product">
           <div class="left">
             <div class="image-select">
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2g48wamdpkk80@resize_w450_nl.webp"
-                alt="hình được chọn"
-              />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2g48wamdpkk80@resize_w450_nl.webp"
+                alt="hình được chọn" />
             </div>
             <div class="image-child">
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2g48wamdpkk80@resize_w450_nl.webp"
-                alt="hinh_con_1"
-              />
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z274hm17@resize_w450_nl.webp"
-                alt="hinh_con_2"
-              />
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z29xmibf@resize_w450_nl.webp"
-                alt="hinh_con_3"
-              />
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13tsorb7fcq46@resize_w450_nl.webp"
-                alt="hinh_con_4"
-              />
-              <img
-                src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z274vva8@resize_w450_nl.webp"
-                alt="hinh_con_5"
-              />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2g48wamdpkk80@resize_w450_nl.webp"
+                alt="hinh_con_1" />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z274hm17@resize_w450_nl.webp"
+                alt="hinh_con_2" />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z29xmibf@resize_w450_nl.webp"
+                alt="hinh_con_3" />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13tsorb7fcq46@resize_w450_nl.webp"
+                alt="hinh_con_4" />
+              <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m13ts4z274vva8@resize_w450_nl.webp"
+                alt="hinh_con_5" />
             </div>
           </div>
           <div class="right">
@@ -72,14 +60,10 @@
               <div class="desc">
                 <div class="line-first">
                   <div class="icon-transport"></div>
-                  <span class="desc-transport"
-                    >Nhận từ 14 Th12 - 17 Th12, phí giao</span
-                  >
+                  <span class="desc-transport">Nhận từ 14 Th12 - 17 Th12, phí giao</span>
                 </div>
                 <div class="line-second">
-                  <span class="desc-transport-2"
-                    >Tặng Voucher ₫15.000 nếu đơn giao sau thời gian trên.</span
-                  >
+                  <span class="desc-transport-2">Tặng Voucher ₫15.000 nếu đơn giao sau thời gian trên.</span>
                 </div>
               </div>
             </div>
@@ -87,21 +71,16 @@
               <h3 class="title">An tâm mua sắm cùng Shopee</h3>
               <div class="desc">
                 <div class="icon-protect"></div>
-                <span class="text"
-                  >Trả hàng miễn phí 15 ngày · Bảo hiểm bảo vệ người tiêu
-                  dùng</span
-                >
+                <span class="text">Trả hàng miễn phí 15 ngày · Bảo hiểm bảo vệ người tiêu
+                  dùng</span>
               </div>
             </div>
 
-            <div v-for="variant in product.variants" class="attribute-first">
+            <div v-for="(variant, index) in product.variants" :key="index" class="attribute-first">
               <h3 class="title">{{ variant.name }}</h3>
               <div class="desc">
-                <button
-                  v-for="option in variant.options"
-                  :class="{ active: isVariantSelected(variant, option) }"
-                  @click="selectVariant(variant, option)"
-                >
+                <button v-for="(option, index) in variant.options" :key="index"
+                  :class="{ active: isVariantSelected(variant, option) }" @click="selectVariant(variant, option)">
                   {{ option.value }}
                 </button>
               </div>
@@ -109,20 +88,18 @@
             <div class="quantity">
               <h3 class="title">Số lượng</h3>
               <div class="desc">
-                <button class="decrease">-</button>
-                <input type="text" value="1" />
-                <button class="increase">+</button>
-                <span class="inventory"
-                  >{{ selectedSKU.quantity }} sản phẩm có sẵn</span
-                >
+                <button class="decrease" @click.stop="increaseProduct(false)">-</button>
+                <input type="text" :value="quantityProduct" />
+                <button class="increase" @click.stop="increaseProduct(true)">+</button>
+                <span class="inventory">{{ selectedSKU.quantity }} sản phẩm có sẵn</span>
               </div>
             </div>
             <div class="button">
-              <button class="add-cart">
+              <button class="add-cart" @click.stop="clickAddItemToCart(false)">
                 <div class="icon-cart"></div>
                 <span>Thêm Vào Giỏ Hàng</span>
               </button>
-              <button class="buy-now">
+              <button class="buy-now" @click.stop="clickAddItemToCart(true)">
                 <span>Mua Ngay</span>
               </button>
             </div>
@@ -235,35 +212,26 @@
             <h2>MÔ TẢ SẢN PHẨM</h2>
           </div>
           <div class="description">
-            <span
-              >🆘🆘 Anh em ở Hà Nội, HCM cần giao ghế hoả tốc thì nhắn tin cho
+            <span>🆘🆘 Anh em ở Hà Nội, HCM cần giao ghế hoả tốc thì nhắn tin cho
               shop hoặc liên hệ số hotline bên dưới. Shop sẽ bật kênh người bán
               tự vận chuyển và giao ngay cho anh em(nhận hàng sau 20 phút-1
-              giờ). Shop làm việc từ 9h-21h tất cả các ngày trong tuần.</span
-            >
-            <span class="mt-24"
-              >✅ A3, A3B(có gác chân) sẵn hàng cả 2 màu: đen và trắng xám giao
+              giờ). Shop làm việc từ 9h-21h tất cả các ngày trong tuần.</span>
+            <span class="mt-24">✅ A3, A3B(có gác chân) sẵn hàng cả 2 màu: đen và trắng xám giao
               ngay. Quý khách ở Hanoi vui lòng chọn ship hoả tốc phí ship chỉ
               vài chục nghìn, nhận hàng ngay sau 30 phút.
             </span>
             <span>✅ Ghế full lưới thoáng mát</span>
             <span>✅ Tay 6D: nâng hạ, xoay trái phải, gạt lên gạt xuống</span>
             <span>✅ Thiết kế 2 lưng hỗ trợ tối đa cột sống</span>
-            <span
-              >✅ Tựa đầu 3D: điều chỉnh lên xuống, xoay ngữa nghiêng 135 độ,
-              tiến lùi</span
-            >
+            <span>✅ Tựa đầu 3D: điều chỉnh lên xuống, xoay ngữa nghiêng 135 độ,
+              tiến lùi</span>
             <span>✅ Tính năng khoá vị trí khi ngã đa điểm</span>
-            <span
-              >✅ Piston 4 cấp đạt chứng nhận Ansi/Bifma cho độ bền nâng hạ tới
-              200.000 lần</span
-            >
-            <span
-              >🌈 Bảo hành chính hãng 5 năm. Sau khi đơn hàng thành công quý
+            <span>✅ Piston 4 cấp đạt chứng nhận Ansi/Bifma cho độ bền nâng hạ tới
+              200.000 lần</span>
+            <span>🌈 Bảo hành chính hãng 5 năm. Sau khi đơn hàng thành công quý
               khách check thông tin bảo hành bằng cách vào link:
               baohanh.themanson.vn nhập số điện thoại đã đặt hàng sẽ hiện ra đầy
-              đủ thông tin.</span
-            >
+              đủ thông tin.</span>
             <span>——————————————————————————————</span>
             <span>The Manson - the heartbeat of chairs</span>
           </div>
@@ -276,6 +244,7 @@
 <script>
 import { defineComponent, onMounted, getCurrentInstance, ref } from "vue";
 import commonFunction from "../common/commonFunction";
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: "ProductDetail",
@@ -284,9 +253,11 @@ export default defineComponent({
     const product = ref({});
     const selectedSKU = ref({});
     const selectProductVariants = ref([]);
+    const quantityProduct = ref(1);
+    const router = useRouter();
 
     onMounted(async () => {
-      const res = await proxy.$store.dispatch(`moduleProduct/getItem`, 1);
+      const res = await proxy.$store.dispatch(`moduleProduct/getItem`, 10000000);
       if (res?.data) {
         product.value = res?.data;
         selectProductVariants.value = res?.data.variants?.map((variant) => {
@@ -295,6 +266,23 @@ export default defineComponent({
         setSelectedSKU();
       }
     });
+
+    const clickAddItemToCart = async (isBuyNow) => {
+      let param = {
+        skuId: selectedSKU.value.id,
+        quantity: quantityProduct.value,
+        isSelected: isBuyNow
+      };
+      const res = await proxy.$store.dispatch(`moduleCart/addItemToCart`, param);
+      
+      if (res.data && !isBuyNow) {
+        alert('Thêm sản phẩm vào giỏ thành công');
+      } else if (res.data && isBuyNow) {
+        router.push('/cart');
+      } else if (!res.data) {
+        alert('Lỗi khi thêm sản phẩm vào giỏ');
+      }
+    };
 
     const setSelectedSKU = () => {
       selectedSKU.value = product.value?.skus?.find((list1) => {
@@ -305,6 +293,10 @@ export default defineComponent({
           return !!item2;
         });
       });
+
+      if (selectedSKU.value.quantity < quantityProduct.value) {
+        quantityProduct.value = 1;
+      }
     };
 
     const selectVariant = (variant, option) => {
@@ -331,12 +323,20 @@ export default defineComponent({
     const getDisplayedPrice = () => {
       return selectedSKU.value.price
         ? commonFunction.getDisplayedPrice(
-            selectedSKU.value?.price?.amount,
-            selectedSKU.value?.price?.currency
-          )
+          selectedSKU.value?.price?.amount,
+          selectedSKU.value?.price?.currency
+        )
         : "";
       // return commonFunction.getDisplayedPrice(product.price, product.currency);
     };
+
+    const increaseProduct = (value) => {
+      if (value && quantityProduct.value < selectedSKU.value.quantity) {
+        quantityProduct.value++;
+      } else if (!value && quantityProduct.value > 1) {
+        quantityProduct.value--;
+      }
+    }
 
     return {
       product,
@@ -345,6 +345,9 @@ export default defineComponent({
       isVariantSelected,
       selectVariant,
       selectedSKU,
+      clickAddItemToCart,
+      quantityProduct,
+      increaseProduct
     };
   },
 });
@@ -502,10 +505,8 @@ $bg-content: #fff;
           }
 
           .desc {
-            background-color: var(
-              --brand-primary-light-color,
-              rgba(255, 87, 34, 0.1)
-            );
+            background-color: var(--brand-primary-light-color,
+                rgba(255, 87, 34, 0.1));
             border-radius: 2px;
             color: #ee4d2d;
             font-size: 14px;
@@ -532,6 +533,7 @@ $bg-content: #fff;
           }
 
           .desc {
+
             .line-first,
             .line-second {
               display: flex;

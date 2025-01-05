@@ -1,4 +1,5 @@
 ﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.SeedWork;
 using NichoShop.Domain.Shared;
 
@@ -51,13 +52,13 @@ public class User : AggregateRoot<Guid>
     public void RemoveAddress(Guid userAddressId)
     {
         var deletedAddressIndex = _addresses.FindIndex(x => x.Id == userAddressId);
-        if (deletedAddressIndex == -1) throw new Exception("Address not found");
+        if (deletedAddressIndex == -1) throw new NotFoundException("Address not found");
         _addresses.RemoveAt(deletedAddressIndex);
     }
 
     public void UpdateAddress(Guid userAddressId, UserAddressProps props)
     {
-        var address = _addresses.Find(x => x.Id == userAddressId) ?? throw new Exception("Address not found");
+        var address = _addresses.Find(x => x.Id == userAddressId) ?? throw new NotFoundException("Address not found");
         address.UpdateAddress(props);
     }
 
@@ -73,7 +74,7 @@ public class User : AggregateRoot<Guid>
 
     public void SetDefaultAddress(Guid userAddressId)
     {
-        var address = _addresses.Find(x => x.Id == userAddressId) ?? throw new Exception("Address not found");
+        var address = _addresses.Find(x => x.Id == userAddressId) ?? throw new NotFoundException("Address not found");
         _addresses.ForEach(x => x.SetDefault(false));
         address.SetDefault(true);
     }

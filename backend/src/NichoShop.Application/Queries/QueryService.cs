@@ -88,8 +88,8 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
               s.""Amount"" AS Price,
               ci.""Quantity"",
               s.""Currency"",
-              ci.""SkuId""
-            
+              ci.""SkuId"",
+              ci.""IsSelected""
             FROM shopping_carts sc
                    LEFT JOIN cart_items ci
                      ON sc.""Id"" = ci.""ShoppingCartId""
@@ -127,7 +127,8 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
                         Amount = reader.GetDecimal(3),
                         Quantity = reader.GetInt32(4),
                         Currency = reader.GetString(5),
-                        SkuId = reader.GetInt32(6)
+                        SkuId = reader.GetInt32(6),
+                        IsSelected = reader.GetBoolean(7),
                     };
                     res.Add(cartItem);
                 }

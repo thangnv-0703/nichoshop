@@ -6,6 +6,7 @@ using NichoShop.Application.Models.Dtos.Response.User;
 using NichoShop.Common.Interface;
 using NichoShop.Common.Models;
 using NichoShop.Domain.AggergateModels.UserAggregate;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
@@ -22,10 +23,10 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
         if (user is not null)
         {
-            throw new Exception("Phone number already exists");
+            throw new DomainException { FieldError = "PhoneNumber", Message = "Phone number already exists" };
         }
 
-        var passwordHashed = PasswordHelper.Hash(requestDto.Password); 
+        var passwordHashed = PasswordHelper.Hash(requestDto.Password);
         var newUser = new User(
             requestDto.PhoneNumber,
             passwordHashed,
@@ -43,27 +44,33 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
     {
-        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new Exception("Phone number not found");
+        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new NotFoundException("Phone number not found");
 
         var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
 
         if (!isVerified)
         {
-            throw new Exception("Password is incorrect");
+            throw new UnauthorizedAccessException("Password is incorrect");
         }
 
-        var identity = new Identity 
+        var identity = new Identity
         {
             UserId = user.Id,
             PhoneNumber = user.PhoneNumber.Value,
-            Email = user.Email ?? ""
+            Email = user.Email ?? "",
         };
-        return new LoginResponseDto { Token = _jwtService.GenerateToken(identity) };
+
+        ContextData contextData = new ContextData
+        {
+            Username = user.UserName,
+            FullName = user.FullName,
+        };
+        return new LoginResponseDto { Token = _jwtService.GenerateToken(identity), ContextData = contextData };
     }
 
     public async Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param)
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
 
         user.UpdateUserInfo(param.UserName, param.FullName, param.Email, param.PhoneNumber, param.Gender, param.DateOfBirth);
         await _userRepository.SaveChangesAsync();
@@ -72,7 +79,7 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
     public async Task<UserInfoDto> GetUserInfoAsync()
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new Exception("User is undefined");
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
         var res = _mapper.Map<UserInfoDto>(user);
         return res;
     }

@@ -23,6 +23,17 @@ const actions = {
             store.commit("setLoading", false);
         }
     },
+    async addItemToCart({ commit }, payload) {
+        commit("setLoading", true);
+        try {
+            let res = await api.addItemToCart(payload);
+            return res;
+        } catch (error) {
+            commit("setError", error);
+        } finally {
+            commit("setLoading", false);
+        }
+    }
 };
 const mutations = {
     ...crud.mutations,
