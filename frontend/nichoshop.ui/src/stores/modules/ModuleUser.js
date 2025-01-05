@@ -5,7 +5,7 @@ const state = {
   ...crud.state,
   context: {
     token: null,
-    user: null
+    contextData: null
   }
 };
 const getters = {
@@ -21,7 +21,10 @@ const actions = {
     const res = await api.login(payload);
     if (res?.data?.token) {
       store.commit("setToken", res?.data?.token)
+    } if (res?.data?.contextData) {
+      store.commit("setContextData", res?.data?.contextData)
     }
+
     return res;
   },
   async logout() {
@@ -32,6 +35,9 @@ const mutations = {
   ...crud.mutations,
   setToken: (state, token) => {
     state.context.token = token
+  },
+  setContextData: (state, contextData) => {
+    state.context.contextData = contextData
   }
 };
 

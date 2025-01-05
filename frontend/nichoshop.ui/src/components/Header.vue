@@ -29,7 +29,7 @@
             v-if="authHelper.isAuthenticated()"
             @click="toggle"
           >
-            thothoikhon
+            {{ authHelper.getContext()?.username }}
           </div>
           <Popover ref="popOver">
             <div class="flex flex-col gap-4">

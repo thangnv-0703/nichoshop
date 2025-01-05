@@ -26,17 +26,6 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
             throw new DomainException { FieldError = "PhoneNumber", Message = "Phone number already exists" };
         }
 
-        if (false)
-        {
-            throw new DomainException { FieldError = "PhoneNumber", Message = "aaaaa" };
-        }
-
-
-
-
-
-
-
         var passwordHashed = PasswordHelper.Hash(requestDto.Password);
         var newUser = new User(
             requestDto.PhoneNumber,
@@ -68,9 +57,15 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
         {
             UserId = user.Id,
             PhoneNumber = user.PhoneNumber.Value,
-            Email = user.Email ?? ""
+            Email = user.Email ?? "",
         };
-        return new LoginResponseDto { Token = _jwtService.GenerateToken(identity) };
+
+        ContextData contextData = new ContextData
+        {
+            Username = user.UserName,
+            FullName = user.FullName,
+        };
+        return new LoginResponseDto { Token = _jwtService.GenerateToken(identity), ContextData = contextData };
     }
 
     public async Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param)
