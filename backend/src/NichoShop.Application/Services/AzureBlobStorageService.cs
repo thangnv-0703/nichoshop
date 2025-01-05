@@ -2,7 +2,6 @@
 using NichoShop.Application.Interfaces;
 using NichoShop.Domain.Enums;
 using NichoShop.Application.Extensions;
-using NichoShop.Common.Interface;
 using Azure.Storage.Blobs.Models;
 
 namespace NichoShop.Application.Services;
@@ -10,13 +9,11 @@ namespace NichoShop.Application.Services;
 public class AzureBlobStorageService : IStorageService
 {
     private readonly BlobServiceClient _blobServiceClient;
-    private readonly IUserContext _userContext;
 
-    public AzureBlobStorageService(IUserContext userContext, IConfiguration _configuration)
+    public AzureBlobStorageService(IConfiguration _configuration)
     {
         string connectionString = _configuration.GetSection("AzureBlobStorage:Connectionstring").Value ?? throw new ArgumentNullException();
         _blobServiceClient = new BlobServiceClient(connectionString);
-        _userContext = userContext;
     }
 
     private async Task<BlobContainerClient> GetContainerClient(string containerName)
@@ -67,18 +64,12 @@ public class AzureBlobStorageService : IStorageService
     private async Task<Guid> UploadFileAsync(Stream stream, string contentType, StorageType type)
     {
         var containerClient = await GetContainerClient(type.GetDisplayName());
-        var fileId = type switch
-        {
-            StorageType.Avatar => _userContext.UserId,
-            StorageType.ProductImages => Guid.NewGuid(),
-            StorageType.CategoryImages => Guid.NewGuid(),
-            _ => throw new NotImplementedException()
-        };
+        var fileId = Guid.NewGuid();
         var blobClient = containerClient.GetBlobClient(fileId.ToString());
 
-        var uploadOptions = new Azure.Storage.Blobs.Models.BlobUploadOptions
+        var uploadOptions = new BlobUploadOptions
         {
-            HttpHeaders = new Azure.Storage.Blobs.Models.BlobHttpHeaders
+            HttpHeaders = new BlobHttpHeaders
             {
                 ContentType = contentType
             }

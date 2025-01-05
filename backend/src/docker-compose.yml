@@ -1,14 +1,8 @@
 version: '3.4'
 
 services:
-  # nichoshop.application:
-  #   image: ${DOCKER_REGISTRY-}nichoshopapplication
-  #   build:
-  #     context: .
-  #     dockerfile: NichoShop.Application/Dockerfile
-  
-  database:
-    image: postgres
-
-volumes:
-  postgres_db:
+  nichoshop.application:
+    image: ${DOCKER_REGISTRY-}nichoshopapplication
+    build:
+      context: .
+      dockerfile: NichoShop.Application/Dockerfile
