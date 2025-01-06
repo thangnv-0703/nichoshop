@@ -11,7 +11,6 @@ const actions = {
 };
 const mutations = {
     setLoading(state, loading) {
-        debugger
         state.loading = loading;
     }
 };
