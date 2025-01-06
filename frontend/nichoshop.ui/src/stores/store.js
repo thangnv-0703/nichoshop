@@ -7,9 +7,10 @@ import moduleLocation from "./modules/moduleLocation";
 import moduleProduct from './modules/moduleProduct';
 import moduleCart from './modules/moduleCart';
 import moduleCartItem from './modules/moduleCartItem';
+import moduleCategory from './modules/moduleCategory';
 const store = createStore({
 
-  modules: { moduleLoading, moduleUser, moduleUserAddress, moduleLocation, moduleProduct, moduleCart, moduleCartItem },
+  modules: { moduleLoading, moduleUser, moduleUserAddress, moduleLocation, moduleProduct, moduleCart, moduleCartItem, moduleCategory },
   plugins: [
     createPersistedState({
       key: 'vuex',

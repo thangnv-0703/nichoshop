@@ -14,6 +14,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
     public async Task<List<CategoryViewModel>> GetCategoryViewModelsAsync()
     {
         return await _dbContext.Category
+            .Where(x => x.ParentId == null)
             .Select(c => new CategoryViewModel
             {
                 Id = c.Id,

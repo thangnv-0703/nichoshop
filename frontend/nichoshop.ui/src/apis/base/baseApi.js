@@ -5,7 +5,7 @@ export default class BaseApi {
 
   getApiURL(route) {
     let me = this;
-    let url = `https://localhost:44396/api/${me.apiVersion}/${me.controller}`;
+    let url = `https://localhost:7232/api/${me.apiVersion}/${me.controller}`;
     if (route) {
       url += `/${route}`;
     }
