@@ -18,65 +18,68 @@ export default class Crud {
     };
 
     me.actions = {
-      async getPaging({ commit }, payload) {
-        commit("setLoading", true);
+      async getPaging(store, payload) {
         try {
+          store.commit("moduleLoading/setLoading", true, { root: true });
           const response = await me.api.getPaging();
-          commit("setItems", response.data);
-        } catch (error) {
-          commit("setError", error);
-        } finally {
-          commit("setLoading", false);
+          store.commit("setItems", response.data);
+        }
+        catch (error) {
+          store.commit("setError", error);
+        }
+        finally {
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
-      async getAll({ commit }) {
-        commit("setLoading", true);
+      async getAll(store) {
         try {
-
+          store.commit("moduleLoading/setLoading", true, { root: true });
           const response = await me.api.getAll();
-          commit("setItems", response.data);
-        } catch (error) {
-          commit("setError", error);
-        } finally {
-          commit("setLoading", false);
+          store.commit("setItems", response.data);
+        }
+        catch (error) {
+          store.commit("setError", error);
+        }
+        finally {
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
-      async getItem({ commit }, id) {
-        commit("setLoading", true);
+      async getItem(store, id) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
         try {
           const response = await me.api.getItem(id);
-          commit("setItem", response.data);
+          store.commit("setItem", response.data);
           return response;
         } catch (error) {
-          commit("setError", error);
+          store.commit("setError", error);
         } finally {
-          commit("setLoading", false);
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
-      async createItem({ commit, state }, payload) {
-        commit("setLoading", true);
+      async createItem(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
         try {
           const res = await me.api.create(payload);
           if (res?.data) {
-            commit("setItems", [...state.items, {
+            store.commit("setItems", [...store.state.items, {
               ...payload,
-              [state.config.fieldId]: res.data
+              [store.state.config.fieldId]: res.data
             }]);
           }
           return res;
         } catch (error) {
-          commit("setError", error);
+          store.commit("setError", error);
         } finally {
-          commit("setLoading", false);
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
-      async updateItem({ commit, state }, payload) {
-        commit("setLoading", true);
+      async updateItem(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
         try {
           const res = await me.api.update(payload.id, payload);
           if (res?.data) {
-            commit("setItems", state.items.map(item => {
-              if (item[state.config.fieldId] == payload.id) {
+            store.commit("setItems", store.state.items.map(item => {
+              if (item[store.state.config.fieldId] == payload.id) {
                 return payload
               }
               return item;
@@ -85,23 +88,24 @@ export default class Crud {
           }
           return res;
         } catch (error) {
-          commit("setError", error);
+          store.commit("setError", error);
         } finally {
-          commit("setLoading", false);
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
-      async deleteItem({ commit, state }, id) {
-        commit("setLoading", true);
+      async deleteItem(store, id) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
+
         try {
           const res = await me.api.delete(id);
           if (res) {
-            commit("setItems", state.items.filter(item => item[state.config.fieldId] !== id));
+            store.commit("setItems", store.state.items.filter(item => item[store.state.config.fieldId] !== id));
           }
           return res;
         } catch (error) {
-          commit("setError", error);
+          store.commit("setError", error);
         } finally {
-          commit("setLoading", false);
+          store.commit("moduleLoading/setLoading", false, { root: true });
         }
       },
     };
