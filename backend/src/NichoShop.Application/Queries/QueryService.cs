@@ -14,12 +14,13 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
     public async Task<List<CategoryViewModel>> GetCategoryViewModelsAsync()
     {
         return await _dbContext.Category
-            .Where(x => x.ParentId == null)
+            .Where(x => x.ParentId == null && x.FileImageId != null)
             .Select(c => new CategoryViewModel
             {
                 Id = c.Id,
                 Name = c.Name,
-                DisplayName = c.DisplayName
+                DisplayName = c.DisplayName,
+                FileImageId = c.FileImageId
             })
             .ToListAsync();
     }
