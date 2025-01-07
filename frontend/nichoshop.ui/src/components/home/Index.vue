@@ -4,8 +4,7 @@
       <h2 class="title">DANH MỤC</h2>
       <div class="category-grid">
         <div v-for="category in categories" :key="category.id" class="category-item">
-          <img
-            :src="'https://nichoshopstorage.blob.core.windows.net/categoryimage/003b4ee6-f536-4c20-8417-9fea99225cb8'"
+          <img :src="`https://nichoshopstorage.blob.core.windows.net/categoryimage/${category.fileImageId}`"
             :alt="category.displayName" class="category-image" />
           <p class="category-name">{{ category.displayName }}</p>
         </div>
@@ -81,6 +80,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      debugger
       const res = await proxy.$store.dispatch("moduleCategory/getCategory");
       categories.value = await res.data;
     });
