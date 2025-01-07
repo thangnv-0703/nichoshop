@@ -6,6 +6,7 @@ using NichoShop.Application.Models.Dtos.Response.User;
 using NichoShop.Common.Interface;
 using NichoShop.Common.Models;
 using NichoShop.Domain.AggergateModels.UserAggregate;
+using NichoShop.Domain.Enums;
 using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Repositories;
 
@@ -23,7 +24,17 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
         if (user is not null)
         {
-            throw new DomainException { FieldError = "PhoneNumber", Message = "Phone number already exists" };
+            throw new DomainException
+            {
+                Errors =
+                [
+                    new() {
+                        Field="PhoneNumber",
+                        MessageCode="i18nUser.PhoneNumberExisted",
+                        ErrorCode=ErrorCode.PhoneNumberExisted
+                    }
+                ]
+            };
         }
 
         var passwordHashed = PasswordHelper.Hash(requestDto.Password);

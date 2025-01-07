@@ -1,4 +1,5 @@
-﻿using NichoShop.Domain.Exceptions;
+﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.SeedWork;
 using System.Text.RegularExpressions;
 
@@ -23,7 +24,20 @@ public partial class PhoneNumber : ValueObject
 
     protected void ValidateValueObject()
     {
-        if (!regex.IsMatch(Value)) throw new DomainException { FieldError = "PhoneNumber", Message = "Invalid phone number" };
+        if (!regex.IsMatch(Value))
+        {
+            throw new DomainException
+            {
+                Errors =
+                [
+                    new() {
+                        Field="PhoneNumber",
+                        MessageCode="i18nPhoneNumber.InvalidPhoneNumber",
+                        ErrorCode=ErrorCode.InvalidPhoneNumber
+                    }
+                ]
+            };
+        }
     }
 
     [GeneratedRegex(@"^84(?:3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$")]
