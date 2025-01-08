@@ -20,11 +20,9 @@ public class ProductAttributeValueEntityConfiguration : IEntityTypeConfiguration
             .IsRequired();
 
         builder.Property(o => o.RawValue)
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasMaxLength(100);
 
-        builder.Property(o => o.ValueId)
-            .IsRequired();
+        builder.Property(o => o.ValueId);
 
         builder.HasOne<AttributeProduct>()
             .WithMany()
