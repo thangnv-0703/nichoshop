@@ -1,19 +1,25 @@
 ﻿using Newtonsoft.Json;
+using NichoShop.Domain.Enums;
 
 namespace NichoShop.Domain.Exceptions
 {
     public class DomainException : Exception
     {
-        public string FieldError { get; set; }
-        public string Message { get; set; }
-
+        public List<DomainError> Errors { get; set; }
+        public string MessageCode { get; set; }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(new
             {
-                FieldError,
-                Message,
+                Errors,
+                MessageCode,
             });
         }
+    }
+    public class DomainError
+    {
+        public string Field { get; set; }
+        public string MessageCode { get; set; }
+        public ErrorCode ErrorCode { get; set; }
     }
 }

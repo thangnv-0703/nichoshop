@@ -17,8 +17,14 @@ public class Money : ValueObject
         {
             throw new DomainException
             {
-                Message = "Invalid money",
-                FieldError = "Amount"
+                Errors =
+               [
+                   new() {
+                        Field="Amount",
+                        MessageCode="i18nMoney.InvalidMoney",
+                        ErrorCode=ErrorCode.InvalidMoney
+                    }
+               ]
             };
         }
     }

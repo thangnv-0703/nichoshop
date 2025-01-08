@@ -67,7 +67,7 @@
           class="text-[#ee4d2d] ml-[4px] cursor-pointer"
           @click="onClickGoToLoginPage"
         >
-          Đăng nhập
+          {{ $t("i18nAuth.Login") }}
         </p>
       </div>
     </Form>

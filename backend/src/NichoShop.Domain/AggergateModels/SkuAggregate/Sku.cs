@@ -37,8 +37,14 @@ public class Sku : AggregateRoot<int>
         {
             throw new DomainException
             {
-                FieldError = "Quantity",
-                Message = "Invalid sku"
+                Errors =
+                [
+                   new() {
+                        Field="Quantity",
+                        MessageCode= "i18nSku.InvalidSku",
+                        ErrorCode=ErrorCode.InvalidSku
+                    }
+                ]
             };
         }
     }
