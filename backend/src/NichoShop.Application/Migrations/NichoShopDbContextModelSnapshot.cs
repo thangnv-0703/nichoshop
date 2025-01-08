@@ -240,11 +240,10 @@ namespace NichoShop.Application.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("RawValue")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("ValueId")
+                    b.Property<int?>("ValueId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
