@@ -275,11 +275,11 @@ export default defineComponent({
       };
       const res = await proxy.$store.dispatch(`moduleCart/addItemToCart`, param);
       
-      if (res.data && !isBuyNow) {
+      if (res?.data && !isBuyNow) {
         alert('Thêm sản phẩm vào giỏ thành công');
-      } else if (res.data && isBuyNow) {
+      } else if (res?.data && isBuyNow) {
         router.push('/cart');
-      } else if (!res.data) {
+      } else {
         alert('Lỗi khi thêm sản phẩm vào giỏ');
       }
     };

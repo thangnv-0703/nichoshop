@@ -10,16 +10,21 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
     private readonly List<CartItem> _items = [];
     public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 
-    public void AddItem(int quantity, int skuId, bool isSelected)
+    public CartItem AddItem(int quantity, int skuId, bool isSelected)
     {
         CartItem? item = _items.FirstOrDefault(x => x.SkuId == skuId);
+
         if (item is null)
         {
             item = new CartItem(skuId, quantity);
             _items.Add(item);
         }
-        item.SetQuantity(quantity);
+        else
+        {
+            item.SetQuantity(quantity + item.Quantity);
+        }
         item.SetIsSelected(isSelected);
+        return item;
     }
 
     public void RemoveItem(Guid cartItem)

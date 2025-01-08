@@ -8,33 +8,21 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    Checkbox: typeof import('primevue/checkbox')['default']
-    Column: typeof import('primevue/column')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
-    DataTable: typeof import('primevue/datatable')['default']
-    DatePicker: typeof import('primevue/datepicker')['default']
     Divider: typeof import('primevue/divider')['default']
-    FloatLabel: typeof import('primevue/floatlabel')['default']
     Form: typeof import('@primevue/forms/form')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     Index: typeof import('./src/components/home/Index.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
-    Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
     Order: typeof import('./src/components/home/Order.vue')['default']
     Password: typeof import('primevue/password')['default']
     Popover: typeof import('primevue/popover')['default']
-    RadioButton: typeof import('primevue/radiobutton')['default']
-    RadioButtonGroup: typeof import('primevue/radiobuttongroup')['default']
+    ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./src/components/common/Search.vue')['default']
-    Select: typeof import('primevue/select')['default']
     SvgIcon: typeof import('./src/components/common/SvgIcon.vue')['default']
-    Tag: typeof import('primevue/tag')['default']
     Toast: typeof import('primevue/toast')['default']
-  }
-  export interface ComponentCustomProperties {
-    Ripple: typeof import('primevue/ripple')['default']
   }
 }

@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 
+import i18n from "./i18n/i18n";
 import { createVfm } from "vue-final-modal";
 import PrimeVue from "primevue/config";
 import ConfirmationService from 'primevue/confirmationservice';
@@ -27,6 +28,9 @@ app.use(PrimeVue, {
     preset: MyPreset,
   },
 });
+
+
+app.use(i18n)
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(vfm);
