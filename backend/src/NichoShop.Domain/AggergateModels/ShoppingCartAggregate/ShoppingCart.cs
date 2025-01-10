@@ -36,4 +36,16 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
 
         foundCartItem.SetQuantity(cartItem.Quantity);
     }
+
+    public void UpdateSelectionCartItem(List<int> skuIds, bool isSelected)
+    {
+        _items.ForEach(item =>
+        {
+            if (skuIds.Contains(item.SkuId))
+            {
+                item.SetIsSelected(isSelected);
+            }
+        });
+    }
+
 }

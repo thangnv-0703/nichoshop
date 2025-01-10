@@ -45,6 +45,13 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
 
+    public async Task<bool> UpdateMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
+    {
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+
+        cart.UpdateSelectionCartItem(updateSeletionDto.SkuIds, updateSeletionDto.IsSelected);
+        return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
 
     public async Task<bool> DeleteCartItem(Guid cartItemId)
     {
