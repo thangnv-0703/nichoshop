@@ -46,6 +46,14 @@ public class ShoppingCartController : Controller
         return Ok(result);
     }
 
+    [HttpPut("items/multi-selection")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> UpdateCartItemMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
+    {
+        var result = await _shoppingCartService.UpdateMultiSelection(updateSeletionDto);
+        return Ok(result);
+    }
+
     [HttpDelete("items/{cartItemId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> DeleteCartItem(Guid cartItemId)

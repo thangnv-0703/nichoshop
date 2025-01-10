@@ -14,8 +14,16 @@ const getters = {
 const actions = {
   ...crud.actions,
   async signup(store, payload) {
-    const res = await api.signup(payload);
-    return res;
+    store.commit("moduleLoading/setLoading", true, { root: true });
+    try {
+      const res = await api.signup(payload);
+      return res;
+    } catch (error) {
+      store.commit("setError", error);
+    }
+    finally {
+      store.commit("moduleLoading/setLoading", false, { root: true });
+    }
   },
   async login(store, payload) {
     const res = await api.login(payload);

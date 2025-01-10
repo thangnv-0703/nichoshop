@@ -12,14 +12,14 @@ const getters = {
 };
 const actions = {
     ...crud.actions,
-    async updateItem({ commit, state }, payload) {
+    async updateItem(store, payload) {
         store.commit("moduleLoading/setLoading", true, { root: true });
 
         try {
             const res = await api.updateCartItemQuantity(payload.id, payload);
             if (res?.data) {
-                commit("setItems", state.items.map(item => {
-                    if (item[state.config.fieldId] == payload.id) {
+                store.commit("setItems", store.state.items.map(item => {
+                    if (item[store.state.config.fieldId] == payload.id) {
                         return payload
                     }
                     return item;
@@ -28,11 +28,35 @@ const actions = {
             }
             return res;
         } catch (error) {
-            commit("setError", error);
+            store.commit("setError", error);
         } finally {
             store.commit("moduleLoading/setLoading", false, { root: true });
         }
     },
+
+    async updateCartItemMultiSelection(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
+
+        try {
+            const res = await api.updateCartItemMultiSelection(payload);
+            debugger;
+            if (res?.data) {
+                // store.commit("setItems", store.state.items.map(item => {
+                //     if (item[store.state.config.fieldId] == payload.id) {
+                //         return payload
+                //     }
+                //     return item;
+                // }
+                // ));
+            }
+            return res;
+        } catch (error) {
+            store.commit("setError", error);
+        } finally {
+            store.commit("moduleLoading/setLoading", false, { root: true });
+        }
+
+    }
 };
 const mutations = {
     ...crud.mutations,

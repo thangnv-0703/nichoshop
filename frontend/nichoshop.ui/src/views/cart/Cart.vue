@@ -153,7 +153,7 @@
 
 <script>
 import baseList from "@/views/base/baseList.js";
-import { ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted, getCurrentInstance, watch } from "vue";
 import _ from "lodash";
 
 export default {
@@ -168,6 +168,18 @@ export default {
     const cartId = ref(null);
     const module = "moduleCartItem";
     const selectedProducts = ref([]);
+
+    watch(selectedProducts, (newValue, oldValue) => {
+
+      updateSelection(
+        newValue.filter((item) => !oldValue.some((x) => x.id == item.id)),
+        true
+      );
+      updateSelection(
+        oldValue.filter((item) => !newValue.some((x) => x.id == item.id)),
+        false
+      );
+    });
 
     const selectAllProducts = (isChecked) => {
       if (isChecked) {
@@ -206,6 +218,16 @@ export default {
         }).length
       );
     };
+
+    const updateSelection = (items, isSelected) => {
+      if (items.length === 0) return;
+      proxy.$store.dispatch("moduleCartItem/updateCartItemMultiSelection", {
+        SkuIds: items.map((x) => x.skuId),
+        CartId: cartId.value,
+        IsSelected: isSelected,
+      });
+    };
+
     const updateQuantity = (item, isDecrease) => {
       const product = proxy.items.find((product) => product.id === item.id);
 
@@ -232,6 +254,7 @@ export default {
       selectProductsInGroup,
       selectAllProducts,
       getTotalPrice,
+      updateSelection,
     };
   },
 };
