@@ -32,6 +32,9 @@
     <None Update="Sql\product.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Sql\product_attribute_values.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Sql\sku.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
