@@ -40,6 +40,8 @@ public class ShoppingCartController : Controller
 
     [HttpPut("items/quantity")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
         var result = await _shoppingCartService.UpdateCartItem(updateCartItemRequestDto);
@@ -48,6 +50,8 @@ public class ShoppingCartController : Controller
 
     [HttpPut("items/multi-selection")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> UpdateCartItemMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
     {
         var result = await _shoppingCartService.UpdateMultiSelection(updateSeletionDto);
@@ -56,6 +60,8 @@ public class ShoppingCartController : Controller
 
     [HttpDelete("items/{cartItemId}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> DeleteCartItem(Guid cartItemId)
     {
         var result = await _shoppingCartService.DeleteCartItem(cartItemId);
