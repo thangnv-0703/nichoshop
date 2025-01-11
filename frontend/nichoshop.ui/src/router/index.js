@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import routerPage from "./routerPage";
 import authHelper from "../helpers/authHelper";
+import routerUser from "./routerUser";
 
 const routes = [
   {
@@ -32,33 +33,7 @@ const routes = [
           anonymous: true,
         }
       },
-      {
-        path: "/user",
-        component: () => import("@/layouts/UserLayout.vue"),
-        meta: {},
-        children: [
-          {
-            path: "",
-            redirect: "user/account/profile",
-          },
-          {
-            path: "account",
-            redirect: "user/account/profile",
-          },
-          {
-            path: "account/profile",
-            name: "accountProfile",
-            component: () =>
-              import("@/views/user/account/profile/AccountProfile.vue"),
-          },
-          {
-            path: "account/address",
-            name: "userAddress",
-            component: () =>
-              import("@/views/user/account/address/UserAddress.vue"),
-          },
-        ],
-      },
+      ...routerUser
     ],
   },
   {

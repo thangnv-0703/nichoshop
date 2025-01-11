@@ -12,10 +12,16 @@
           </span>
         </template>
         <template #submenulabel="{ item }">
-          <div class="flex items-center gap-1">
+          <div v-if="!item.linkTo" class="flex items-center gap-1">
             <span :class="item.icon" />
-            <span class="text-primary font-bold">{{ item.label }}</span>
+            <span class="text-primary">{{ item.label }}</span>
           </div>
+          <router-link v-else :to="item.linkTo"
+            ><a v-ripple class="flex items-center gap-1">
+              <span :class="item.icon" />
+              <span>{{ item.label }}</span>
+            </a></router-link
+          >
         </template>
         <template #item="{ item, props }">
           <router-link :to="item.linkTo"
@@ -42,7 +48,7 @@ const items = ref([
 
   {
     label: "Tài khoản của tôi",
-    icon: "pi pi-user",
+    icon: "nicho-icon nicho-user",
     items: [
       {
         label: "Hồ sơ",
@@ -57,12 +63,27 @@ const items = ref([
         label: "Địa chỉ",
         linkTo: "address",
       },
+      {
+        label: "Đổi mật khẩu",
+        linkTo: "password",
+      },
     ],
+  },
+  {
+    label: "Đơn mua",
+    icon: "nicho-icon nicho-purchase",
+    items: [],
+    linkTo: "/user/purchase",
   },
 ]);
 </script>
-<style scoped>
-:deep(.p-menu) {
-  border: unset;
+<style scoped lang="scss">
+:deep {
+  .p-menu {
+    border: unset;
+  }
+  .p-tab {
+    font-weight: normal;
+  }
 }
 </style>

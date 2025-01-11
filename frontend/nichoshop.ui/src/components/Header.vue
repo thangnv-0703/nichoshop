@@ -28,10 +28,21 @@
           <Popover ref="popOver">
             <div class="flex flex-col gap-4">
               <div>
-                <RouterLink to="/user/account/profile" class="font-medium block mb-2">
+                <RouterLink
+                  to="/user/account/profile"
+                  class="font-medium block mb-2 popover-item"
+                >
                   Tài khoản của tôi
                 </RouterLink>
-                <RouterLink class="font-medium block" to="/logout">Đăng xuất</RouterLink>
+                <RouterLink
+                  to="/user/purchase"
+                  class="font-medium block mb-2 popover-item"
+                >
+                  Đơn mua
+                </RouterLink>
+                <RouterLink class="font-medium block popover-item" to="/logout"
+                  >Đăng xuất</RouterLink
+                >
               </div>
             </div>
           </Popover>

@@ -17,6 +17,20 @@ const MyPreset = definePreset(Aura, {
             950: "{blue.950}",
         },
     },
+    components: {
+        tabs: {
+            tab: {
+                active: {
+                    color: '#ee4d2d'
+                }
+            },
+            active: {
+                bar: {
+                    background: '#ee4d2d'
+                }
+            }
+        },
+    },
 });
 
 export default MyPreset
