@@ -15,6 +15,10 @@ class CartApi extends BaseApi {
         const apiURL = this.getApiURL('items/quantity');
         return httpClient.put(apiURL, payload);
     }
+    updateCartItemMultiSelection(payload) {
+        const apiURL = this.getApiURL('items/multi-selection');
+        return httpClient.put(apiURL, payload);
+    }
     delete(id, payload) {
         if (!id) {
             return null;

@@ -15,8 +15,6 @@ namespace NichoShop.Application.Filters
 
         public void OnException(ExceptionContext context)
         {
-            _logger.LogError("HELLO WORLD LOGGING");
-
             //TODO:  Logging 
 
             context.ExceptionHandled = true;
