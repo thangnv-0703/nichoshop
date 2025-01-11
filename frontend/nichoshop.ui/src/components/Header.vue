@@ -36,11 +36,17 @@
               <div>
                 <RouterLink
                   to="/user/account/profile"
-                  class="font-medium block mb-2"
+                  class="font-medium block mb-2 popover-item"
                 >
                   Tài khoản của tôi
                 </RouterLink>
-                <RouterLink class="font-medium block" to="/logout"
+                <RouterLink
+                  to="/user/purchase"
+                  class="font-medium block mb-2 popover-item"
+                >
+                  Đơn mua
+                </RouterLink>
+                <RouterLink class="font-medium block popover-item" to="/logout"
                   >Đăng xuất</RouterLink
                 >
               </div>

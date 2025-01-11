@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  line-height: 1.6;
+}
+.nicho-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1200px;
+}
+.div-center {
+  display: grid;
+  place-items: center;
+}
+.list-empty {
+  width: 100%;
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("@/assets/images/empty.png");
+  text-align: center;
+  padding-top: 200px;
+}
+.popover-item:hover {
+  color: #40c9a2;
+}
