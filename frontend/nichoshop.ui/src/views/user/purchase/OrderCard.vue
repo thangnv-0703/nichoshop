@@ -43,7 +43,7 @@
             Dây cắm test board 10cm/21cm/30cm lõi đồng, mối tiếp xúc tốt và chắc
             chắn, kết nối siêu nhanh (10 sợi)</span
           >
-          <p>Phân loại hàng: 10cm</p>
+          <p class="text-[#929292]">Phân loại hàng: 10cm</p>
           <p>x1</p>
         </div>
       </div>

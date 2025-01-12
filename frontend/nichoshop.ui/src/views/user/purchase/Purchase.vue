@@ -29,4 +29,3 @@ const tabs = ref([
   { title: " Trả hàng/hoàn tiền", data: "Tab 3 Content", value: "6" },
 ]);
 </script>
-6

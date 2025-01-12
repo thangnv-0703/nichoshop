@@ -95,7 +95,7 @@ export default {
     :reserve-scroll-bar-gap="true"
     :swipe-to-close="none"
     class="flex justify-center items-center"
-    content-class="w-[500px] mx-4 p-5 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg space-y-2"
+    content-class="w-[600px] mx-4 p-5 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-lg space-y-2"
   >
     <template #default="{ close }">
       <span class="text-xl">{{ $attrs.popupTitle }}</span>
@@ -109,7 +109,11 @@ export default {
           <div class="grid grid-cols-2 gap-1">
             <div class="flex flex-col gap-1">
               <FloatLabel variant="on">
-                <InputText v-model="model.fullName" id="fullName" />
+                <InputText
+                  v-model="model.fullName"
+                  id="fullName"
+                  class="w-full"
+                />
                 <label for="fullName">Họ và tên</label>
               </FloatLabel>
               <template v-if="$form.fullName?.invalid">
@@ -126,7 +130,11 @@ export default {
             <div class="flex flex-col gap-1">
               <div class="flex flex-col gap-1">
                 <FloatLabel variant="on">
-                  <InputText v-model="model.phoneNumber" id="phoneNumber" />
+                  <InputText
+                    class="w-full"
+                    v-model="model.phoneNumber"
+                    id="phoneNumber"
+                  />
                   <!-- <InputMask
                     v-model="model.PhoneNumber"
                     id="phonenumber"
@@ -189,7 +197,7 @@ export default {
           </div>
           <GoogleMap
             :api-key="process?.env?.VUE_APP_API_KEY"
-            style="width: 100%; height: 200px"
+            style="width: 100%; height: 300px"
             :center="center"
             :zoom="15"
           >
