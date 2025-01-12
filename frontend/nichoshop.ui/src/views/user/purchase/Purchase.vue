@@ -8,7 +8,7 @@
       </TabList>
       <TabPanels>
         <TabPanel v-for="tab in tabs" :key="tab.content" :value="tab.value">
-          <order-card :data="tab.data" />
+          <order-card v-for="i in 2" :data="tab.data" />
         </TabPanel>
       </TabPanels>
     </Tabs>

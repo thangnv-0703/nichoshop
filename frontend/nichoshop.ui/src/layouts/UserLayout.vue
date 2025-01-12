@@ -8,7 +8,9 @@
               src="https://down-vn.img.susercontent.com/file/36b878bafc795dd0ad8c0b142270d8b9"
               class="rounded-full w-[34px]"
             />
-            <span class="text-s font-semibold">Tên tài khoản</span>
+            <span class="text-s font-semibold">
+              {{ authHelper.getContext()?.username }}</span
+            >
           </span>
         </template>
         <template #submenulabel="{ item }">
@@ -40,6 +42,7 @@
 
 <script setup>
 import { ref } from "vue";
+import authHelper from "@/helpers/AuthHelper";
 
 const items = ref([
   {
