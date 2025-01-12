@@ -25,12 +25,12 @@
             d="m15 4.8c-.1-1-.8-2-1.6-2.9-.4-.3-.7-.5-1-.8-.1-.1-.7-.5-.7-.5h-8.5s-1.4 1.4-1.6 1.6c-.4.4-.8 1-1.1 1.4-.1.4-.4.8-.4 1.1-.3 1.4 0 2.3.6 3.3l.3.3v3.5c0 1.5 1.1 2.6 2.6 2.6h8c1.5 0 2.5-1.1 2.5-2.6v-3.7c.1-.1.1-.3.3-.3.4-.8.7-1.7.6-3zm-3 7c0 .4-.1.5-.4.5h-8c-.3 0-.5-.1-.5-.5v-3.1c.3 0 .5-.1.8-.4.1 0 .3-.1.3-.1.4.4 1 .7 1.5.7.7 0 1.2-.1 1.6-.5.5.3 1.1.4 1.6.4.7 0 1.2-.3 1.8-.7.1.1.3.3.5.4.3.1.5.3.8.3zm.5-5.2c0 .1-.4.7-.3.5l-.1.1c-.1 0-.3 0-.4-.1s-.3-.3-.5-.5l-.5-1.1-.5 1.1c-.4.4-.8.7-1.4.7-.5 0-.7 0-1-.5l-.6-1.1-.5 1.1c-.3.5-.6.6-1.1.6-.3 0-.6-.2-.9-.8l-.5-1-.7 1c-.1.3-.3.4-.4.6-.1 0-.3.1-.3.1s-.4-.4-.4-.5c-.4-.5-.5-.9-.4-1.5 0-.1.1-.4.3-.5.3-.5.4-.8.8-1.2.7-.8.8-1 1-1h7s .3.1.8.7c.5.5 1.1 1.2 1.1 1.8-.1.7-.2 1.2-.5 1.5z"
           ></path>
         </svg>
-        <span class="ml-1">Xem Shop</span>
+        <button class="ml-1">Xem Shop</button>
       </div>
     </div>
     <div class="text-[#ee4d2d] text-[14px]">HOÀN THÀNH</div>
   </div>
-  <div>
+  <div v-for="i in 3" :key="i" class="order-item">
     <div class="flex gap-3 items-center justify-between">
       <div class="flex gap-3 items-center">
         <img
@@ -55,7 +55,7 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-end items-center">
+  <div class="flex justify-end items-center mb-10">
     <div>
       <div class="text-end footer-price-content">
         Thành tiền: <span class="text-[#ee4d2d] footer-price">₫269.450</span>
@@ -79,7 +79,7 @@ export default {};
   display: flex;
 }
 .footer-price-content {
-  padding: 24px 24px 12px;
+  padding: 24px 0 12px 24px;
 }
 .footer-price {
   font-size: 24px;
