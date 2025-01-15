@@ -1,0 +1,22 @@
+.button {
+  border-radius: 2px;
+  outline: none;
+  padding: 3px 8px;
+  min-height: 40px;
+  text-transform: capitalize;
+  min-width: 150px;
+}
+.button-sm {
+  min-height: unset;
+  min-width: unset;
+  font-size: 12px;
+}
+.button-secondary {
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  color: #555;
+  background-color: #fff;
+}
+.button-primary {
+  color: #fff;
+  background-color: #ee4d2d;
+}

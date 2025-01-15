@@ -8,14 +8,22 @@
               src="https://down-vn.img.susercontent.com/file/36b878bafc795dd0ad8c0b142270d8b9"
               class="rounded-full w-[34px]"
             />
-            <span class="text-s font-semibold">Tên tài khoản</span>
+            <span class="text-s font-semibold">
+              {{ authHelper.getContext()?.username }}</span
+            >
           </span>
         </template>
         <template #submenulabel="{ item }">
-          <div class="flex items-center gap-1">
+          <div v-if="!item.linkTo" class="flex items-center gap-1">
             <span :class="item.icon" />
-            <span class="text-primary font-bold">{{ item.label }}</span>
+            <span class="text-primary">{{ item.label }}</span>
           </div>
+          <router-link v-else :to="item.linkTo"
+            ><a v-ripple class="flex items-center gap-1">
+              <span :class="item.icon" />
+              <span>{{ item.label }}</span>
+            </a></router-link
+          >
         </template>
         <template #item="{ item, props }">
           <router-link :to="item.linkTo"
@@ -34,6 +42,7 @@
 
 <script setup>
 import { ref } from "vue";
+import authHelper from "@/helpers/AuthHelper";
 
 const items = ref([
   {
@@ -42,7 +51,7 @@ const items = ref([
 
   {
     label: "Tài khoản của tôi",
-    icon: "pi pi-user",
+    icon: "nicho-icon nicho-user",
     items: [
       {
         label: "Hồ sơ",
@@ -57,12 +66,27 @@ const items = ref([
         label: "Địa chỉ",
         linkTo: "address",
       },
+      {
+        label: "Đổi mật khẩu",
+        linkTo: "password",
+      },
     ],
+  },
+  {
+    label: "Đơn mua",
+    icon: "nicho-icon nicho-purchase",
+    items: [],
+    linkTo: "/user/purchase",
   },
 ]);
 </script>
-<style scoped>
-:deep(.p-menu) {
-  border: unset;
+<style scoped lang="scss">
+:deep {
+  .p-menu {
+    border: unset;
+  }
+  .p-tab {
+    font-weight: normal;
+  }
 }
 </style>
