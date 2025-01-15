@@ -8,7 +8,7 @@ import ToastService from 'primevue/toastservice';
 import store from "./stores/store";
 import App from "./App.vue";
 import router from "./router";
-import enumeration from "./common/Enumeration";
+import enumeration from "./common/enumeration";
 import MyPreset from '@/presets/MyPreset.js'
 
 import "./style.css";
