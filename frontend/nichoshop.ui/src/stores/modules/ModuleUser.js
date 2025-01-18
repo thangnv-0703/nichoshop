@@ -13,6 +13,18 @@ const getters = {
 };
 const actions = {
   ...crud.actions,
+  async changePassword(store, payload) {
+    store.commit("moduleLoading/setLoading", true, { root: true });
+    try {
+      const res = await api.changePassword(payload);
+      return res;
+    } catch (error) {
+      store.commit("setError", error);
+    }
+    finally {
+      store.commit("moduleLoading/setLoading", false, { root: true });
+    }
+  },
   async signup(store, payload) {
     store.commit("moduleLoading/setLoading", true, { root: true });
     try {

@@ -20,7 +20,25 @@ export default defineComponent({
       this.getEditData()
     }
   },
+
+  computed: {
+    entityErrors() {
+      return this.$store.state[this.module].error;
+    },
+  },
+
   mounted() {
+  },
+  watch: {
+    entityErrors: function (newValue) {
+      const errors = newValue.response?.data?.Errors;
+      debugger
+      if (errors) {
+        for (const error in errors) {
+          this.$refs[error]
+        }
+      }
+    }
   },
   methods: {
 

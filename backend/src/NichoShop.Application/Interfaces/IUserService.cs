@@ -9,5 +9,5 @@ public interface IUserService
     Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto);
     Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param);
     Task<UserInfoDto> GetUserInfoAsync();
-
+    Task<bool> ChangePassword(ChangePasswordRequestDto requestDto);
 }

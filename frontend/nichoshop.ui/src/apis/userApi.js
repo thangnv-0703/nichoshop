@@ -7,6 +7,10 @@ class UserApi extends BaseApi {
     me.apiVersion = "v1";
     me.controller = "users";
   }
+  changePassword(payload) {
+    const apiURL = this.getApiURL("change-password");
+    return httpClient.put(apiURL, payload);
+  }
   login(payload) {
     const apiURL = this.getApiURL("login");
     return httpClient.post(apiURL, payload);

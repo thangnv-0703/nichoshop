@@ -1,6 +1,7 @@
 export default {
     name: "vi",
     messages: {
-        PhoneNumberExisted: 'Số điện thoại đã tồn tại',
+        phoneNumberExisted: 'Số điện thoại đã tồn tại',
+        incorrectPassword: 'Mật khẩu không chính xác',
     },
 };

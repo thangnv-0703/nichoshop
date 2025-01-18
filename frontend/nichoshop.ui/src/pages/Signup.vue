@@ -73,67 +73,80 @@
     </Form>
   </auth-layout>
 </template>
-<script setup lang="ts">
+<script lang="ts">
 import { ref, getCurrentInstance } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import { z } from "zod";
 import { useRouter } from "vue-router";
-const { proxy } = getCurrentInstance();
-const router = useRouter();
-const tabs = ref({
-  personal: 0,
-  bussiness: 1,
-});
-const currentTab = ref(tabs.value.personal);
-const model = ref({
-  UserName: null,
-  PhoneNumber: null,
-  Password: null,
-});
-const resolver = ref(
-  zodResolver(
-    z.object({
-      userName: z.string({ required_error: "Không được để trống" }),
-      phoneNumber: z
-        .string({ required_error: "Không được để trống" })
-        .regex(/^84(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/, {
-          message: "Số điện thoại không đúng dịnh dạng",
-        }),
-      password: z
-        .string({ required_error: "Không được để trống" })
-        .min(3, { message: "Ít nhất chứa 3 ký tự." })
-        .refine((value) => /[a-z]/.test(value), {
-          message: "Phải chứa chữ cái in thường.",
-        })
-        .refine((value) => /[A-Z]/.test(value), {
-          message: "Phải chứa chữ cái in hoa.",
-        }),
-    })
-  )
-);
-const onFormSubmit = ({ valid }) => {
-  if (!valid) {
-    return;
-  }
-  proxy.$store
-    .dispatch("moduleUser/signup", {
-      UserName: model.value.UserName,
-      PhoneNumber: model.value.PhoneNumber,
-      Password: model.value.Password,
-    })
-    .then((res) => {
-      router.push("/login");
-    })
-    .catch((error) => {
-      console.log(error);
+import baseDetail from "@/views/base/baseDetail.js";
+
+export default {
+  extends: baseDetail,
+  components: { AuthLayout },
+
+  setup() {
+    const { proxy } = getCurrentInstance();
+    const router = useRouter();
+    const tabs = ref({
+      personal: 0,
+      bussiness: 1,
     });
-};
-const onClickGoToLoginPage = () => {
-  router.push("/login");
-};
-const onSwitchTab = (newValue) => {
-  currentTab.value = newValue;
+    const currentTab = ref(tabs.value.personal);
+    const model = ref({
+      UserName: null,
+      PhoneNumber: null,
+      Password: null,
+    });
+    const module = "moduleUser";
+    const resolver = ref(
+      zodResolver(
+        z.object({
+          userName: z.string({ required_error: "Không được để trống" }),
+          phoneNumber: z
+            .string({ required_error: "Không được để trống" })
+            .regex(/^84(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/, {
+              message: "Số điện thoại không đúng dịnh dạng",
+            }),
+          password: z
+            .string({ required_error: "Không được để trống" })
+            .min(3, { message: "Ít nhất chứa 3 ký tự." })
+            .refine((value) => /[a-z]/.test(value), {
+              message: "Phải chứa chữ cái in thường.",
+            })
+            .refine((value) => /[A-Z]/.test(value), {
+              message: "Phải chứa chữ cái in hoa.",
+            }),
+        })
+      )
+    );
+    const onFormSubmit = async ({ valid }) => {
+      if (!valid) {
+        return;
+      }
+      const res = await proxy.$store.dispatch("moduleUser/signup", {
+        UserName: model.value.UserName,
+        PhoneNumber: model.value.PhoneNumber,
+        Password: model.value.Password,
+      });
+      if (res) {
+        router.push("/login");
+      }
+    };
+    const onClickGoToLoginPage = () => {
+      router.push("/login");
+    };
+    const onSwitchTab = (newValue) => {
+      currentTab.value = newValue;
+    };
+    return {
+      resolver,
+      onClickGoToLoginPage,
+      onFormSubmit,
+      model,
+      module,
+    };
+  },
 };
 </script>
 
