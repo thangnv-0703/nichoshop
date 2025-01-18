@@ -94,4 +94,23 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
         var res = _mapper.Map<UserInfoDto>(user);
         return res;
     }
+
+    public async Task<bool> ChangePassword(ChangePasswordRequestDto requestDto)
+    {
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
+
+        var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
+
+        if (!isVerified)
+        {
+            throw new DomainException
+            {
+                MessageCode = "i18nUser.messages.incorrectPassword"
+            };
+        }
+        var passwordHashed = PasswordHelper.Hash(requestDto.NewPassword);
+        user.UpdatePassword(passwordHashed);
+        await _userRepository.SaveChangesAsync();
+        return true;
+    }
 }

@@ -19,15 +19,14 @@ const apiCall = async (method, apiURL, payload = null) => {
         });
         return response;
     } catch (error) {
-
         if (error.response.status == 401) {
             router.push("/login");
         }
         else if (error.response.status == 404 && error.response.data) {
             showToast({ severity: 'error', detail: error.response.data, group: 'tc', life: 3000, closable: false });
         }
-        else if (error.response.status == 422 && error.response.data?.messageCode) {
-            showToast({ severity: 'error', detail: t(error.response.data?.messageCode), group: 'tc', life: 3000, closable: false });
+        else if (error.response.status == 422 && error.response.data?.MessageCode) {
+            showToast({ severity: 'error', detail: t(error.response.data?.MessageCode), group: 'tc', life: 3000, closable: false });
         }
         throw error;
     }

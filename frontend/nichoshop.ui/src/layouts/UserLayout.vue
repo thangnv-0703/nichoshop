@@ -55,20 +55,20 @@ const items = ref([
     items: [
       {
         label: "Hồ sơ",
-        linkTo: "profile",
+        linkTo: "/user/account/profile",
       },
       {
         label: "Ngân hàng",
         badge: 2,
-        linkTo: "bank",
+        linkTo: "/user/account/bank",
       },
       {
         label: "Địa chỉ",
-        linkTo: "address",
+        linkTo: "/user/account/address",
       },
       {
         label: "Đổi mật khẩu",
-        linkTo: "password",
+        linkTo: "/user/account/password",
       },
     ],
   },

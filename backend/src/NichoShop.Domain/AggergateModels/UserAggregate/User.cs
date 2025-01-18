@@ -62,6 +62,11 @@ public class User : AggregateRoot<Guid>
         address.UpdateAddress(props);
     }
 
+    public void UpdatePassword(string passwordHashed)
+    {
+        PasswordHashed = passwordHashed;
+    }
+
     public void UpdateUserInfo(string userName, string? fullName, string? email, string? phoneNumber, Gender? gender, DateTime? dob)
     {
         if (!string.IsNullOrWhiteSpace(userName)) UserName = userName;

@@ -59,4 +59,14 @@ public class UserController : Controller
         var result = await _userService.GetUserInfoAsync();
         return Ok(result);
     }
+
+    [HttpPut("change-password")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)
+    {
+        //var result = _createUserValidator.Validate(requestDto);
+        var res = await _userService.ChangePassword(requestDto);
+        return Ok(res);
+    }
 }

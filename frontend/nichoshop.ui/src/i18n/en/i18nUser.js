@@ -1,6 +1,7 @@
 export default {
     name: "en",
     messages: {
-        PhoneNumberExisted: 'Phone number existed',
+        phoneNumberExisted: 'Phone number existed',
+        incorrectPassword: 'Incorrect password',
     },
 };
