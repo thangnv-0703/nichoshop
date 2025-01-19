@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref } from "vue";
-import authHelper from "@/helpers/AuthHelper";
+import authHelper from "@/helpers/authHelper";
 
 const items = ref([
   {
