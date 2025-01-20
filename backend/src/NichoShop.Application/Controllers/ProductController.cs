@@ -32,5 +32,13 @@ namespace NichoShop.Application.Controllers
             var result = await _productService.GetProductSearchViewModelAsync(param);
             return Ok(result);
         }
+
+        [HttpGet("by-category/{categoryId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetProductsByCategory(int categoryId)
+        {
+            var result = await _productService.GetProductsByCategoryAsync(categoryId);
+            return Ok(result);
+        }
     }
 }
