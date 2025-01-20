@@ -39,7 +39,6 @@ const actions = {
 
         try {
             const res = await api.updateCartItemMultiSelection(payload);
-            debugger;
             if (res?.data) {
                 // store.commit("setItems", store.state.items.map(item => {
                 //     if (item[store.state.config.fieldId] == payload.id) {

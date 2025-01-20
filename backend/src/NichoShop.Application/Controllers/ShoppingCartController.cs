@@ -67,4 +67,12 @@ public class ShoppingCartController : Controller
         var result = await _shoppingCartService.DeleteCartItem(cartItemId);
         return Ok(result);
     }
+
+    [HttpGet("checkout")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetCheckOut()
+    {
+        var result = await _shoppingCartService.GetCheckOutAsync();
+        return Ok(result);
+    }
 }
