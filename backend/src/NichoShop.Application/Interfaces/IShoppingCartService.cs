@@ -10,5 +10,6 @@ public interface IShoppingCartService
     Task<bool> AddItemToCartAsync(AddItemToCartRequestDto param);
     Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto);
     Task<bool> UpdateMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto);
+    Task<CheckOutDto> GetCheckOutAsync();
     Task<bool> DeleteCartItem(Guid cartItemId);
 }
