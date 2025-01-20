@@ -329,7 +329,7 @@ export default {
         const totalFinalText = ref('');
 
         const formatNumberWithDots = (num) => {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return num.toLocaleString('vi-VN');
         }
 
         const handleTotalPrice = () => {

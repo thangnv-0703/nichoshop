@@ -236,6 +236,20 @@
             <span>The Manson - the heartbeat of chairs</span>
           </div>
         </div>
+        <div class="product-relavant">
+          <p>CÓ THỂ BẠN CŨNG THÍCH</p>
+          <div class="product-grid">
+            <div v-for="(product, index) in products_relavant" :key="index" class="product-item"
+              @click="goToProductDetail">
+              <img :src="product.productImage" :alt="product.productName" class="product-image" />
+              <div class="product-info">
+                <p class="product-name">{{ product.productName }}</p>
+                <p class="product-price">₫{{ formatNumberWithDots(product.amount) }}</p>
+                <p class="product-sold">Đã bán {{ product.sold }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -255,8 +269,10 @@ export default defineComponent({
     const selectProductVariants = ref([]);
     const quantityProduct = ref(1);
     const router = useRouter();
+    const products_relavant = ref([]);
 
     onMounted(async () => {
+      // chi tiết
       const res = await proxy.$store.dispatch(`moduleProduct/getItem`, 10000000);
       if (res?.data) {
         product.value = res?.data;
@@ -264,6 +280,12 @@ export default defineComponent({
           return { name: variant.name, value: variant.options[0].value };
         });
         setSelectedSKU();
+      }
+
+      // sản phẩm gợi ý
+      const res_relavant = await proxy.$store.dispatch(`moduleProduct/getProductByCategory`, 101178);
+      if (res_relavant?.data) {
+        products_relavant.value = res_relavant?.data;
       }
     });
 
@@ -274,7 +296,7 @@ export default defineComponent({
         isSelected: isBuyNow
       };
       const res = await proxy.$store.dispatch(`moduleCart/addItemToCart`, param);
-      
+
       if (res?.data && !isBuyNow) {
         alert('Thêm sản phẩm vào giỏ thành công');
       } else if (res?.data && isBuyNow) {
@@ -338,6 +360,10 @@ export default defineComponent({
       }
     }
 
+    const formatNumberWithDots = (num) => {
+      return num.toLocaleString('vi-VN');
+    }
+
     return {
       product,
       getDisplayedPrice,
@@ -347,7 +373,9 @@ export default defineComponent({
       selectedSKU,
       clickAddItemToCart,
       quantityProduct,
-      increaseProduct
+      increaseProduct,
+      products_relavant,
+      formatNumberWithDots
     };
   },
 });
@@ -936,6 +964,66 @@ $bg-content: #fff;
 
         .mt-24 {
           margin-top: 24px;
+        }
+      }
+    }
+
+    .product-relavant {
+      padding: 15px;
+      margin-top: 10px;
+      background-color: #fff;
+      border-radius: 0.125rem;
+      display: flex;
+      flex-direction: column;
+
+      .product-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr); // 6 sản phẩm mỗi dòng
+        gap: 20px;
+
+        .product-item {
+          cursor: pointer;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          overflow: hidden;
+          background-color: #fff;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+
+          .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+          }
+
+          .product-info {
+            padding: 10px;
+
+            .product-name {
+              font-size: 14px;
+              color: #333;
+              margin-bottom: 5px;
+              line-height: 1.4;
+            }
+
+            .product-price {
+              font-size: 16px;
+              font-weight: bold;
+              color: #f53d2d;
+              margin-bottom: 5px;
+            }
+
+            .product-sold {
+              font-size: 12px;
+              color: #999;
+            }
+          }
         }
       }
     }

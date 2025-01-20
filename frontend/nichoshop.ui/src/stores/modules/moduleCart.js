@@ -35,7 +35,6 @@ const actions = {
         }
     },
     async getCheckOut(store) {
-        debugger
         store.commit("moduleLoading/setLoading", true, { root: true });
         try {
             const response = await api.getCheckOut();
