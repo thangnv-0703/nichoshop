@@ -36,6 +36,53 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
         return await query.FirstOrDefaultAsync(entity => EF.Property<object>(entity, "Id") == id);
     }
 
+    public async Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, string Comparison)> filters)
+    {
+        var parameter = Expression.Parameter(typeof(TEntity), "x");
+        IQueryable<TEntity> query = _context.Set<TEntity>();
+        foreach (var filter in filters)
+        {
+            // Tạo Expression cho tên field và giá trị filter
+            var property = Expression.Property(parameter, filter.Key);
+            var constant = Expression.Constant(filter.Value.Value);
+
+            Expression comparisonExpression = null;
+
+            switch (filter.Value.Comparison.ToLower())
+            {
+                case "equal":
+                    comparisonExpression = Expression.Equal(property, constant);
+                    break;
+                case "notequal":
+                    comparisonExpression = Expression.NotEqual(property, constant);
+                    break;
+                case "greaterthan":
+                    comparisonExpression = Expression.GreaterThan(property, constant);
+                    break;
+                case "lessthan":
+                    comparisonExpression = Expression.LessThan(property, constant);
+                    break;
+                case "in":
+                    comparisonExpression = Expression.Call(
+                        typeof(Enumerable),
+                        "Contains",
+                        new Type[] { property.Type },
+                        constant,
+                        property
+                    );
+
+                    break;
+                default:
+                    throw new ArgumentException($"Unsupported comparison: {filter.Value.Comparison}");
+            }
+
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(comparisonExpression, parameter);
+            query = query.Where(lambda);
+        }
+
+        return query.ToList();
+    }
+
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await _context.SaveChangesAsync(cancellationToken);

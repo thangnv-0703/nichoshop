@@ -48,10 +48,25 @@ public class ShoppingCartService : IShoppingCartService
         var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
         {
-            throw new Exception("Invalid Quantity Sku");
+            throw new DomainException
+            {
+                MessageCode = "i18nShoppingCart.messages.invalidQuantity"
+            };
         }
 
         cart.UpdateCartItem(new CartItem(updateCartItemRequestDto.Id, updateCartItemRequestDto.Quantity));
+        return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
+    public async Task<bool> DeleteCartItems(List<Guid> cartItemIds)
+    {
+        var userId = _userContext.UserId;
+        var shoppingCart = await _shoppingCartRepository.GetShoppingCartByUserIdAsync(userId);
+
+        if (shoppingCart is null)
+        {
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
+        }
+        shoppingCart.RemoveItems(cartItemIds);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
 

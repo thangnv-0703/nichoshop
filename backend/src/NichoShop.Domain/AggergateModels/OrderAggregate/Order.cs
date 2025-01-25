@@ -1,4 +1,5 @@
 ﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.SeedWork;
 
 namespace NichoShop.Domain.AggergateModels.OrderAggregate;
@@ -47,7 +48,10 @@ public class Order : AggregateRoot<Guid>
             );
         PaymentMethod = paymentMethod;
         orderItemProps.ForEach(x => AddItem(x.Quantity, x.SkuId, x.ProductName, x.VariantName, x.Thumbnail, x.Amount, x.Currency));
-        if (IsInvalid()) throw new Exception("Order is invalid");
+        if (IsInvalid()) throw new DomainException
+        {
+            MessageCode = "i18nOrder.messages.orderInvalid"
+        };
     }
 
     private bool IsInvalid()

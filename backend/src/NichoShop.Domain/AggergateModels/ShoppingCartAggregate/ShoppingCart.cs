@@ -34,6 +34,11 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
         _items.RemoveAt(deletedItemIndex);
     }
 
+    public void RemoveItems(List<Guid> cartItems)
+    {
+        _items.RemoveAll(item => cartItems.Contains(item.Id));
+    }
+
     public void UpdateCartItem(CartItem cartItem)
     {
         var foundCartItem = _items.Find(x => x.SkuId == cartItem.SkuId);
@@ -41,6 +46,8 @@ public class ShoppingCart(Guid customerId) : AggregateRoot<Guid>
 
         foundCartItem.SetQuantity(cartItem.Quantity);
     }
+
+
 
     public void UpdateSelectionCartItem(List<int> skuIds, bool isSelected)
     {
