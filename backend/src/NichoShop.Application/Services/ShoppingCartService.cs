@@ -10,12 +10,22 @@ using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository, ISkuRepository skuRepository) : IShoppingCartService
+public class ShoppingCartService : IShoppingCartService
 {
-    private readonly IQueryService _queryService = queryService;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IShoppingCartRepository _shoppingCartRepository = shoppingCartRepository;
-    private readonly ISkuRepository _skuRepository = skuRepository;
+    private readonly IQueryService _queryService;
+    private readonly IUserContext _userContext;
+    private readonly IUserAddressService _userAddressService;
+    private readonly IShoppingCartRepository _shoppingCartRepository;
+    private readonly ISkuRepository _skuRepository;
+
+    public ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository, ISkuRepository skuRepository, IUserAddressService userAddressService)
+    {
+        _queryService = queryService;
+        _userContext = userContext;
+        _userAddressService = userAddressService;
+        _shoppingCartRepository = shoppingCartRepository;
+        _skuRepository = skuRepository;
+    }
 
     public async Task<CartViewModel> GetShoppingCartByUserIdAsync()
     {
@@ -87,6 +97,20 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
         }
 
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
+
+    public async Task<CheckOutDto> GetCheckOutAsync()
+    {
+        var result = new CheckOutDto();
+
+        var addresses = await _userAddressService.GetUserAddressAsync();
+        var addressDefault = addresses.Find(x => x.IsDefault);
+        result.Address = addressDefault;
+
+        var products = await GetShoppingCartByUserIdAsync();
+        result.Products = products.Items.FindAll(x => x.IsSelected);
+
+        return result;
     }
 
     /// <summary>

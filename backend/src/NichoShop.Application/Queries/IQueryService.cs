@@ -9,5 +9,6 @@ public interface IQueryService
     Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode);
     Task<List<CartItemViewModel>> GetCartItemViewModelsAsync(Guid userId);
     Task<List<ProductSearchViewModel>> GetProductSearchViewModelAsync(ProductSearchRequestDto param);
+    Task<List<ProductsByCategoryDto>> GetProductSearchViewModelAsync(int categoryId);
     Task<List<ProductCategoryViewModel>> GetCategoryTree(int categoryId);
 }

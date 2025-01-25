@@ -33,7 +33,18 @@ const actions = {
         } finally {
             store.commit("moduleLoading/setLoading", false, { root: true });
         }
-    }
+    },
+    async getCheckOut(store) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
+        try {
+            const response = await api.getCheckOut();
+            return response;
+        } catch (error) {
+            store.commit("setError", error);
+        } finally {
+            store.commit("moduleLoading/setLoading", false, { root: true });
+        }
+    },
 };
 const mutations = {
     ...crud.mutations,
