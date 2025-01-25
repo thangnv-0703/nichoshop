@@ -49,6 +49,11 @@ public class Sku : AggregateRoot<int>
         }
     }
 
+
+    public void UpdateQuantity(int quantity)
+    {
+        this.Quantity = quantity;
+    }
     private bool IsInvalid()
     {
         return Quantity < 0;

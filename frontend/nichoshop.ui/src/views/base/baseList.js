@@ -32,7 +32,8 @@ export default defineComponent({
         attrs: {
           popupTitle: `Sửa ${this.$store.state[this.module].config?.name}`,
           editMode: this.$nicho.enumeration.editMode.Edit,
-          record: _.cloneDeep(record)
+          record: _.cloneDeep(record),
+          close: () => close()
         },
       });
       open();
@@ -43,6 +44,7 @@ export default defineComponent({
         attrs: {
           popupTitle: `Thêm ${this.$store.state[this.module].config?.name}`,
           editMode: this.$nicho.enumeration.editMode.Add,
+          close: () => close()
         },
       });
       open();

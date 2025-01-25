@@ -55,13 +55,13 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto requestDto)
     {
-        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new NotFoundException("Phone number not found");
+        var user = await _userRepository.FindUserByPhoneNumber(requestDto.PhoneNumber) ?? throw new NotFoundException("i18nAuth.messages.notFoundPhoneNumber");
 
         var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
 
         if (!isVerified)
         {
-            throw new UnauthorizedAccessException("Password is incorrect");
+            throw new UnauthorizedAccessException("i18nAuth.messages.passwordIncorrect");
         }
 
         var identity = new Identity
@@ -81,7 +81,7 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
     public async Task<bool> UpdateUserInfoAsync(UpdateUserRequestDto param)
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("i18nUser.messages.notFoundUser");
 
         user.UpdateUserInfo(param.UserName, param.FullName, param.Email, param.PhoneNumber, param.Gender, param.DateOfBirth);
         await _userRepository.SaveChangesAsync();
@@ -90,14 +90,14 @@ public class UserService(IUserRepository userRepository, IJwtService jwtService,
 
     public async Task<UserInfoDto> GetUserInfoAsync()
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("i18nUser.messages.notFoundUser");
         var res = _mapper.Map<UserInfoDto>(user);
         return res;
     }
 
     public async Task<bool> ChangePassword(ChangePasswordRequestDto requestDto)
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("User not found");
+        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("i18nUser.messages.notFoundUser");
 
         var isVerified = PasswordHelper.Verify(requestDto.Password, user.PasswordHashed);
 

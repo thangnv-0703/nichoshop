@@ -45,19 +45,34 @@ public class ShoppingCartService : IShoppingCartService
 
     public async Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
         {
-            throw new Exception("Invalid Quantity Sku");
+            throw new DomainException
+            {
+                MessageCode = "i18nShoppingCart.messages.invalidQuantity"
+            };
         }
 
         cart.UpdateCartItem(new CartItem(updateCartItemRequestDto.Id, updateCartItemRequestDto.Quantity));
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
+    public async Task<bool> DeleteCartItems(List<Guid> cartItemIds)
+    {
+        var userId = _userContext.UserId;
+        var shoppingCart = await _shoppingCartRepository.GetShoppingCartByUserIdAsync(userId);
+
+        if (shoppingCart is null)
+        {
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
+        }
+        shoppingCart.RemoveItems(cartItemIds);
+        return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
 
     public async Task<bool> UpdateMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
 
         cart.UpdateSelectionCartItem(updateSeletionDto.SkuIds, updateSeletionDto.IsSelected);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
@@ -70,7 +85,7 @@ public class ShoppingCartService : IShoppingCartService
 
         if (shoppingCart is null)
         {
-            throw new NotFoundException("Shopping cart not found");
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         }
 
         shoppingCart.RemoveItem(cartItemId);

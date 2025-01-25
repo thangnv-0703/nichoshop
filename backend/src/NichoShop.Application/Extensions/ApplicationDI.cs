@@ -72,6 +72,8 @@ public static class ApplicationDI
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IStorageService, AzureBlobStorageService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<ISkuService, SkuSerive>();
+        services.AddScoped<IOrderService, OrderService>();
         return services;
     }
 

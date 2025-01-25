@@ -2,12 +2,12 @@
 {
     public class NotFoundException : Exception
     {
-        public string Message { get; set; }
+        public string MessageCode { get; set; }
         public object Data { get; set; }
 
         public NotFoundException(string message)
         {
-            Message = message;
+            MessageCode = message;
         }
     }
 }

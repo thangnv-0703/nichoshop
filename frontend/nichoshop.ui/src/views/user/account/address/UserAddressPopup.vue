@@ -27,6 +27,12 @@ export default {
       zodResolver(
         z.object({
           fullName: z.string({ required_error: "Không được để trống" }),
+          phoneNumber: z.string({ required_error: "Không được để trống" }),
+          street: z.string({ required_error: "Không được để trống" }),
+          province: z.string({ required_error: "Không được để trống" }),
+          district: z.string({ required_error: "Không được để trống" }),
+          ward: z.string({ required_error: "Không được để trống" }),
+          specificAdress: z.string({ required_error: "Không được để trống" }),
         })
       )
     );
@@ -110,6 +116,7 @@ export default {
             <div class="flex flex-col gap-1">
               <FloatLabel variant="on">
                 <InputText
+                  name="fullName"
                   v-model="model.fullName"
                   id="fullName"
                   class="w-full"
@@ -131,6 +138,7 @@ export default {
               <div class="flex flex-col gap-1">
                 <FloatLabel variant="on">
                   <InputText
+                    name="phoneNumber"
                     class="w-full"
                     v-model="model.phoneNumber"
                     id="phoneNumber"
@@ -141,40 +149,77 @@ export default {
                     mask="(99)999 999 999"
                     fluid
                   /> -->
-                  <label for="phonenumber">Số điện thoại</label>
+                  <label for="phoneNumber">Số điện thoại</label>
                 </FloatLabel>
+                <Message
+                  v-if="$form.phoneNumber?.invalid"
+                  severity="error"
+                  size="small"
+                  variant="simple"
+                  >{{ $form.phoneNumber.error?.message }}</Message
+                >
               </div>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-1">
-            <Select
-              v-model="model.province"
-              optionValue="fullName"
-              filter
-              name="provinces"
-              :options="provinces"
-              optionLabel="fullName"
-              placeholder="Tỉnh/Thành phố"
-            />
-            <Select
-              filter
-              v-model="model.district"
-              optionValue="fullName"
-              name="districts"
-              :options="districts"
-              optionLabel="fullName"
-              placeholder="Quận/huyện"
-            />
-            <Select
-              filter
-              v-model="model.ward"
-              name="wards"
-              optionValue="fullName"
-              :options="wards"
-              optionLabel="fullName"
-              placeholder="Phường/xã"
-            />
+            <div>
+              <Select
+                class="w-full"
+                v-model="model.province"
+                optionValue="fullName"
+                filter
+                name="province"
+                :options="provinces"
+                optionLabel="fullName"
+                placeholder="Tỉnh/Thành phố"
+              />
+              <Message
+                v-if="$form.province?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.province.error?.message }}</Message
+              >
+            </div>
+            <div>
+              <Select
+                class="w-full"
+                filter
+                v-model="model.district"
+                optionValue="fullName"
+                name="district"
+                :options="districts"
+                optionLabel="fullName"
+                placeholder="Quận/huyện"
+              />
+              <Message
+                v-if="$form.district?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.district.error?.message }}</Message
+              >
+            </div>
+            <div>
+              <Select
+                class="w-full"
+                filter
+                v-model="model.ward"
+                name="ward"
+                optionValue="fullName"
+                :options="wards"
+                optionLabel="fullName"
+                placeholder="Phường/xã"
+              />
+              <Message
+                v-if="$form.ward?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.ward.error?.message }}</Message
+              >
+            </div>
           </div>
 
           <div class="flex flex-col gap-1">
@@ -184,9 +229,9 @@ export default {
               type="text"
               placeholder="Địa chỉ cụ thể"
             />
-            <template v-if="$form.specificAddress?.invalid">
+            <template v-if="$form.specificAdress?.invalid">
               <Message
-                v-for="(error, index) of $form.specificAddress.errors"
+                v-for="(error, index) of $form.specificAdress.errors"
                 :key="index"
                 severity="error"
                 size="small"

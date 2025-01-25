@@ -31,13 +31,13 @@ export default defineComponent({
   },
   watch: {
     entityErrors: function (newValue) {
-      const errors = newValue.response?.data?.Errors;
-      
-      if (errors) {
-        for (const error in errors) {
-          this.$refs[error]
-        }
-      }
+      // const errors = newValue.response?.data?.Errors;
+      // debugger
+      // if (errors) {
+      //   for (const error in errors) {
+      //     this.$refs[error]
+      //   }
+      // }
     }
   },
   methods: {
@@ -61,7 +61,7 @@ export default defineComponent({
           break;
       }
       if (res?.data) {
-        close();
+        this.$attrs.close()
         this.toast.add({ severity: 'success', summary: 'Thành công', detail: 'Lưu thành công!', group: 'tc', life: 3000 });
       }
     },
