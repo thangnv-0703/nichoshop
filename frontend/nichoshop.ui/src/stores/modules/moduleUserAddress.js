@@ -13,6 +13,30 @@ const getters = {
 };
 const actions = {
   ...crud.actions,
+  async setAsDefault(store, payload) {
+    store.commit("moduleLoading/setLoading", true, { root: true });
+    try {
+      const res = await api.setAsDefault(payload);
+      if (res?.data) {
+        store.commit("setItems", store.state.items.map(item => {
+          if (item[store.state.config.fieldId] == payload) {
+            return { ...item, isDefault: true };
+          }
+          else if (item.isDefault) {
+            return { ...item, isDefault: false };
+          }
+          return item;
+        }
+        ));
+      }
+      return res;
+    } catch (error) {
+      store.commit("setError", error);
+    }
+    finally {
+      store.commit("moduleLoading/setLoading", false, { root: true });
+    }
+  },
 };
 const mutations = {
   ...crud.mutations,

@@ -61,6 +61,7 @@
               >
             </div>
             <Button
+              @click="setAsDefault(slotProps.data)"
               :disabled="slotProps.data['isDefault']"
               class="w-[160px] set-default-btn"
               label="Thiết lập mặc định"
@@ -95,11 +96,15 @@ export default {
     const filters = ref({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     });
+    const setAsDefault = ({ id }) => {
+      proxy.$store.dispatch(`${module}/setAsDefault`, id);
+    };
     return {
       products,
       detailModal,
       module,
       autoLoadGrid,
+      setAsDefault,
     };
   },
 };
