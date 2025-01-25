@@ -201,6 +201,7 @@ export default defineComponent({
       toggle,
       goToHomePage,
       popOver,
+      authHelper,
     };
   },
 });

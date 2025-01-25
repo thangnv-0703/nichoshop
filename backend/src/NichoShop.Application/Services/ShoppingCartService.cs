@@ -35,7 +35,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
     public async Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
         {
             throw new Exception("Invalid Quantity Sku");
@@ -47,7 +47,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
     public async Task<bool> UpdateMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
 
         cart.UpdateSelectionCartItem(updateSeletionDto.SkuIds, updateSeletionDto.IsSelected);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
@@ -60,7 +60,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
         if (shoppingCart is null)
         {
-            throw new NotFoundException("Shopping cart not found");
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         }
 
         shoppingCart.RemoveItem(cartItemId);
