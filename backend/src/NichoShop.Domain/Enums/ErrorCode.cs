@@ -6,5 +6,6 @@
         InvalidSku = 422002,
         InvalidMoney = 422003,
         InvalidPhoneNumber = 422004,
+        IncorrectPassword = 422005
     }
 }

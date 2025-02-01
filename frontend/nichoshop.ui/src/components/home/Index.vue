@@ -80,7 +80,6 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      debugger
       const res = await proxy.$store.dispatch("moduleCategory/getCategory");
       categories.value = await res.data;
     });

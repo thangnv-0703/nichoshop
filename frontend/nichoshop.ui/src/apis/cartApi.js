@@ -11,6 +11,10 @@ class CartApi extends BaseApi {
         const apiURL = this.getApiURL();
         return httpClient.get(apiURL);
     }
+    getCheckOut() {
+        const apiURL = this.getApiURL('checkout');
+        return httpClient.get(apiURL);
+    }
     updateCartItemQuantity(id, payload) {
         const apiURL = this.getApiURL('items/quantity');
         return httpClient.put(apiURL, payload);

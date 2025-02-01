@@ -1,4 +1,5 @@
 ﻿using NichoShop.Domain.Enums;
+using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Seedwork;
 using NichoShop.Domain.Shared;
 
@@ -33,7 +34,10 @@ public class OrderItem : Entity<Guid>
 
         if (IsInvalid())
         {
-            throw new Exception("Invalid order item");
+            throw new DomainException
+            {
+                MessageCode = "i18nOrder.messages.invalidOrderItem"
+            };
         }
     }
 

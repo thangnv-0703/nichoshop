@@ -10,12 +10,22 @@ using NichoShop.Domain.Repositories;
 
 namespace NichoShop.Application.Services;
 
-public class ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository, ISkuRepository skuRepository) : IShoppingCartService
+public class ShoppingCartService : IShoppingCartService
 {
-    private readonly IQueryService _queryService = queryService;
-    private readonly IUserContext _userContext = userContext;
-    private readonly IShoppingCartRepository _shoppingCartRepository = shoppingCartRepository;
-    private readonly ISkuRepository _skuRepository = skuRepository;
+    private readonly IQueryService _queryService;
+    private readonly IUserContext _userContext;
+    private readonly IUserAddressService _userAddressService;
+    private readonly IShoppingCartRepository _shoppingCartRepository;
+    private readonly ISkuRepository _skuRepository;
+
+    public ShoppingCartService(IUserContext userContext, IQueryService queryService, IShoppingCartRepository shoppingCartRepository, ISkuRepository skuRepository, IUserAddressService userAddressService)
+    {
+        _queryService = queryService;
+        _userContext = userContext;
+        _userAddressService = userAddressService;
+        _shoppingCartRepository = shoppingCartRepository;
+        _skuRepository = skuRepository;
+    }
 
     public async Task<CartViewModel> GetShoppingCartByUserIdAsync()
     {
@@ -35,19 +45,34 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
     public async Task<bool> UpdateCartItem(UpdateCartItemRequestDto updateCartItemRequestDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateCartItemRequestDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         if (!await IsValidQuantitySkuAsync(updateCartItemRequestDto.Quantity, updateCartItemRequestDto.Id))
         {
-            throw new Exception("Invalid Quantity Sku");
+            throw new DomainException
+            {
+                MessageCode = "i18nShoppingCart.messages.invalidQuantity"
+            };
         }
 
         cart.UpdateCartItem(new CartItem(updateCartItemRequestDto.Id, updateCartItemRequestDto.Quantity));
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
     }
+    public async Task<bool> DeleteCartItems(List<Guid> cartItemIds)
+    {
+        var userId = _userContext.UserId;
+        var shoppingCart = await _shoppingCartRepository.GetShoppingCartByUserIdAsync(userId);
+
+        if (shoppingCart is null)
+        {
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
+        }
+        shoppingCart.RemoveItems(cartItemIds);
+        return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
 
     public async Task<bool> UpdateMultiSelection(UpdateMultiCartItemSelectionDto updateSeletionDto)
     {
-        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("Shopping cart not found");
+        var cart = await _shoppingCartRepository.GetByIdAsync(updateSeletionDto.CartId, includeDetail: true) ?? throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
 
         cart.UpdateSelectionCartItem(updateSeletionDto.SkuIds, updateSeletionDto.IsSelected);
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
@@ -60,7 +85,7 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
 
         if (shoppingCart is null)
         {
-            throw new NotFoundException("Shopping cart not found");
+            throw new NotFoundException("i18nShoppingCart.messages.notFoundShoppingCart");
         }
 
         shoppingCart.RemoveItem(cartItemId);
@@ -87,6 +112,20 @@ public class ShoppingCartService(IUserContext userContext, IQueryService querySe
         }
 
         return await _shoppingCartRepository.SaveChangesAsync() > 0;
+    }
+
+    public async Task<CheckOutDto> GetCheckOutAsync()
+    {
+        var result = new CheckOutDto();
+
+        var addresses = await _userAddressService.GetUserAddressAsync();
+        var addressDefault = addresses.Find(x => x.IsDefault);
+        result.Address = addressDefault;
+
+        var products = await GetShoppingCartByUserIdAsync();
+        result.Products = products.Items.FindAll(x => x.IsSelected);
+
+        return result;
     }
 
     /// <summary>

@@ -28,21 +28,13 @@
           <Popover ref="popOver">
             <div class="flex flex-col gap-4">
               <div>
-                <RouterLink
-                  to="/user/account/profile"
-                  class="font-medium block mb-2 popover-item"
-                >
+                <RouterLink to="/user/account/profile" class="font-medium block mb-2 popover-item">
                   Tài khoản của tôi
                 </RouterLink>
-                <RouterLink
-                  to="/user/purchase"
-                  class="font-medium block mb-2 popover-item"
-                >
+                <RouterLink to="/user/purchase" class="font-medium block mb-2 popover-item">
                   Đơn mua
                 </RouterLink>
-                <RouterLink class="font-medium block popover-item" to="/logout"
-                  >Đăng xuất</RouterLink
-                >
+                <RouterLink class="font-medium block popover-item" to="/logout">Đăng xuất</RouterLink>
               </div>
             </div>
           </Popover>
@@ -103,7 +95,7 @@
       </div>
       <div v-else class="header-bottom-checkout">
         <div class="content">
-          <svg style="width: 130px; height: 46px; fill: #ee4d2d;" viewBox="0 0 192 65"
+          <svg style="width: 130px; height: 46px; fill: #ee4d2d" viewBox="0 0 192 65"
             class="shopee-svg-icon icon-shopee-logo">
             <g fill-rule="evenodd">
               <path
@@ -121,7 +113,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import AuthHelper from "@/helpers/AuthHelper";
+import authHelper from "@/helpers/authHelper";
 
 export default defineComponent({
   name: "Header",
@@ -133,7 +125,6 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const authHelper = AuthHelper;
     const popOver = ref(null);
     const searchQuery = ref("");
     const suggestions = ref([
@@ -162,13 +153,13 @@ export default defineComponent({
     };
 
     return {
-      authHelper,
       searchQuery,
       suggestions,
       search,
       toggle,
       goToHomePage,
       popOver,
+      authHelper,
     };
   },
 });
@@ -293,7 +284,7 @@ $navbar-color: #f53d2d;
 
   .header-bottom-checkout {
     background: #fff;
-    border-bottom: 1px solid rgba(0, 0, 0, .09);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
 
     .content {
       max-width: 1200px;
@@ -315,7 +306,6 @@ $navbar-color: #f53d2d;
         margin-top: 10px;
       }
     }
-
   }
 }
 </style>
