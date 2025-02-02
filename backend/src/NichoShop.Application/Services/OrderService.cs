@@ -43,12 +43,12 @@ namespace NichoShop.Application.Services
             var cart = await _shoppingCartService.GetShoppingCartByUserIdAsync();
             var products = cart.Items.FindAll(x => x.IsSelected);
 
-            var filtersWithComparison = new Dictionary<string, (object Value, string Comparison)>
+            var filtersWithComparison = new Dictionary<string, (object Value, SqlOperator Comparison)>
             {
-                { "Id", (products.Select(x=>x.SkuId), "in") }
+                { "Id", (products.Select(x=>x.SkuId), SqlOperator.In) },
             };
 
-            var skus = await _skuService.GetByFitlers(filtersWithComparison) ?? throw new NotFoundException("i18nOrder.messages.notFoundSku");
+            var skus = _skuService.GetByFitlers(filtersWithComparison) ?? throw new NotFoundException("i18nOrder.messages.notFoundSku");
 
             bool isOutOfStock = skus.Any(x =>
             {
