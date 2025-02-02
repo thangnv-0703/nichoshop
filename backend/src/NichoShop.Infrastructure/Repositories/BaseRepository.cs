@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Domain.Enums;
 using NichoShop.Domain.Seedwork;
 using NichoShop.Domain.SeedWork;
 using System.Linq.Expressions;
@@ -13,6 +14,7 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
     public void Add(TEntity entity)
     {
         _context.Set<TEntity>().AddAsync(entity);
+
     }
 
     public async Task<List<TEntity>> GetAllAsync()
@@ -36,7 +38,7 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
         return await query.FirstOrDefaultAsync(entity => EF.Property<object>(entity, "Id") == id);
     }
 
-    public async Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, string Comparison)> filters)
+    public List<TEntity> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
     {
         var parameter = Expression.Parameter(typeof(TEntity), "x");
         IQueryable<TEntity> query = _context.Set<TEntity>();
@@ -48,21 +50,21 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
 
             Expression comparisonExpression = null;
 
-            switch (filter.Value.Comparison.ToLower())
+            switch (filter.Value.Comparison)
             {
-                case "equal":
+                case SqlOperator.Equal:
                     comparisonExpression = Expression.Equal(property, constant);
                     break;
-                case "notequal":
+                case SqlOperator.Notequal:
                     comparisonExpression = Expression.NotEqual(property, constant);
                     break;
-                case "greaterthan":
+                case SqlOperator.Greaterthan:
                     comparisonExpression = Expression.GreaterThan(property, constant);
                     break;
-                case "lessthan":
+                case SqlOperator.Lessthan:
                     comparisonExpression = Expression.LessThan(property, constant);
                     break;
-                case "in":
+                case SqlOperator.In:
                     comparisonExpression = Expression.Call(
                         typeof(Enumerable),
                         "Contains",

@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.User;
+using Serilog;
 using System.Net;
 
 namespace NichoShop.Application.Controllers;
@@ -27,6 +29,7 @@ public class UserController : Controller
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Signup([FromBody] CreateUserRequestDto requestDto)
     {
+        Log.Debug($"Vào hàm singup data ${JsonConvert.SerializeObject(requestDto)}");
         var result = _createUserValidator.Validate(requestDto);
         await _userService.CreateUserAsync(requestDto);
         return Ok(true);

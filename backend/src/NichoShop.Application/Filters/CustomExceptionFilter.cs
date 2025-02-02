@@ -1,21 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NichoShop.Domain.Exceptions;
+using Serilog;
 
 namespace NichoShop.Application.Filters
 {
     public class CustomExceptionFilter : IExceptionFilter
     {
-        private readonly ILogger<CustomExceptionFilter> _logger;
-
-        public CustomExceptionFilter(ILogger<CustomExceptionFilter> logger)
-        {
-            _logger = logger;
-        }
-
         public void OnException(ExceptionContext context)
         {
-            //TODO:  Logging 
 
             context.ExceptionHandled = true;
 
@@ -53,6 +46,8 @@ namespace NichoShop.Application.Filters
                         StatusCode = 500,
                         Value = msg
                     };
+
+                    Log.Error(context.Exception.ToString());
                     break;
             }
         }
