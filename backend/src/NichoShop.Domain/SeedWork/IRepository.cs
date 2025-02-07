@@ -8,5 +8,6 @@ public interface IRepository<TEntity> where TEntity : IAggregateRoot
     void Add(TEntity entity);
     Task<List<TEntity>> GetAllAsync();
     Task<TEntity?> GetByIdAsync(object id, bool includeDetail = false);
-    List<TEntity> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters);
+    Task<List<TEntity>> GetPaging(int pageNumber, int pageSize, Dictionary<string, (object Value, SqlOperator Comparison)> filters, bool includeDetail);
+    Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters);
 }

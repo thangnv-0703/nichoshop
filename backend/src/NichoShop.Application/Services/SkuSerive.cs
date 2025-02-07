@@ -14,9 +14,9 @@ namespace NichoShop.Application.Services
             _skuRepository = skuRepository;
         }
 
-        public List<Sku> GetByFitlers(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
+        public async Task<List<Sku>> GetByFitlers(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
         {
-            return _skuRepository.GetByFilters(filters);
+            return await _skuRepository.GetByFilters(filters);
         }
 
         public async Task<bool> UpdateSkus(List<Sku> skus)
@@ -25,7 +25,7 @@ namespace NichoShop.Application.Services
             {
                 { "Id", (skus.Select(x=>x.Id), SqlOperator.In) }
             };
-            List<Sku> foundSkus = _skuRepository.GetByFilters(filtersWithComparison);
+            List<Sku> foundSkus = await _skuRepository.GetByFilters(filtersWithComparison);
 
             foundSkus = foundSkus.Select(
                 foundSku =>

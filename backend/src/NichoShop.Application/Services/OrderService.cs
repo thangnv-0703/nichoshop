@@ -1,4 +1,5 @@
 ﻿using NichoShop.Application.Interfaces;
+using NichoShop.Application.Models.Dtos.Request.Paging;
 using NichoShop.Application.Models.Dtos.Request.ShoppingCart;
 using NichoShop.Common.Interface;
 using NichoShop.Domain.AggergateModels.OrderAggregate;
@@ -48,7 +49,7 @@ namespace NichoShop.Application.Services
                 { "Id", (products.Select(x=>x.SkuId), SqlOperator.In) },
             };
 
-            var skus = _skuService.GetByFitlers(filtersWithComparison) ?? throw new NotFoundException("i18nOrder.messages.notFoundSku");
+            var skus = await _skuService.GetByFitlers(filtersWithComparison) ?? throw new NotFoundException("i18nOrder.messages.notFoundSku");
 
             bool isOutOfStock = skus.Any(x =>
             {
@@ -102,6 +103,11 @@ namespace NichoShop.Application.Services
 
             int res = await _orderRepository.SaveChangesAsync();
             return res > 0 ? order.Id : Guid.Empty;
+        }
+
+        public async Task<List<Order>> GetPaging(PagingRequestDto param)
+        {
+            return await _orderRepository.GetPaging(param.PageNumber, param.PageSize, null, true);
         }
     }
 }

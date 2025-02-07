@@ -8,7 +8,7 @@
       </TabList>
       <TabPanels>
         <TabPanel v-for="tab in tabs" :key="tab.value" :value="tab.value">
-          <order-card v-for="i in 2" :data="tab.data" />
+          <order-card v-for="item in items" :data="item" />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -16,13 +16,19 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import OrderCard from "./OrderCard.vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
+import baseList from "@/views/base/baseList.js";
 export default {
+  extends: baseList,
+
   components: {
     OrderCard,
   },
   setup() {
+    const autoLoadGrid = true;
+    const { proxy } = getCurrentInstance();
+    const module = "moduleOrder";
     const tabs = ref([
       { title: "Tất cả", data: "Tab 1 Content", value: "0" },
       { title: "Chờ thanh toán", data: "Tab 2 Content", value: "1" },
@@ -33,7 +39,7 @@ export default {
       { title: " Trả hàng/hoàn tiền", data: "Tab 3 Content", value: "6" },
     ]);
 
-    return { tabs };
+    return { module, autoLoadGrid, tabs };
   },
 };
 </script>

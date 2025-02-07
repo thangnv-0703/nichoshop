@@ -1,6 +1,6 @@
 import { ModalsContainer, useModal } from "vue-final-modal";
 import { defineComponent, getCurrentInstance } from "vue";
-import _ from 'lodash'
+import _, { filter } from 'lodash'
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 export default defineComponent({
@@ -24,7 +24,11 @@ export default defineComponent({
   },
   methods: {
     loadDataGrid() {
-      this.$store.dispatch(`${this.module}/getAll`); //để tạm get all
+      this.$store.dispatch(`${this.module}/getPaging`, {
+        pageNumber: 1,
+        pageSize: 10,
+        filter: null
+      });
     },
     edit(record) {
       const { open, close } = useModal({
