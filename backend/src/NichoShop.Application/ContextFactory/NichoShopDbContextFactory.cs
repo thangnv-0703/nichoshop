@@ -18,7 +18,7 @@ public class NichoShopDbContextFactory : IDesignTimeDbContextFactory<NichoShopDb
             .Build();
         Console.WriteLine(environment);
         var optionsBuilder = new DbContextOptionsBuilder<NichoShopDbContext>();
-        var connectionString = configuration.GetConnectionString("NichoShopDB");
+        var connectionString = configuration.GetSection("Postgres:ConnectionString").Value;
         optionsBuilder.UseNpgsql(connectionString, b => b.MigrationsAssembly("NichoShop.Application"));
 
         return new NichoShopDbContext(optionsBuilder.Options, configuration);

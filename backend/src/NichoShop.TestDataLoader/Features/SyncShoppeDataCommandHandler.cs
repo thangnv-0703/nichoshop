@@ -6,7 +6,6 @@ using NichoShop.Domain.AggergateModels;
 using NichoShop.Domain.Enums;
 using NichoShop.Infrastructure;
 using NichoShop.TestDataLoader.Features.Models;
-using System;
 
 namespace NichoShop.TestDataLoader.Features;
 

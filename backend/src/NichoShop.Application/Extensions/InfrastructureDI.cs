@@ -17,7 +17,7 @@ public static class InfrastructureDI
     public static IServiceCollection ConfigreDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<NichoShopDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("NichoShopDB"), b => b.MigrationsAssembly("NichoShop.Application")));
+            options.UseNpgsql(configuration.GetSection("Postgres:ConnectionString").Value, b => b.MigrationsAssembly("NichoShop.Application")));
         return services;
     }
 
