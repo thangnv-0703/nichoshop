@@ -67,7 +67,21 @@
 </template>
 
 <script>
-export default {};
+import { ref, onMounted, getCurrentInstance } from "vue";
+
+export default {
+  props: {
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
+    onMounted(() => {
+      console.log(props.data);
+    });
+  },
+};
 </script>
 
 <style>

@@ -21,7 +21,8 @@ export default class Crud {
       async getPaging(store, payload) {
         try {
           store.commit("moduleLoading/setLoading", true, { root: true });
-          const response = await me.api.getPaging();
+          const response = await me.api.getPaging(payload);
+          debugger
           store.commit("setItems", response.data);
         }
         catch (error) {

@@ -38,13 +38,20 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
         return await query.FirstOrDefaultAsync(entity => EF.Property<object>(entity, "Id") == id);
     }
 
-    public List<TEntity> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
+
+
+    private IQueryable<TEntity> GetQueryByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
     {
         var parameter = Expression.Parameter(typeof(TEntity), "x");
         IQueryable<TEntity> query = _context.Set<TEntity>();
+
+        if (filters == null)
+        {
+            return query;
+        }
+
         foreach (var filter in filters)
         {
-            // Tạo Expression cho tên field và giá trị filter
             var property = Expression.Property(parameter, filter.Key);
             var constant = Expression.Constant(filter.Value.Value);
 
@@ -82,7 +89,26 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
             query = query.Where(lambda);
         }
 
-        return query.ToList();
+        return query;
+    }
+
+
+    public async Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
+    {
+        IQueryable<TEntity> query = GetQueryByFilters(filters);
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<TEntity>> GetPaging(int pageNumber, int pageSize, Dictionary<string, (object Value, SqlOperator Comparison)> filters, bool includeDetail)
+    {
+        IQueryable<TEntity> query = _context.Set<TEntity>();
+        if (includeDetail)
+        {
+            query = ApplyIncludeDetail(query);
+        }
+        query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        return await query.ToListAsync();
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
