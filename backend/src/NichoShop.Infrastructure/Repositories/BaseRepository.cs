@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Domain.Enums;
 using NichoShop.Domain.Seedwork;
 using NichoShop.Domain.SeedWork;
 using System.Linq.Expressions;
@@ -13,6 +14,7 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
     public void Add(TEntity entity)
     {
         _context.Set<TEntity>().AddAsync(entity);
+
     }
 
     public async Task<List<TEntity>> GetAllAsync()
@@ -36,33 +38,40 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
         return await query.FirstOrDefaultAsync(entity => EF.Property<object>(entity, "Id") == id);
     }
 
-    public async Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, string Comparison)> filters)
+
+
+    private IQueryable<TEntity> GetQueryByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
     {
         var parameter = Expression.Parameter(typeof(TEntity), "x");
         IQueryable<TEntity> query = _context.Set<TEntity>();
+
+        if (filters == null)
+        {
+            return query;
+        }
+
         foreach (var filter in filters)
         {
-            // Tạo Expression cho tên field và giá trị filter
             var property = Expression.Property(parameter, filter.Key);
             var constant = Expression.Constant(filter.Value.Value);
 
             Expression comparisonExpression = null;
 
-            switch (filter.Value.Comparison.ToLower())
+            switch (filter.Value.Comparison)
             {
-                case "equal":
+                case SqlOperator.Equal:
                     comparisonExpression = Expression.Equal(property, constant);
                     break;
-                case "notequal":
+                case SqlOperator.Notequal:
                     comparisonExpression = Expression.NotEqual(property, constant);
                     break;
-                case "greaterthan":
+                case SqlOperator.Greaterthan:
                     comparisonExpression = Expression.GreaterThan(property, constant);
                     break;
-                case "lessthan":
+                case SqlOperator.Lessthan:
                     comparisonExpression = Expression.LessThan(property, constant);
                     break;
-                case "in":
+                case SqlOperator.In:
                     comparisonExpression = Expression.Call(
                         typeof(Enumerable),
                         "Contains",
@@ -80,7 +89,26 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
             query = query.Where(lambda);
         }
 
-        return query.ToList();
+        return query;
+    }
+
+
+    public async Task<List<TEntity>> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
+    {
+        IQueryable<TEntity> query = GetQueryByFilters(filters);
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<TEntity>> GetPaging(int pageNumber, int pageSize, Dictionary<string, (object Value, SqlOperator Comparison)> filters, bool includeDetail)
+    {
+        IQueryable<TEntity> query = _context.Set<TEntity>();
+        if (includeDetail)
+        {
+            query = ApplyIncludeDetail(query);
+        }
+        query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        return await query.ToListAsync();
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

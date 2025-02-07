@@ -1,9 +1,6 @@
 ﻿using NichoShop.Application.Extensions;
 using NichoShop.Application.Mappers;
-using NLog;
-using NLog.Web;
 
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -31,11 +28,9 @@ builder.Services
     .AddInfrastructureServices(configuration)
     .AddAutoMapper(typeof(AutoMapperProfiles));
 
-builder.Logging.ClearProviders();
-builder.Host.UseNLog();
+LoggingSetup.ConfigureLogging(builder.Environment);
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,3 +49,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
