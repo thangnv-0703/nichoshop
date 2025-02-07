@@ -7,6 +7,7 @@ namespace NichoShop.Application.Interfaces
     {
         Task<ProductDetailViewModel> GetProductDetailAsync(int productId);
         Task<List<ProductSearchViewModel>> GetProductSearchViewModelAsync(ProductSearchRequestDto param);
+        Task<List<ProductHomeViewModel>> GetProductHomeViewModelAsync(ProductHomeRequestDto param);
         Task<List<ProductsByCategoryDto>> GetProductsByCategoryAsync(int categoryId);
     }
 }

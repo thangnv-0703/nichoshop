@@ -33,6 +33,14 @@ namespace NichoShop.Application.Controllers
             return Ok(result);
         }
 
+        [HttpPost("home")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetProductHomeViewModel([FromBody] ProductHomeRequestDto param)
+        {
+            var result = await _productService.GetProductHomeViewModelAsync(param);
+            return Ok(result);
+        }
+
         [HttpGet("by-category/{categoryId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetProductsByCategory(int categoryId)
