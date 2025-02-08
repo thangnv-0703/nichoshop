@@ -8,13 +8,19 @@ export default defineComponent({
   computed: {
     items() {
       return this.$store.state[this.module].items;
-    }
+    },
+
   },
   data() {
     return {
       detailModal: null,
       gridBase: null,
       module: null,
+      gridInfo: {
+        pageNumber: 1,
+        pageSize: 1,
+        filters: null
+      },
       confirm: useConfirm(),
       toast: useToast()
     };
@@ -23,12 +29,22 @@ export default defineComponent({
     this.autoLoadGrid && this.loadDataGrid();
   },
   methods: {
-    loadDataGrid() {
+    loadDataGrid(isLoadMore = false) {
+      debugger
       this.$store.dispatch(`${this.module}/getPaging`, {
-        pageNumber: 1,
-        pageSize: 10,
-        filter: null
+        isLoadMore,
+        pageNumber: this.gridInfo.pageNumber,
+        pageSize: this.gridInfo.pageSize,
+        filters: this.gridInfo.filters
       });
+    },
+    reload() {
+      this.gridInfo.pageNumber = 1;
+      this.loadDataGrid();
+    },
+    loadMore() {
+      this.gridInfo.pageNumber++;
+      this.loadDataGrid(true);
     },
     edit(record) {
       const { open, close } = useModal({

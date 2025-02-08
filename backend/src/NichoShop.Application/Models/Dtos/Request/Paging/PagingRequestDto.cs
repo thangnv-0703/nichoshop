@@ -9,7 +9,7 @@ namespace NichoShop.Application.Models.Dtos.Request.Paging
 
         public int PageSize { get; set; }
 
-        public Dictionary<string, FilterItem> Filters { get; set; }
+        public Dictionary<string, FilterItem>? Filters { get; set; }
 
         // sort, filter
     }
