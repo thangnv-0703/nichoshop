@@ -133,16 +133,14 @@ namespace NichoShop.Application.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("integer");
 
                     b.Property<double>("ShippingFee")
                         .HasColumnType("decimal(13,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
