@@ -9,13 +9,19 @@ const enumeration = {
         USD: 1,
         EUR: 2,
     },
-    OrderStatus: {
-        PendingApproval: 0,
-        Approved: 1,
-        AwaitingShipment: 2,
-        Shipping: 3,
-        Shipped: 4,
-        Canceled: 5
-    }
+    orderStatus: {
+        pendingApproval: 0,
+        approved: 1,
+        awaitingShipment: 2,
+        shipping: 3,
+        shipped: 4,
+        canceled: 5
+    },
+    comparisonOperator: {
+        equal: 0,
+        notEqual: 1,
+        greaterThan: 2,
+        lessThan: 3,
+    },
 };
 export default enumeration;
