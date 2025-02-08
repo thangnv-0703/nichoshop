@@ -20,10 +20,8 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder.Property(o => o.Status)
-            .HasConversion(
-                v => v.ToString(),
-                dbStatus => (OrderStatus)Enum.Parse(typeof(OrderStatus), dbStatus)
-            );
+            .HasConversion<int>();
+
 
         builder.Property(o => o.OrderDate)
             .IsRequired();
@@ -41,7 +39,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
             shippingAddress.Property(s => s.FullName)
                 .HasColumnName($"{nameof(Order)}{nameof(ShippingAddress.FullName)}")
                 .HasMaxLength(50)
-                .IsRequired(); 
+                .IsRequired();
 
             shippingAddress.OwnsOne(s => s.PhoneNumber, phoneBuilder =>
             {
@@ -49,7 +47,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
                     .HasColumnType("varchar(15)")
                     .HasColumnName($"{nameof(Order)}{nameof(ShippingAddress.PhoneNumber)}")
                     .HasMaxLength(15)
-                    .IsRequired(); 
+                    .IsRequired();
             });
 
             shippingAddress.Property(s => s.OtherDetails)
@@ -87,9 +85,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         });
 
         builder.Property(o => o.PaymentMethod)
-            .HasConversion(
-            v => v.ToString(),
-            dbPaymentMethod => (PaymentMethod)Enum.Parse(typeof(PaymentMethod), dbPaymentMethod)
-        );
+              .HasConversion<int>();
+
     }
 }

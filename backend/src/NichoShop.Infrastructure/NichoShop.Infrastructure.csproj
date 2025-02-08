@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NichoShop.Common\Common\NichoShop.Common.csproj" />
     <ProjectReference Include="..\NichoShop.Domain\NichoShop.Domain.csproj" />
   </ItemGroup>
 
