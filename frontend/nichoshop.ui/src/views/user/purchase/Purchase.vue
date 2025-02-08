@@ -41,23 +41,23 @@ export default {
       },
       {
         title: "Chờ xác nhận",
-        value: proxy.$nicho.enumeration.OrderStatus.PendingApproval,
+        value: proxy.$nicho.enumeration.orderStatus.pendingApproval,
       },
       {
         title: "Chờ lấy hàng",
-        value: proxy.$nicho.enumeration.OrderStatus.Approved,
+        value: proxy.$nicho.enumeration.orderStatus.approved,
       },
       {
         title: " Chờ giao hàng",
-        value: proxy.$nicho.enumeration.OrderStatus.AwaitingShipment,
+        value: proxy.$nicho.enumeration.orderStatus.awaitingShipment,
       },
       {
         title: "Đã giao",
-        value: proxy.$nicho.enumeration.OrderStatus.Shipped,
+        value: proxy.$nicho.enumeration.orderStatus.shipped,
       },
       {
         title: " Đã hủy",
-        value: proxy.$nicho.enumeration.OrderStatus.Canceled,
+        value: proxy.$nicho.enumeration.orderStatus.canceled,
       },
       { title: " Trả hàng/hoàn tiền", value: 6 },
     ]);
@@ -66,7 +66,10 @@ export default {
       proxy.gridInfo.filters = proxy.gridInfo.filters || {};
       proxy.gridInfo.filters = {
         ...proxy.gridInfo.filters,
-        status: { value, Comparison: 0 },
+        status: {
+          value,
+          comparison: proxy.$nicho.enumeration.comparisonOperator.equal,
+        },
       };
       proxy.reload();
     };
