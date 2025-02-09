@@ -6,14 +6,14 @@ using NichoShop.Domain.AggergateModels;
 using NichoShop.Domain.Enums;
 using NichoShop.Infrastructure;
 using NichoShop.TestDataLoader.Features.Models;
-using System;
 
 namespace NichoShop.TestDataLoader.Features;
 
 public record SyncShoppeDataCommand : IRequest { }
 
-public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration configuration, NichoShopDbContext context, IStorageService storageService) : IRequestHandler<SyncShoppeDataCommand>
+public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration configuration, NichoShopDbContext context, IStorageService storageService, IMediator mediator) : IRequestHandler<SyncShoppeDataCommand>
 {
+    private readonly IMediator _mediator = mediator;
     private readonly IStorageService _storageService = storageService;
     private readonly IShoppeApi _shoppeApi = shoppeApi;
     private readonly IConfiguration _configuration = configuration;
@@ -37,6 +37,7 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
 
         await LoadCategoryImageAsync();
         var categoryIds = await SyncCategoryDataAsync(cookie);
+        await _mediator.Send(new CopyBlobStorageCommand() { IsCopyFromDevToProd = true, StorageType = StorageType.CategoryImages }, cancellationToken);
         //await SyncAttributeDataAsync(cookie, categoryIds);
     }
 
@@ -104,8 +105,6 @@ public class SyncShoppeDataCommandHandler(IShoppeApi shoppeApi, IConfiguration c
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), jsonFilePath);
         string jsonContent = File.ReadAllText(filePath);
         var categories = JsonConvert.DeserializeObject<List<CategoryJson>>(jsonContent);
-
-
 
         if (categories is null)
         {
