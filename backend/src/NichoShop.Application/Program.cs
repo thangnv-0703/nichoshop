@@ -9,7 +9,7 @@ if (environment == "Development")
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
     {
-        options.Connect("Endpoint=https://nichoshop-app-configuraion.azconfig.io;Id=OI5h;Secret=50sUfcbZ6LAPoXV92kOhnYTu0BB8W7KGcVGfSPeSE9v6eWvgdVQJJQQJ99BAAC3pKaRJiu6FAAACAZAC18S3");
+        options.Connect("Endpoint=https://hivespace-appcfg.azconfig.io;Id=PPEz;Secret=6hmVeTio5FWXwrFM3U6Jyv8NLEFHJJMwwj54tLgbrq58U828aLzaJQQJ99BAAC3pKaRJiu6FAAABAZAC1Sdg");
     });
 
     //builder.Configuration.AddAzureKeyVault(
