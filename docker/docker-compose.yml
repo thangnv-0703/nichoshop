@@ -45,7 +45,6 @@ services:
     depends_on:
       - elasticsearch
 
-volumes:
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: azurite
