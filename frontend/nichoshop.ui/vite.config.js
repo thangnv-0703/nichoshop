@@ -6,6 +6,9 @@ import { PrimeVueResolver } from "@primevue/auto-import-resolver";
 
 export default defineConfig({
   base: "/",
+  build: {
+    chunkSizeWarningLimit: 1024, // Set to 1024 KB (1MB) or higher to suppress warnings
+  },
   plugins: [
     vue(),
     Components({
