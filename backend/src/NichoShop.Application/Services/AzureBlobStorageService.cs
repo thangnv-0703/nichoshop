@@ -16,7 +16,7 @@ public class AzureBlobStorageService : IStorageService
         _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
-    private async Task<BlobContainerClient> GetContainerClient(string containerName)
+    public async Task<BlobContainerClient> GetContainerClient(string containerName)
     {
         BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
@@ -84,5 +84,11 @@ public class AzureBlobStorageService : IStorageService
     {
         using var stream = new MemoryStream(data);
         return await UploadFileAsync(stream, contentType, type);
+    }
+
+    public void DeleteContainer(StorageType type)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(type.GetDisplayName());
+        containerClient.DeleteIfExists();
     }
 }
