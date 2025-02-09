@@ -22,8 +22,11 @@ export default class Crud {
         try {
           store.commit("moduleLoading/setLoading", true, { root: true });
           const response = await me.api.getPaging(payload);
-          debugger
-          store.commit("setItems", response.data);
+          if (payload.isLoadMore) {
+            store.commit("setItems", [...store.state.items, ...response.data]);
+          } else {
+            store.commit("setItems", response.data);
+          }
         }
         catch (error) {
           store.commit("setError", error);

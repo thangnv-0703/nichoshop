@@ -7,6 +7,7 @@ using NichoShop.Domain.AggergateModels.UserAggregate;
 using NichoShop.Domain.Enums;
 using NichoShop.Domain.Exceptions;
 using NichoShop.Domain.Repositories;
+using NichoShop.Domain.Shared;
 
 namespace NichoShop.Application.Services
 {
@@ -44,9 +45,16 @@ namespace NichoShop.Application.Services
             var cart = await _shoppingCartService.GetShoppingCartByUserIdAsync();
             var products = cart.Items.FindAll(x => x.IsSelected);
 
-            var filtersWithComparison = new Dictionary<string, (object Value, SqlOperator Comparison)>
+            var filtersWithComparison = new Dictionary<string, FilterItem>
             {
-                { "Id", (products.Select(x=>x.SkuId), SqlOperator.In) },
+                { "Id",
+
+                    new FilterItem
+                    {
+                        Value=products.Select(x=>x.SkuId),
+                        Comparison=SqlOperator.In
+                    }
+                },
             };
 
             var skus = await _skuService.GetByFitlers(filtersWithComparison) ?? throw new NotFoundException("i18nOrder.messages.notFoundSku");
@@ -107,7 +115,8 @@ namespace NichoShop.Application.Services
 
         public async Task<List<Order>> GetPaging(PagingRequestDto param)
         {
-            return await _orderRepository.GetPaging(param.PageNumber, param.PageSize, null, true);
+
+            return await _orderRepository.GetPaging(param.PageNumber, param.PageSize, param.Filters, true);
         }
     }
 }
