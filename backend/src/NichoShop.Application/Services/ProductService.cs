@@ -37,6 +37,11 @@ namespace NichoShop.Application.Services
             return await _queryService.GetProductSearchViewModelAsync(param);
         }
 
+        public async Task<List<ProductHomeViewModel>> GetProductHomeViewModelAsync(ProductHomeRequestDto param)
+        {
+            return await _queryService.GetProductHomeViewModelAsync(param);
+        }
+
         public async Task<List<ProductsByCategoryDto>> GetProductsByCategoryAsync(int categoryId)
         {
             return await _queryService.GetProductSearchViewModelAsync(categoryId);
