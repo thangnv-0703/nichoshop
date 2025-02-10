@@ -21,8 +21,12 @@ export default class Crud {
       async getPaging(store, payload) {
         try {
           store.commit("moduleLoading/setLoading", true, { root: true });
-          const response = await me.api.getPaging();
-          store.commit("setItems", response.data);
+          const response = await me.api.getPaging(payload);
+          if (payload.isLoadMore) {
+            store.commit("setItems", [...store.state.items, ...response.data]);
+          } else {
+            store.commit("setItems", response.data);
+          }
         }
         catch (error) {
           store.commit("setError", error);

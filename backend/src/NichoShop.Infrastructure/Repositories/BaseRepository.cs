@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NichoShop.Common.Utilities;
 using NichoShop.Domain.Enums;
 using NichoShop.Domain.Seedwork;
 using NichoShop.Domain.SeedWork;
+using NichoShop.Domain.Shared;
 using System.Linq.Expressions;
 
 namespace NichoShop.Infrastructure.Repositories;
@@ -38,15 +40,26 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
         return await query.FirstOrDefaultAsync(entity => EF.Property<object>(entity, "Id") == id);
     }
 
-    public List<TEntity> GetByFilters(Dictionary<string, (object Value, SqlOperator Comparison)> filters)
+
+
+    private IQueryable<TEntity> GetQueryByFilters(Dictionary<string, FilterItem> filters)
     {
         var parameter = Expression.Parameter(typeof(TEntity), "x");
         IQueryable<TEntity> query = _context.Set<TEntity>();
+
+        if (filters == null)
+        {
+            return query;
+        }
+
         foreach (var filter in filters)
         {
-            // Tạo Expression cho tên field và giá trị filter
-            var property = Expression.Property(parameter, filter.Key);
-            var constant = Expression.Constant(filter.Value.Value);
+            Expression property = Expression.Property(parameter, filter.Key);
+            if (property.Type.IsEnum)
+            {
+                property = Expression.Convert(property, typeof(Int64));
+            }
+            var constant = Expression.Constant(CommonFunction.ConvertToActualType(filter.Value.Value));
 
             Expression comparisonExpression = null;
 
@@ -82,7 +95,35 @@ public abstract class BaseRepository<TEntity, TKey>(NichoShopDbContext context) 
             query = query.Where(lambda);
         }
 
-        return query.ToList();
+        return query;
+    }
+
+
+    public async Task<List<TEntity>> GetByFilters(Dictionary<string, FilterItem> filters)
+    {
+        IQueryable<TEntity> query = GetQueryByFilters(filters);
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<TEntity>> GetPaging(int pageNumber, int pageSize, Dictionary<string, FilterItem> filters, bool includeDetail)
+    {
+        IQueryable<TEntity> query = _context.Set<TEntity>();
+
+        //TODO: check param 
+
+        if (filters != null)
+        {
+            query = GetQueryByFilters(filters);
+        }
+
+        if (includeDetail)
+        {
+            query = ApplyIncludeDetail(query);
+        }
+
+        query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        return await query.ToListAsync();
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

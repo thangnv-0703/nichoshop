@@ -31,7 +31,7 @@ internal class Program
             {
                 var configuration = context.Configuration;
                 services.AddDbContext<NichoShopDbContext>(options =>
-                    options.UseNpgsql(configuration.GetConnectionString("NichoShopDB")));
+                    options.UseNpgsql(configuration.GetSection("Postgres:ConnectionString").Value));
 
                 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
@@ -60,9 +60,10 @@ internal class Program
 
         while (true)
         {
-            DisplayMenu();
+            List<string> menuOptions = MenuOption.GetAll<MenuOption>().Select(option => $"{option.Id}. {option.Name}").ToList();
+            MenuHelper.DisplayMenu(menuOptions);
 
-            int choice = GetMenuChoice();
+            int choice = MenuHelper.GetMenuChoice();
 
             if (choice == 0)
             {
@@ -92,24 +93,6 @@ internal class Program
         }
 
         
-    }
-
-    private static void DisplayMenu()
-    {
-        Console.WriteLine("Menu Options:");
-        Console.WriteLine("0. Exit");
-        foreach (var option in MenuOption.GetAll<MenuOption>())
-        {
-            Console.WriteLine($"{option.Id}. {option.Name}");
-        }
-        Console.Write("Your choice: ");
-    }
-
-    static int GetMenuChoice()
-    {
-        int choice;
-        while (!int.TryParse(Console.ReadLine(), out choice)) { }
-        return choice;
     }
 }
 

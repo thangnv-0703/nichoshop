@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NichoShop.Domain.Enums;
 using NichoShop.Domain.SeedWork;
 using NichoShop.TestDataLoader.Features;
 
@@ -9,26 +10,12 @@ public class MenuOption(int id, string name, IRequest command) : Enumeration(id,
 
     public static readonly MenuOption SyncShoppeData =
         new(1, "Sync shoppe data", new SyncShoppeDataCommand());
-
-    public static readonly MenuOption LoadCategoyDataFromSql = 
-        new(2, "Load categoy data from sql", new LoadDataFromSqlCommand() { FileName = "category.sql" });
-
-    public static readonly MenuOption LoadLocationDataFromSql = 
-        new(3, "Load location data from sql", new LoadDataFromSqlCommand() { FileName = "location.sql" });
-
-    public static readonly MenuOption LoadAttributeDataFromSql = 
-        new(4, "Load attribute data from sql", new LoadDataFromSqlCommand() { FileName = "attribute.sql" });
-
-    public static readonly MenuOption LoadAttributeCategoryDataFromSql = 
-        new(5, "Load attribute category data from sql", new LoadDataFromSqlCommand() { FileName = "attribute_category.sql" });
-
-    public static readonly MenuOption LoadProductDataFromSql = 
-        new(6, "Load product data from sql", new LoadDataFromSqlCommand() { FileName = "product.sql" });
-
-    public static readonly MenuOption LoadSkuDataFromSql = 
-        new(7, "Load sku data from sql", new LoadDataFromSqlCommand() { FileName = "sku.sql" });
-
-    public static readonly MenuOption LoadProductAttributeValuesDataFromSql =
-        new(8, "Load product attribute values data from sql", new LoadDataFromSqlCommand() { FileName = "product_attribute_values.sql" });
-
+    public static readonly MenuOption LoadCategoyDataFromSql =
+        new(2, "Load data from sql", new LoadDataFromSqlCommand());
+    public static readonly MenuOption CopyCategoryImageFromProductionToDev = 
+        new(3, "Copy category image from production to dev", new CopyBlobStorageCommand() 
+        { 
+            IsCopyFromDevToProd = false, 
+            StorageType = StorageType.CategoryImages
+        });
 }

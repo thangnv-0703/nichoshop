@@ -30,7 +30,11 @@
     </div>
     <div class="text-[#ee4d2d] text-[14px]">HOÀN THÀNH</div>
   </div>
-  <div v-for="i in 3" :key="i" class="order-item">
+  <div
+    v-for="orderItem in order.items"
+    :key="orderItem.id"
+    class="order-item mt-2"
+  >
     <div class="flex gap-3 items-center justify-between">
       <div class="flex gap-3 items-center">
         <img
@@ -39,26 +43,30 @@
           alt=""
         />
         <div>
-          <span>
-            Dây cắm test board 10cm/21cm/30cm lõi đồng, mối tiếp xúc tốt và chắc
-            chắn, kết nối siêu nhanh (10 sợi)</span
-          >
-          <p class="text-[#929292]">Phân loại hàng: 10cm</p>
-          <p>x1</p>
+          <span> {{ orderItem.productName }}</span>
+          <p class="text-[#929292]">
+            Phân loại hàng: {{ orderItem.variantName }}
+          </p>
+          <p>x{{ orderItem.quantity }}</p>
         </div>
       </div>
       <div class="order-item-price">
         <span class="text-[#929292] line-through text-[14px] mr-1">
-          ₫544.450
+          ₫{{ orderItem.price?.amount?.toLocaleString("vi-VN") }}
         </span>
-        <span class="text-[#ee4d2d] text-[14px]"> ₫269.450 </span>
+        <span class="text-[#ee4d2d] text-[14px]">
+          ₫{{ orderItem.price?.amount?.toLocaleString("vi-VN") }}
+        </span>
       </div>
     </div>
   </div>
   <div class="flex justify-end items-center mb-10">
     <div>
       <div class="text-end footer-price-content">
-        Thành tiền: <span class="text-[#ee4d2d] footer-price">₫269.450</span>
+        Thành tiền:
+        <span class="text-[#ee4d2d] footer-price">
+          ₫{{ order.totalPrice?.toLocaleString("vi-VN") }}</span
+        >
       </div>
       <button class="button-primary button mr-3">Mua lại</button>
       <button class="button-secondary button">Xem đánh giá người mua</button>
@@ -66,8 +74,22 @@
   </div>
 </template>
 
-<script>
-export default {};
+<script lang="ts">
+import { ref, onMounted, getCurrentInstance } from "vue";
+
+export default {
+  props: {
+    order: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
+    onMounted(() => {
+      console.log(props.order);
+    });
+  },
+};
 </script>
 
 <style>

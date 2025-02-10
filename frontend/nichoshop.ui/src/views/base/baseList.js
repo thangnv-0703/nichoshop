@@ -1,6 +1,6 @@
 import { ModalsContainer, useModal } from "vue-final-modal";
 import { defineComponent, getCurrentInstance } from "vue";
-import _ from 'lodash'
+import _, { filter } from 'lodash'
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 export default defineComponent({
@@ -8,13 +8,19 @@ export default defineComponent({
   computed: {
     items() {
       return this.$store.state[this.module].items;
-    }
+    },
+
   },
   data() {
     return {
       detailModal: null,
       gridBase: null,
       module: null,
+      gridInfo: {
+        pageNumber: 1,
+        pageSize: 1,
+        filters: null
+      },
       confirm: useConfirm(),
       toast: useToast()
     };
@@ -23,8 +29,22 @@ export default defineComponent({
     this.autoLoadGrid && this.loadDataGrid();
   },
   methods: {
-    loadDataGrid() {
-      this.$store.dispatch(`${this.module}/getAll`); //để tạm get all
+    loadDataGrid(isLoadMore = false) {
+      debugger
+      this.$store.dispatch(`${this.module}/getPaging`, {
+        isLoadMore,
+        pageNumber: this.gridInfo.pageNumber,
+        pageSize: this.gridInfo.pageSize,
+        filters: this.gridInfo.filters
+      });
+    },
+    reload() {
+      this.gridInfo.pageNumber = 1;
+      this.loadDataGrid();
+    },
+    loadMore() {
+      this.gridInfo.pageNumber++;
+      this.loadDataGrid(true);
     },
     edit(record) {
       const { open, close } = useModal({

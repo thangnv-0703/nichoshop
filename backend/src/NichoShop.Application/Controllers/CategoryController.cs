@@ -7,7 +7,6 @@ namespace NichoShop.Application.Controllers;
 
 [Route("api/v1/categories")]
 [ApiController]
-[Authorize]
 public class CategoryController : Controller
 {
     private readonly ICategoryService _categoryService;

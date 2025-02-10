@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Tabs value="0">
+    <Tabs @update:value="onChangeTab" :value="-1">
       <TabList>
         <Tab v-for="tab in tabs" :key="tab.title" :value="tab.value">{{
           tab.title
@@ -8,7 +8,12 @@
       </TabList>
       <TabPanels>
         <TabPanel v-for="tab in tabs" :key="tab.value" :value="tab.value">
-          <order-card v-for="i in 2" :data="tab.data" />
+          <order-card v-for="item in items" :order="item" />
+          <div class="text-center">
+            <button @click="loadMore" class="button-primary button m-auto">
+              Load more
+            </button>
+          </div>
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -16,24 +21,59 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import OrderCard from "./OrderCard.vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
+import baseList from "@/views/base/baseList.js";
 export default {
+  extends: baseList,
+
   components: {
     OrderCard,
   },
   setup() {
+    const autoLoadGrid = true;
+    const { proxy } = getCurrentInstance();
+    const module = "moduleOrder";
     const tabs = ref([
-      { title: "Tất cả", data: "Tab 1 Content", value: "0" },
-      { title: "Chờ thanh toán", data: "Tab 2 Content", value: "1" },
-      { title: " Vận chuyển", data: "Tab 3 Content", value: "2" },
-      { title: " Chờ giao hàng", data: "Tab 3 Content", value: "3" },
-      { title: " Hoàn thành", data: "Tab 3 Content", value: "4" },
-      { title: " Đã hủy", data: "Tab 3 Content", value: "5" },
-      { title: " Trả hàng/hoàn tiền", data: "Tab 3 Content", value: "6" },
+      {
+        title: "Tất cả",
+        value: -1,
+      },
+      {
+        title: "Chờ xác nhận",
+        value: proxy.$nicho.enumeration.orderStatus.pendingApproval,
+      },
+      {
+        title: "Chờ lấy hàng",
+        value: proxy.$nicho.enumeration.orderStatus.approved,
+      },
+      {
+        title: " Chờ giao hàng",
+        value: proxy.$nicho.enumeration.orderStatus.awaitingShipment,
+      },
+      {
+        title: "Đã giao",
+        value: proxy.$nicho.enumeration.orderStatus.shipped,
+      },
+      {
+        title: " Đã hủy",
+        value: proxy.$nicho.enumeration.orderStatus.canceled,
+      },
+      { title: " Trả hàng/hoàn tiền", value: 6 },
     ]);
 
-    return { tabs };
+    const onChangeTab = (value) => {
+      proxy.gridInfo.filters = proxy.gridInfo.filters || {};
+      proxy.gridInfo.filters = {
+        ...proxy.gridInfo.filters,
+        status: {
+          value,
+          comparison: proxy.$nicho.enumeration.comparisonOperator.equal,
+        },
+      };
+      proxy.reload();
+    };
+    return { module, autoLoadGrid, tabs, onChangeTab };
   },
 };
 </script>

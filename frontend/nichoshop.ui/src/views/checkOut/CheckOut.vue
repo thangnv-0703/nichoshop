@@ -324,7 +324,7 @@ export default {
       },
       products: [],
     });
-
+    const router = useRouter();
     const totalPriceText = ref("");
     const totalQuantity = ref("");
 
@@ -361,12 +361,22 @@ export default {
       }
     });
 
-    const createOrder = () => {
-      proxy.$store.dispatch("moduleOrder/createItem", {
+    const createOrder = async () => {
+      const res = await proxy.$store.dispatch("moduleOrder/createItem", {
         userAddressID: data.value.address.id,
         items: [],
         paymentMethod: 1,
       });
+      if (res) {
+        showToast({
+          severity: "success",
+          summary: "Thành công",
+          detail: "Đặt hàng thành công",
+          group: "tc",
+          life: 3000,
+        });
+        router.push("/user/purchase");
+      }
     };
 
     return {

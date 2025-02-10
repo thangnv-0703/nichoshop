@@ -2,7 +2,24 @@
 using NichoShop.Application.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+if (environment == "Development")
+{
+    builder.Configuration.AddAzureAppConfiguration(options =>
+    {
+        options.Connect("Endpoint=https://hivespace-appcfg.azconfig.io;Id=PPEz;Secret=6hmVeTio5FWXwrFM3U6Jyv8NLEFHJJMwwj54tLgbrq58U828aLzaJQQJ99BAAC3pKaRJiu6FAAABAZAC1Sdg");
+    });
+
+    //builder.Configuration.AddAzureKeyVault(
+    //    new Uri("<Key Vault URI>"),
+    //    new DefaultAzureCredential());
+}
+
+
 var configuration = builder.Configuration;
+Console.WriteLine(configuration["Test:Env"]);
 
 // Add services to the container.
 builder.Services
