@@ -8,9 +8,15 @@ class ProductApi extends BaseCrudApi {
         me.apiVersion = "v1";
         me.controller = "products";
     }
+
     getProductByCategory(idCategory) {
         const apiURL = this.getApiURL(`by-category/${idCategory}`);
         return httpClient.get(apiURL);
+    }
+
+    getProductHome(payload) {
+        const apiURL = this.getApiURL('home');
+        return httpClient.post(apiURL, payload);
     }
 }
 export default new ProductApi();

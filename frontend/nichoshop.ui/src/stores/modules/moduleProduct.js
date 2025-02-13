@@ -14,8 +14,18 @@ const actions = {
     async getProductByCategory(store, idCategory) {
         store.commit("moduleLoading/setLoading", true, { root: true });
         try {
-            let res = await api.getProductByCategory(idCategory);
-            return res;
+            return await api.getProductByCategory(idCategory);
+        } catch (error) {
+            store.commit("setError", error);
+        } finally {
+            store.commit("moduleLoading/setLoading", false, { root: true });
+        }
+    },
+
+    async getProductHome(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
+        try {
+            return await api.getProductHome(payload);
         } catch (error) {
             store.commit("setError", error);
         } finally {
