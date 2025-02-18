@@ -2,23 +2,11 @@
   <div>
     <div class="card">
       <div class="flex justify-end">
-        <Button
-          @click="add"
-          label="Thêm địa chỉ mới"
-          severity="warn"
-          icon="pi pi-plus"
-        />
+        <Button @click="add" label="Thêm địa chỉ mới" severity="warn" icon="pi pi-plus" />
       </div>
 
-      <DataTable
-        v-if="items.length > 0"
-        :ref="baseGrid"
-        v-model:selection="selectedProducts"
-        :value="items"
-        dataKey="id"
-        :rows="10"
-        :filters="filters"
-      >
+      <DataTable v-if="items.length > 0" :ref="baseGrid" v-model:selection="selectedProducts" :value="items"
+        dataKey="id" :rows="10" :filters="filters">
         <Column field="price" header="Địa chỉ" style="min-width: 8rem">
           <template #body="slotProps">
             <div class="flex">
@@ -38,36 +26,18 @@
                 `${slotProps.data.ward}, ${slotProps.data.district}, ${slotProps.data.province}`
               }}
             </div>
-            <Tag
-              severity="warn"
-              v-if="slotProps.data.isDefault"
-              value="Mặc định"
-            ></Tag>
+            <Tag severity="warn" v-if="slotProps.data.isDefault" value="Mặc định"></Tag>
           </template>
         </Column>
 
         <Column :exportable="false" style="width: 140px">
           <template #body="slotProps">
             <div class="flex justify-end">
-              <span
-                @click="edit(slotProps.data)"
-                class="text-[#0B80CC] cursor-pointer"
-                >Cập nhật</span
-              >
-              <span
-                @click="deleteOne(slotProps.data)"
-                class="text-[#0B80CC] cursor-pointer ml-3"
-                >Xóa</span
-              >
+              <span @click="edit(slotProps.data)" class="text-[#0B80CC] cursor-pointer">Cập nhật</span>
+              <span @click="deleteOne(slotProps.data)" class="text-[#0B80CC] cursor-pointer ml-3">Xóa</span>
             </div>
-            <Button
-              @click="setAsDefault(slotProps.data)"
-              :disabled="slotProps.data['isDefault']"
-              class="w-[160px] set-default-btn"
-              label="Thiết lập mặc định"
-              severity="secondary"
-              variant="outlined"
-            />
+            <Button @click="setAsDefault(slotProps.data)" :disabled="slotProps.data['isDefault']"
+              class="w-[160px] set-default-btn" label="Thiết lập mặc định" severity="secondary" variant="outlined" />
           </template>
         </Column>
       </DataTable>
@@ -99,12 +69,17 @@ export default {
     const setAsDefault = ({ id }) => {
       proxy.$store.dispatch(`${module}/setAsDefault`, id);
     };
+    const loadDataGrid = (isLoadMore = false) => {
+      debugger
+      proxy.$store.dispatch(`${module}/getAll`);
+    };
     return {
       products,
       detailModal,
       module,
       autoLoadGrid,
       setAsDefault,
+      loadDataGrid,
     };
   },
 };
