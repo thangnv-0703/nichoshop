@@ -15,26 +15,18 @@ public class UserAddressController : Controller
 {
     private readonly IUserAddressService _userAddressService;
     private readonly IValidator<UserAddressRequestDto> _userAddressValidator;
-    private readonly ICacheService _redisService;
-    private readonly IUserContext _userContext;
 
-    public UserAddressController(IUserAddressService userAddressService, IValidator<UserAddressRequestDto> userAddressValidator, ICacheService redisService, IUserContext userContext)
+    public UserAddressController(IUserAddressService userAddressService, IValidator<UserAddressRequestDto> userAddressValidator)
     {
         _userAddressService = userAddressService;
         _userAddressValidator = userAddressValidator;
-        _redisService = redisService;
-        _userContext = userContext;
     }
 
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetUserAddress()
     {
-        var cacheKey = $"userAddress_{_userContext.UserId}";
-        var result = await _redisService.GetOrCreateAsync(cacheKey, async () =>
-        {
-            return await _userAddressService.GetUserAddressAsync();
-        });
+        var result = await _userAddressService.GetUserAddressAsync();
         return Ok(result);
     }
 

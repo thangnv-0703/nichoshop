@@ -12,19 +12,17 @@ namespace NichoShop.Application.Controllers;
 public class CategoryController : Controller
 {
     private readonly ICategoryService _categoryService;
-    private readonly ICacheService _redisService;
 
-    public CategoryController(ICategoryService categoryService, ICacheService redisService)
+    public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
-        _redisService = redisService;
     }
 
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetCategory()
     {
-        var result = await _redisService.GetOrCreateAsync(CacheKeys.Categories, _categoryService.GetCategoryAsync);
+        var result = await _categoryService.GetCategoryAsync();
         return Ok(result);
     }
 }

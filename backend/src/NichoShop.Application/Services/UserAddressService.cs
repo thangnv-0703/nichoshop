@@ -13,20 +13,26 @@ public class UserAddressService : IUserAddressService
     private readonly IUserContext _userContext;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-
-    public UserAddressService(IUserRepository userRepository, IUserContext userContext, IMapper mapper)
+    private readonly ICacheService _redisService;
+    public UserAddressService(IUserRepository userRepository, IUserContext userContext, IMapper mapper, ICacheService redisService)
     {
         _userRepository = userRepository;
         _userContext = userContext;
         _mapper = mapper;
+        _redisService = redisService;
     }
 
     public async Task<List<UserAddressDto>> GetUserAddressAsync()
     {
-        var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("i18nUser.messages.notFoundUser");
-        var userAddresses = user.Addresses.ToList();
-        var res = _mapper.Map<List<UserAddressDto>>(userAddresses);
-        return res;
+        var cacheKey = $"userAddress_{_userContext.UserId}";
+        var result = await _redisService.GetOrCreateAsync(cacheKey, async () =>
+        {
+            var user = await _userRepository.GetByIdAsync(_userContext.UserId, includeDetail: true) ?? throw new NotFoundException("i18nUser.messages.notFoundUser");
+            var userAddresses = user.Addresses.ToList();
+            var res = _mapper.Map<List<UserAddressDto>>(userAddresses);
+            return res;
+        });
+        return result;
     }
 
     public async Task<Guid> CreateUserAddressAsync(UserAddressRequestDto param)

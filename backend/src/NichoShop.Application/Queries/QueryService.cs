@@ -25,7 +25,7 @@ public class QueryService(NichoShopDbContext dbContext) : IQueryService
             .ToListAsync();
     }
 
-    public async Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string parentCode)
+    public async Task<List<LocationViewModel>> GetLocationViewModelsAsync(int type, string? parentCode)
     {
         // Get provinces
         if (type == (int)LocationType.Province)
