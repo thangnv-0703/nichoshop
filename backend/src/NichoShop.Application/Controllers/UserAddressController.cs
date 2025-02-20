@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NichoShop.Application.Interfaces;
 using NichoShop.Application.Models.Dtos.Request.UserAddress;
+using NichoShop.Common.Interface;
 using System.Net;
 
 namespace NichoShop.Application.Controllers;
@@ -14,18 +15,26 @@ public class UserAddressController : Controller
 {
     private readonly IUserAddressService _userAddressService;
     private readonly IValidator<UserAddressRequestDto> _userAddressValidator;
+    private readonly ICacheService _redisService;
+    private readonly IUserContext _userContext;
 
-    public UserAddressController(IUserAddressService userAddressService, IValidator<UserAddressRequestDto> userAddressValidator)
+    public UserAddressController(IUserAddressService userAddressService, IValidator<UserAddressRequestDto> userAddressValidator, ICacheService redisService, IUserContext userContext)
     {
         _userAddressService = userAddressService;
         _userAddressValidator = userAddressValidator;
+        _redisService = redisService;
+        _userContext = userContext;
     }
 
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetUserAddress()
     {
-        var result = await _userAddressService.GetUserAddressAsync();
+        var cacheKey = $"userAddress_{_userContext.UserId}";
+        var result = await _redisService.GetOrCreateAsync(cacheKey, async () =>
+        {
+            return await _userAddressService.GetUserAddressAsync();
+        });
         return Ok(result);
     }
 
