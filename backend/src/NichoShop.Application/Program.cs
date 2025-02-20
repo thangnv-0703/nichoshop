@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-if (environment == "Development")
+if (environment == "Production")
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
     {
@@ -17,9 +17,7 @@ if (environment == "Development")
     //    new DefaultAzureCredential());
 }
 
-
 var configuration = builder.Configuration;
-Console.WriteLine(configuration["Test:Env"]);
 
 // Add services to the container.
 builder.Services
