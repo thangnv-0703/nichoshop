@@ -4,5 +4,5 @@ namespace NichoShop.Application.Interfaces;
 
 public interface ILocationService
 {
-    Task<List<LocationViewModel>> GetLocationAsync(int type, string parentCode);
+    Task<List<LocationViewModel>> GetLocationAsync(int type, string? parentCode);
 }

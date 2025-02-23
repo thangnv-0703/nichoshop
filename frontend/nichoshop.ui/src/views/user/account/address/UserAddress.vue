@@ -70,7 +70,6 @@ export default {
       proxy.$store.dispatch(`${module}/setAsDefault`, id);
     };
     const loadDataGrid = (isLoadMore = false) => {
-      debugger
       proxy.$store.dispatch(`${module}/getAll`);
     };
     return {

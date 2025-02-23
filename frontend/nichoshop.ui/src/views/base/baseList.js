@@ -30,7 +30,6 @@ export default defineComponent({
   },
   methods: {
     loadDataGrid(isLoadMore = false) {
-      debugger
       this.$store.dispatch(`${this.module}/getPaging`, {
         isLoadMore,
         pageNumber: this.gridInfo.pageNumber,
