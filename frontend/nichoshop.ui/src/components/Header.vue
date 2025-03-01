@@ -52,7 +52,7 @@
             </svg>
           </div>
           <div class="search-bar">
-            <input type="text" v-model="searchQuery" placeholder="Tìm kiếm sản phẩm..." />
+            <input type="text" v-model="textSearch" placeholder="Tìm kiếm sản phẩm..." @keyup.enter="search" />
             <button @click="search">
               <svg height="19" viewBox="0 0 19 19" width="19" class="shopee-svg-icon">
                 <g fill-rule="evenodd" stroke="none" stroke-width="1">
@@ -126,7 +126,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const popOver = ref(null);
-    const searchQuery = ref("");
     const suggestions = ref([
       "Chặn Cửa",
       "iPhone 15 Pro Max Giá Rẻ 1k",
@@ -137,9 +136,10 @@ export default defineComponent({
       "Cardigan Nữ",
       "Ống Nhòm",
     ]);
+    const textSearch = ref('');
 
     const search = () => {
-      router.push("/search");
+      router.push({ name: 'search', params: { key: textSearch.value } });
     };
 
     const goToHomePage = () => {
@@ -153,13 +153,13 @@ export default defineComponent({
     };
 
     return {
-      searchQuery,
       suggestions,
       search,
       toggle,
       goToHomePage,
       popOver,
       authHelper,
+      textSearch
     };
   },
 });

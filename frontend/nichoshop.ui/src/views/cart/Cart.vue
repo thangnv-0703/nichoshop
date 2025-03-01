@@ -2,20 +2,9 @@
   <Header />
   <div class="card nicho-container">
     <div v-if="items.length > 0">
-      <DataTable
-        v-model:selection="selectedProducts"
-        :value="items"
-        rowGroupMode="subheader"
-        groupRowsBy="representative.name"
-        sortMode="single"
-        sortField="representative.name"
-        :sortOrder="1"
-      >
-        <Column
-          field="isSelected"
-          selectionMode="multiple"
-          headerStyle="width: 3rem"
-        >
+      <DataTable v-model:selection="selectedProducts" :value="items" rowGroupMode="subheader"
+        groupRowsBy="representative.name" sortMode="single" sortField="representative.name" :sortOrder="1">
+        <Column field="isSelected" selectionMode="multiple" headerStyle="width: 3rem">
           <!-- <template #body="slotProps">
             <Checkbox :value="slotProps.data.isSelected" />
           </template> -->
@@ -25,11 +14,8 @@
           <template #body="slotProps">
             <div class="flex gap-3">
               <div class="flex gap-3 w-[350px]">
-                <img
-                  src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750"
-                  width="80"
-                  style="vertical-align: middle"
-                />
+                <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m045ss3gh8y750" width="80"
+                  style="vertical-align: middle" />
                 <span>
                   {{ slotProps.data.productName }}
                 </span>
@@ -50,36 +36,23 @@
         <Column field="quantity" header="Số lượng" style="min-width: 160px">
           <template #body="slotProps">
             <div class="flex">
-              <button
-                @click="updateQuantity(slotProps.data, true)"
-                class="w-[32px] decrease div-center cursor-pointer"
-              >
+              <button @click="updateQuantity(slotProps.data, true)" class="w-[32px] decrease div-center cursor-pointer">
                 <svg class="icon">
-                  <polygon
-                    points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"
-                  ></polygon>
+                  <polygon points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"></polygon>
                 </svg>
               </button>
               <div class="quantity">{{ slotProps.data.quantity }}</div>
-              <button
-                @click="updateQuantity(slotProps.data, false)"
-                class="w-[32px] increase div-center cursor-pointer"
-              >
+              <button @click="updateQuantity(slotProps.data, false)"
+                class="w-[32px] increase div-center cursor-pointer">
                 <svg class="icon">
-                  <polygon
-                    points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"
-                  ></polygon>
+                  <polygon points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5">
+                  </polygon>
                 </svg>
               </button>
             </div>
           </template>
         </Column>
-        <Column
-          field="price"
-          header="Số tiền"
-          style="min-width: 120px"
-          bodyStyle=" color: #ee4d2d"
-        >
+        <Column field="price" header="Số tiền" style="min-width: 120px" bodyStyle=" color: #ee4d2d">
           <template #body="slotProps">
             ₫
             {{
@@ -92,29 +65,18 @@
         <Column :exportable="false" style="width: 50px">
           <template #body="slotProps">
             <div class="flex justify-end">
-              <span
-                @click="deleteOne(slotProps.data)"
-                class="text-[#0B80CC] cursor-pointer ml-3"
-                >Xóa</span
-              >
+              <span @click="deleteOne(slotProps.data)" class="text-[#0B80CC] cursor-pointer ml-3">Xóa</span>
             </div>
           </template>
         </Column>
         <template v-if="false" #groupheader="slotProps">
           <div class="flex items-center gap-2">
-            <Checkbox
-              @update:modelValue="
-                (value) => selectProductsInGroup(value, slotProps.data)
-              "
-              :modelValue="isGroupChecked(slotProps.data)"
-              binary
-            />
-            <img
-              :alt="slotProps.data.representative.name"
+            <Checkbox @update:modelValue="
+              (value) => selectProductsInGroup(value, slotProps.data)
+            " :modelValue="isGroupChecked(slotProps.data)" binary />
+            <img :alt="slotProps.data.representative.name"
               :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.data.representative.image}`"
-              width="32"
-              style="vertical-align: middle"
-            />
+              width="32" style="vertical-align: middle" />
             <span>{{ slotProps.data.representative.name }}</span>
           </div>
         </template>
@@ -129,20 +91,15 @@
       <div class="cart-footer">
         <div class="flex justify-between">
           <div class="flex items-center gap-4">
-            <Checkbox
-              @update:modelValue="(value) => selectAllProducts(value)"
-              :modelValue="selectedProducts.length == items.length"
-              binary
-            />
+            <Checkbox @update:modelValue="(value) => selectAllProducts(value)"
+              :modelValue="selectedProducts.length == items.length" binary />
             <button>Chọn tất cả</button>
             <button>Xóa</button>
           </div>
           <div class="flex items-center gap-4">
-            <span
-              >Tổng thanh toán ({{ selectedProducts.length }} sản phẩm)</span
-            >
+            <span>Tổng thanh toán ({{ selectedProducts.length }} sản phẩm)</span>
             <span> đ {{ getTotalPrice() }}</span>
-            <Button label="Mua hàng" class="w-[210px]" severity="warn" />
+            <Button label="Mua hàng" class="w-[210px]" severity="warn" @click="checkOut" />
           </div>
         </div>
       </div>
@@ -155,10 +112,14 @@
 import baseList from "@/views/base/baseList.js";
 import { ref, onMounted, getCurrentInstance, watch } from "vue";
 import _ from "lodash";
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   extends: baseList,
   setup() {
+    const route = useRoute();
+    const router = useRouter();
+
     onMounted(async () => {
       const res = await proxy.$store.dispatch("moduleCart/getItem");
       cartId.value = res?.data?.id;
@@ -246,6 +207,10 @@ export default {
         .toLocaleString("vi-VN");
     };
 
+    const checkOut = () => {
+      router.push({ name: 'checkout' });
+    }
+
     return {
       selectedProducts,
       updateQuantity,
@@ -255,6 +220,7 @@ export default {
       selectAllProducts,
       getTotalPrice,
       updateSelection,
+      checkOut
     };
   },
 };

@@ -18,7 +18,7 @@ const routes = [
         }
       },
       {
-        path: "/product-detail", // Đường dẫn cho chi tiết
+        path: "/product-detail/:id", // Đường dẫn cho chi tiết
         name: "productDetail", // Tên của route
         component: () => import("@/pages/ProductDetail.vue"),
         meta: {
@@ -26,7 +26,7 @@ const routes = [
         }
       },
       {
-        path: "/search", // Đường dẫn cho chi tiết
+        path: "/search/:key", // Đường dẫn cho chi tiết
         name: "search", // Tên của route
         component: () => import("@/pages/Search.vue"),
         meta: {
@@ -43,7 +43,7 @@ const routes = [
   },
   {
     path: "/check-out",
-    name: "/check-out",
+    name: "checkout",
     component: () => import("@/views/checkOut/CheckOut.vue"),
   },
   ...routerPage,
