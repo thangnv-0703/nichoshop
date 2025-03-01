@@ -40,7 +40,7 @@ export default defineComponent({
     const products = ref([]);
 
     const goToProductDetail = (productId) => {
-      router.push({ path: '/product-detail', query: { id: productId } });
+      router.push({ name: 'productDetail', params: { id: productId } });
     };
 
     onMounted(async () => {

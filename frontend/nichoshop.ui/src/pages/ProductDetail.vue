@@ -256,7 +256,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, getCurrentInstance, ref } from "vue";
+import { defineComponent, onMounted, getCurrentInstance, ref, nextTick } from "vue";
 import commonFunction from "../common/commonFunction";
 import { useRoute, useRouter } from 'vue-router';
 
@@ -274,7 +274,7 @@ export default defineComponent({
 
     onMounted(async () => {
       // chi tiết
-      let productId = +route?.currentRoute?._value?.params?.id || 10000000;
+      let productId = route.params.id;
       const res = await proxy.$store.dispatch(`moduleProduct/getItem`, productId);
       if (res?.data) {
         product.value = res?.data;

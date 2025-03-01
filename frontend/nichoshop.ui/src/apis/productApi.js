@@ -18,5 +18,10 @@ class ProductApi extends BaseCrudApi {
         const apiURL = this.getApiURL('home');
         return httpClient.post(apiURL, payload);
     }
+
+    getProductSearch(payload) {
+        const apiURL = this.getApiURL('search');
+        return httpClient.post(apiURL, payload);
+    }
 }
 export default new ProductApi();

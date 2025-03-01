@@ -32,6 +32,17 @@ const actions = {
             store.commit("moduleLoading/setLoading", false, { root: true });
         }
     },
+
+    async getProductSearch(store, payload) {
+        store.commit("moduleLoading/setLoading", true, { root: true });
+        try {
+            return await api.getProductSearch(payload);
+        } catch (error) {
+            store.commit("setError", error);
+        } finally {
+            store.commit("moduleLoading/setLoading", false, { root: true });
+        }
+    },
 };
 const mutations = {
     ...crud.mutations,
